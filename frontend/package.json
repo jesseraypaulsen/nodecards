@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "prettier": "2.3.0"
+  },
+  "dependencies": {
+    "cuid": "^2.1.8",
+    "vis-network": "^9.1.0"
+  }
+}
