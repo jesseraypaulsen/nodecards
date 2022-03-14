@@ -26,32 +26,15 @@ export default function Deck() {
 }
 
 // static factory method
-Deck.initialize = async function (container, options, handler, graphRenderer) {
+Deck.initialize = function (container, options, handler, graphRenderer) {
   const deck = new Deck();
   deck.container = container;
   deck.renderingOptions = options;
-  const data = await getDbCollection("nodecards");
-  //const links = await getDbCollection("links");
-  const retrievedNodecards = data.map((item) => ({
-    databaseId: item._id,
-    label: item._id,
-    body: item.body,
-    id: item.nodecardId,
-  }));
-  /* 
-  const retrievedLinks = links.map((item) => ({
-    databaseId: item._id,
-    edgeType: item.edgetype,
-    id: item.linkId,
-    source: item.source, //nodecard A
-    target: item.target  //nodecard B
-  }))
-  */
   setupGraphRenderer(graphRenderer, deck);
   setupSwitchPanel(deck);
   setListener(deck, handler);
-  setupNodecards(retrievedNodecards, deck);
-  //TODO: setupLinks(retrievedLinks,deck);
+  setupNodecards(deck);
+  //TODO: setupLinks(deck);
 };
 
 function setupGraphRenderer(graphRenderer, deck) {
@@ -69,8 +52,16 @@ function setListener(deck, handler) {
   deck.net.on("click", deck.listener);
 }
 
-function setupNodecards(data, deck) {
-  data.map((node, i) => {
+async function setupNodecards(deck) {
+  const data = await getDbCollection("nodecards");
+  const retrievedNodecards = data.map((item) => ({
+    databaseId: item._id,
+    label: item._id,
+    body: item.body,
+    id: item.nodecardId,
+  }));
+
+  retrievedNodecards.map((node, i) => {
     // instantiates Nodecard
     const options = {
       id: node.id,
@@ -84,8 +75,16 @@ function setupNodecards(data, deck) {
   });
 }
 
-function setupLinks(data, deck) {
-  data.map((edge, i) => {
+async function setupLinks(deck) {
+  const data = await getDbCollection("links");
+  const retrievedLinks = data.map((item) => ({
+    databaseId: item._id,
+    edgeType: item.edgetype,
+    id: item.linkId,
+    source: item.source, //nodecard A
+    target: item.target, //nodecard B
+  }));
+  retrievedLinks.map((edge, i) => {
     const options = {
       id: edge.id,
       source: edge.source,
