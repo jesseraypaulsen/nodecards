@@ -32,9 +32,21 @@ export async function updateNodecardDbEntry(databaseId, textBody) {
     }
   );
   const data = await response.json();
-  console.log(`peek after update:`);
-  console.log(data);
   return data;
 }
 
-export function createLinkDbEntry(linkId) {}
+export async function createLinkDbEntry(link) {
+  const searchParams = new URLSearchParams();
+  const linkId = link.getId();
+  const source = link.getSource();
+  const target = link.getTarget();
+  searchParams.append("linkId", linkId);
+  searchParams.append("source", source);
+  searchParams.append("target", target);
+  const response = await fetch(`http://localhost:3000/createLink`, {
+    method: "POST",
+    body: searchParams,
+  });
+  const data = await response.json();
+  return data;
+}

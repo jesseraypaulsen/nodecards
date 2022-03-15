@@ -114,6 +114,25 @@ app.get("/nodecard/:key", async (req, res) => {
   }
 });
 
+app.post("/createLink", async function (req, res) {
+  const collection = db.collection("links");
+  (async () => {
+    try {
+      const cursor = await db.query(aql`
+      INSERT {    
+        linkId: ${req.body.linkId},
+        _from: ${req.body.source},
+        _to: ${req.body.target}
+      } IN ${collection}
+      RETURN NEW`);
+      let data = await cursor.all();
+      res.json({ success: true, msg: "the post was successful", data });
+    } catch (err) {
+      res.json({ success: false, msg: `${err}` });
+    }
+  })();
+});
+
 //list all collections.
 //https://www.arangodb.com/docs/stable/drivers/js-getting-started.html
 //https://arangodb.github.io/arangojs/latest/classes/_database_.database.html#listcollections

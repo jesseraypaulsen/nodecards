@@ -8,9 +8,10 @@ function Nodecard(o) {
   this.text = o.text;
   this.title = limitLength(o.text) || "untitled";
   this.deck = o.deck || null;
+  this.databaseId = o.databaseId || null;
+  this.databaseKey = o.databaseKey || null;
   this.dom = null; // see render for the creation of this value
   this.previousMode = null;
-  this.databaseId = null;
 
   addNodeThenRender(o.pt, o.id, o.text, o.deck, this);
 }
@@ -48,12 +49,12 @@ Nodecard.prototype.setMode = function (mode) {
         let newTitle = limitLength(this.text);
         if (this.title !== newTitle) this.title = newTitle;
         if (this.deck.settings.write && this.deck.settings.save) {
-          if (this.databaseId) {
-            const { databaseId } = this;
-            //databaseId will not exist if nodecard creation on the database is incomplete.
+          if (this.databaseKey) {
+            const { databaseKey } = this;
+            //databaseKey will not exist if nodecard creation on the database is incomplete.
             if (timeoutId) clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
-              updateNodecardDbEntry(databaseId, this.text);
+              updateNodecardDbEntry(databaseKey, this.text);
             }, 750);
           }
         }

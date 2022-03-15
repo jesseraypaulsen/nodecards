@@ -1,4 +1,4 @@
-export default function buildLink(cardA, cardB, edgeType, deck) {
+export default function buildLink({ sourceId, targetId, edgetype, deck }) {
   let _id, _databaseId;
   return {
     render,
@@ -8,12 +8,14 @@ export default function buildLink(cardA, cardB, edgeType, deck) {
     setId,
     getDatabaseId,
     setDatabaseId,
+    getSource,
+    getTarget,
   };
   function render() {
     deck.net.body.data.edges.add({
-      from: cardA.id,
-      to: cardB.id,
-      label: edgeType,
+      from: sourceId,
+      to: targetId,
+      label: edgetype,
       id: _id,
     });
   }
@@ -34,5 +36,11 @@ export default function buildLink(cardA, cardB, edgeType, deck) {
   }
   function setDatabaseId(databaseId) {
     _databaseId = databaseId;
+  }
+  function getSource() {
+    return sourceId;
+  }
+  function getTarget() {
+    return targetId;
   }
 }

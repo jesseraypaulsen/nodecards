@@ -33,8 +33,7 @@ Deck.initialize = function (container, options, handler, graphRenderer) {
   setupGraphRenderer(graphRenderer, deck);
   setupSwitchPanel(deck);
   setListener(deck, handler);
-  setupNodecards(deck);
-  //TODO: setupLinks(deck);
+  setupNodecards(deck, setupLinks);
 };
 
 function setupGraphRenderer(graphRenderer, deck) {
@@ -52,56 +51,47 @@ function setListener(deck, handler) {
   deck.net.on("click", deck.listener);
 }
 
-async function setupNodecards(deck) {
+async function setupNodecards(deck, callback) {
   const data = await getDbCollection("nodecards");
-  const retrievedNodecards = data.map((item) => ({
-    databaseId: item._id,
-    label: item._id,
-    body: item.body,
-    id: item.nodecardId,
-  }));
-
-  retrievedNodecards.map((node, i) => {
-    // instantiates Nodecard
+  data.map((item, i) => {
     const options = {
-      id: node.id,
+      id: item.nodecardId,
+      text: item.body,
+      databaseId: item._id,
+      databaseKey: item._key,
       pt: null,
       state: "fixed",
       mode: "inert",
-      text: node.body,
       prelines: true,
     };
-    setTimeout(() => deck.hydrateCard(options), i * 500);
+    setTimeout(() => {
+      deck.hydrateCard(options);
+      if (i === data.length - 1) {
+        callback(deck);
+      }
+    }, i * 200);
   });
 }
 
 async function setupLinks(deck) {
   const data = await getDbCollection("links");
-  const retrievedLinks = data.map((item) => ({
-    databaseId: item._id,
-    edgeType: item.edgetype,
-    id: item.linkId,
-    source: item.source, //nodecard A
-    target: item.target, //nodecard B
-  }));
-  retrievedLinks.map((edge, i) => {
+  console.log(`from setupLinks, here's all links data:`);
+  console.log(data);
+  data.map((item, i) => {
+    /* holds databaseId not nodecardId.
+    we need a function: (databaseId) => nodecardId 
+    see getCard for template.
+    */
     const options = {
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
+      databaseId: item._id,
+      source: item._from, // _from and _to must be document handles i.e. _id
+      target: item._to,
+      edgetype: item.edgetype,
+      id: item.linkId,
     };
-    setTimeout(() => deck.hydrateLink(options), i * 500);
+    //deck.hydrateLink(options);
+    setTimeout(() => deck.hydrateLink(options), i * 300);
   });
-}
-
-async function createDatabaseEntry(card) {
-  const data = await createNodecardDbEntry(card.id);
-  card.databaseId = data.data[0]._key;
-}
-
-async function createDatabaseEntryForLink(link) {
-  const data = await createLinkDbEntry();
-  link.databaseId = data.data[0]._key;
 }
 
 // coordinates provided by options; id not provided.
@@ -116,6 +106,17 @@ Deck.prototype.createCard = function (options) {
   }
   return card;
 };
+async function createDatabaseEntry(card) {
+  const data = await createNodecardDbEntry(card.id);
+  card.databaseKey = data.data[0]._key;
+  card.databaseId = data.data[0]._id;
+}
+
+async function createDatabaseEntryForLink(link) {
+  const data = await createLinkDbEntry(link);
+  link.setDatabaseId(data.data[0]._key);
+  //link.setDatabaseId(data.data[0]._id);
+}
 
 // id provided by options; coordinates not provided.
 Deck.prototype.hydrateCard = function (options) {
@@ -125,24 +126,49 @@ Deck.prototype.hydrateCard = function (options) {
   this.pushCard(card);
 };
 
-Deck.prototype.createLink = function (options) {
-  const link = buildLink(cardA, cardB, edgeType, this);
+Deck.prototype.createLink = function ({ source, target, edgetype }) {
+  const link = buildLink(source, target, edgetype, this);
   link.addToDeck();
-  const id = cuid();
+  const id = cuid(); //create new id
   link.setId(id);
   link.render();
+  if (this.settings.save) createDatabaseEntryForLink(link);
 };
 
-Deck.prototype.hydrateLink = function (options) {
-  const link = buildLink(cardA, cardB, edgeType, this);
+Deck.prototype.hydrateLink = function ({
+  databaseId,
+  source,
+  target,
+  edgetype,
+  id,
+}) {
+  const sourceId = this.getCardIdByDatabaseId(source);
+  const targetId = this.getCardIdByDatabaseId(target);
+
+  const options = { sourceId, targetId, edgetype, deck: this };
+
+  const link = buildLink(options);
+
+  link.setId(id);
+  link.setDatabaseId(databaseId);
   link.addToDeck();
   link.render();
 };
 
 Deck.prototype.getCard = function (id) {
   let card = this.stack.find((x) => x.id === id);
-  if (!card) console.error("the nodecard cannot be found!");
+  if (!card)
+    console.error(`the nodecard with id of ${id} cannot be found in the deck.`);
   return card;
+};
+
+Deck.prototype.getCardIdByDatabaseId = function (databaseId) {
+  let card = this.stack.find((x) => x.databaseId === databaseId);
+  if (!card)
+    console.error(
+      `the nodecard with databaseId of ${databaseId} cannot be found in the deck.`
+    );
+  return card.id;
 };
 
 Deck.prototype.pushCard = function (card) {
