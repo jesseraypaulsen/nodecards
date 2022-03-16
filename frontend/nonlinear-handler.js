@@ -2,7 +2,7 @@ import { typeofSelection } from "./utils";
 import { turnTogglerSwitchOff } from "./switch-panel";
 export default handler;
 
-function handler(data, deck) {
+async function handler(data, deck) {
   const {
     pointer: { canvas, DOM },
   } = data;
@@ -25,7 +25,7 @@ function handler(data, deck) {
     if (click === "BG") {
       if (deck.settings.write) {
         log("A", 1, deck);
-        let newCard = deck.createCard({
+        let newCard = await deck.createCard({
           pt: pt,
           state: "floating",
           mode: "write",
@@ -82,15 +82,15 @@ function handler(data, deck) {
       deck.currCard.setMode("inert");
 
       // previousMode is a state variable used to condition for tangent vs annotate.
-      let edgeType = "";
+      let edgetype = "";
       if (deck.currCard.previousMode === "read") {
-        edgeType = "annotate";
+        edgetype = "annotate";
       } else if (deck.currCard.previousMode === "write") {
-        edgeType = "tangent";
+        edgetype = "tangent";
       }
 
       if (deck.settings.write) {
-        let newCard = deck.createCard({
+        let newCard = await deck.createCard({
           pt,
           state: "floating",
           mode: "write",
@@ -100,12 +100,7 @@ function handler(data, deck) {
         let latter = deck.currCard.id;
 
         if (deck.settings.nonlinear) {
-          //deck.createLink({former,latter,edgeType,deck})
-          deck.net.body.data.edges.add({
-            from: former,
-            to: latter,
-            label: edgeType,
-          });
+          deck.createLink({ sourceId: former, targetId: latter, edgetype });
         }
       }
 

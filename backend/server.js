@@ -74,15 +74,10 @@ app.post("/createNodecard", function (req, res) {
 app.put("/updateNodecard/:key", function (req, res) {
   const collection = db.collection("nodecards");
   const key = req.params.key;
-  console.log(req.params.key);
   (async () => {
     try {
-      /*const cursor = await db.query(aql`
-      UPDATE { _key: ${key}} WITH {
-        body: ${req.body.textBody}
-      } IN ${collection}`);*/
       const cursor = await db.query(aql`
-        UPDATE { _key: ${key},
+        UPDATE { _key: ${req.params.key},
           body: ${req.body.textBody}
         } IN ${collection}
         RETURN NEW`);

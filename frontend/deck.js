@@ -75,13 +75,7 @@ async function setupNodecards(deck, callback) {
 
 async function setupLinks(deck) {
   const data = await getDbCollection("links");
-  console.log(`from setupLinks, here's all links data:`);
-  console.log(data);
   data.map((item, i) => {
-    /* holds databaseId not nodecardId.
-    we need a function: (databaseId) => nodecardId 
-    see getCard for template.
-    */
     const options = {
       databaseId: item._id,
       source: item._from, // _from and _to must be document handles i.e. _id
@@ -89,20 +83,20 @@ async function setupLinks(deck) {
       edgetype: item.edgetype,
       id: item.linkId,
     };
-    //deck.hydrateLink(options);
-    setTimeout(() => deck.hydrateLink(options), i * 300);
+    deck.hydrateLink(options);
+    //setTimeout(() => deck.hydrateLink(options), i * 300);
   });
 }
 
 // coordinates provided by options; id not provided.
-Deck.prototype.createCard = function (options) {
+Deck.prototype.createCard = async function (options) {
   options.id = cuid();
   options.deck = this;
   const card = new Nodecard(options);
   card.setMode(); // render
   this.pushCard(card);
   if (this.settings.write && this.settings.save) {
-    createDatabaseEntry(card);
+    await createDatabaseEntry(card);
   }
   return card;
 };
@@ -114,8 +108,9 @@ async function createDatabaseEntry(card) {
 
 async function createDatabaseEntryForLink(link) {
   const data = await createLinkDbEntry(link);
-  link.setDatabaseId(data.data[0]._key);
-  //link.setDatabaseId(data.data[0]._id);
+  console.log(`from createDatabaseEntryForLink, here's data`);
+  console.log(data);
+  link.setDatabaseId(data.data[0]._id);
 }
 
 // id provided by options; coordinates not provided.
@@ -126,11 +121,22 @@ Deck.prototype.hydrateCard = function (options) {
   this.pushCard(card);
 };
 
-Deck.prototype.createLink = function ({ source, target, edgetype }) {
-  const link = buildLink(source, target, edgetype, this);
-  link.addToDeck();
+Deck.prototype.createLink = function (options) {
+  options.deck = this;
+  const link = buildLink(options);
   const id = cuid(); //create new id
   link.setId(id);
+
+  //we need the _id of each vertex in the database before we can create the new edge doc.
+  const source = this.getCard(options.sourceId);
+  const target = this.getCard(options.targetId);
+  link.setSourceDatabaseId(source.databaseId);
+  console.log(
+    `from createLink, here's target ${target} and here's target.databaseId: ${target.databaseId}`
+  ); //returns null
+  link.setTargetDatabaseId(target.databaseId);
+
+  link.addToDeck();
   link.render();
   if (this.settings.save) createDatabaseEntryForLink(link);
 };
@@ -142,6 +148,7 @@ Deck.prototype.hydrateLink = function ({
   edgetype,
   id,
 }) {
+  // for rendering in vis-network
   const sourceId = this.getCardIdByDatabaseId(source);
   const targetId = this.getCardIdByDatabaseId(target);
 
@@ -151,6 +158,8 @@ Deck.prototype.hydrateLink = function ({
 
   link.setId(id);
   link.setDatabaseId(databaseId);
+  link.setSourceDatabaseId(source);
+  link.setTargetDatabaseId(target);
   link.addToDeck();
   link.render();
 };
