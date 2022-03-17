@@ -73,7 +73,6 @@ app.post("/createNodecard", function (req, res) {
 
 app.put("/updateNodecard/:key", function (req, res) {
   const collection = db.collection("nodecards");
-  const key = req.params.key;
   (async () => {
     try {
       const cursor = await db.query(aql`
@@ -117,7 +116,8 @@ app.post("/createLink", async function (req, res) {
       INSERT {    
         linkId: ${req.body.linkId},
         _from: ${req.body.source},
-        _to: ${req.body.target}
+        _to: ${req.body.target},
+        edgetype: ${req.body.edgetype}
       } IN ${collection}
       RETURN NEW`);
       let data = await cursor.all();

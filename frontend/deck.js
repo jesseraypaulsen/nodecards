@@ -123,19 +123,17 @@ Deck.prototype.hydrateCard = function (options) {
 
 Deck.prototype.createLink = function (options) {
   options.deck = this;
+  console.log(`from createLink, here's options`);
+  console.log(options); //edgetype:'tangent'
   const link = buildLink(options);
   const id = cuid(); //create new id
   link.setId(id);
 
-  //we need the _id of each vertex in the database before we can create the new edge doc.
+  //we need the _id of each vertex doc in the database before we can create the new edge doc.
   const source = this.getCard(options.sourceId);
   const target = this.getCard(options.targetId);
   link.setSourceDatabaseId(source.databaseId);
-  console.log(
-    `from createLink, here's target ${target} and here's target.databaseId: ${target.databaseId}`
-  ); //returns null
   link.setTargetDatabaseId(target.databaseId);
-
   link.addToDeck();
   link.render();
   if (this.settings.save) createDatabaseEntryForLink(link);

@@ -38,10 +38,12 @@ export async function createLinkDbEntry(link) {
   const linkId = link.getId();
   const source = link.getSourceDatabaseId();
   const target = link.getTargetDatabaseId();
+  const edgetype = link.getEdgetype();
 
   searchParams.append("linkId", linkId);
   searchParams.append("source", source);
   searchParams.append("target", target);
+  searchParams.append("edgetype", edgetype);
   const response = await fetch(`http://localhost:3000/createLink`, {
     method: "POST",
     body: searchParams,

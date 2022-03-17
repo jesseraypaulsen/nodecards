@@ -78,7 +78,7 @@ async function handler(data, deck) {
     if (click === "BG") {
       log("E", 1, deck);
       turnTogglerSwitchOff();
-      let former = deck.currCard.id;
+      const sourceId = deck.currCard.id;
       deck.currCard.setMode("inert");
 
       // previousMode is a state variable used to condition for tangent vs annotate.
@@ -97,10 +97,10 @@ async function handler(data, deck) {
         });
 
         deck.currCard = newCard;
-        let latter = deck.currCard.id;
+        const targetId = deck.currCard.id;
 
         if (deck.settings.nonlinear) {
-          deck.createLink({ sourceId: former, targetId: latter, edgetype });
+          deck.createLink({ sourceId, targetId, edgetype });
         }
       }
 

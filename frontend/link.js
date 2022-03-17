@@ -14,6 +14,7 @@ export default function buildLink({ sourceId, targetId, edgetype, deck }) {
     getTargetDatabaseId,
     setSourceDatabaseId,
     setTargetDatabaseId,
+    getEdgetype,
   };
   function render() {
     deck.net.body.data.edges.add({
@@ -58,5 +59,8 @@ export default function buildLink({ sourceId, targetId, edgetype, deck }) {
   }
   function setTargetDatabaseId(val) {
     _targetDatabaseId = val;
+  }
+  function getEdgetype() {
+    return edgetype;
   }
 }
