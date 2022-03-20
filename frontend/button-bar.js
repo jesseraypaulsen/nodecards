@@ -18,20 +18,20 @@ function attachButtonBar(container, card) {
 
   if (card.mode == "read") {
     [0, 1, 3, 4].map((i) => {
-      const obj = createButtonWithTooltip(items[i]);
+      const obj = createButtonWithTooltip(items[i], card);
       buttonBar.append(obj.el);
       setupMaterialDesign(obj);
     });
   } else if (card.mode == "write") {
     [0, 2, 3, 4].map((i) => {
-      const obj = createButtonWithTooltip(items[i]);
+      const obj = createButtonWithTooltip(items[i], card);
       buttonBar.append(obj.el);
       setupMaterialDesign(obj);
     });
   }
 }
 
-function createButtonWithTooltip(item) {
+function createButtonWithTooltip(item, card) {
   const tooltip = document.createElement("div");
   tooltip.id = item.id;
   tooltip.setAttribute("role", "tooltip");
@@ -73,9 +73,18 @@ function createButtonWithTooltip(item) {
 
   if (item.id == "tooltip-inertify") {
     iconButton.addEventListener("click", (e) => {
-      //if (card.mode == "read") {
+      // this == e.target
       console.log(`inertify button clicked`);
-      //}
+
+      if (card.mode == "read") {
+        card.setMode("inert");
+      }
+      if (card.mode == "write" && card.state == "floating") {
+        card.deck.discard(card.id);
+      } else if (card.mode == "write") {
+        card.setMode("inert");
+      }
+      card.deck.currCard = { state: "empty" };
     });
   }
 

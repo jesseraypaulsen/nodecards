@@ -142,8 +142,7 @@ Nodecard.prototype.reader = function () {
   //const buttonBar = attachButtonBar();
   //buttonBar.classList.add("nodecard__bar");
 
-  const btn = this.closeButton();
-  reader.append(bodyContainer, btn);
+  reader.append(bodyContainer);
   //reader.append(bodyContainer, buttonBar);
 
   return reader;
@@ -154,31 +153,7 @@ Nodecard.prototype.editor = function () {
   editor.classList.add("editor");
   //editor.innerHTML = `<textarea cols="16" rows="12" placeholder="start typing..."></textarea>`;
   editor.innerHTML = `<textarea placeholder="start typing..."></textarea>`;
-  const btn = this.closeButton();
-  editor.append(btn);
   return editor;
-};
-
-Nodecard.prototype.closeButton = function () {
-  const close = document.createElement("span");
-  close.innerHTML = "&#x2715;";
-  close.classList.add("nodecard-close-btn");
-  const cardThis = this;
-
-  close.addEventListener("click", (e) => {
-    // this == e.target
-    if (cardThis.mode == "read") {
-      cardThis.setMode("inert");
-    }
-    if (cardThis.mode == "write" && cardThis.state == "floating") {
-      cardThis.deck.discard(cardThis.id);
-    } else if (cardThis.mode == "write") {
-      cardThis.setMode("inert");
-    }
-    cardThis.deck.currCard = { state: "empty" };
-  });
-
-  return close;
 };
 
 // used by .move and .render
