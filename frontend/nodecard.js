@@ -1,4 +1,5 @@
 export default Nodecard;
+import attachButtonBar from "./button-bar";
 import { updateNodecardDbEntry } from "./data-access";
 
 function Nodecard(o) {
@@ -112,14 +113,15 @@ Nodecard.prototype.render = function (view) {
     opacity: 0,
   });
 
-  this.deck.container.append(this.dom);
-
   if (this.dom.hasChildNodes()) {
     let child = this.dom.firstElementChild;
     child.replaceWith(view);
   } else {
     this.dom.append(view);
   }
+  //These two lines must occur in this order, or Material Tooltip breaks everything.
+  this.deck.container.append(this.dom);
+  attachButtonBar(view, this);
 
   this.setPosition(this.pt.domX, this.pt.domY);
 };
@@ -132,17 +134,26 @@ Nodecard.prototype.move = function ({ domX, domY, canX, canY }) {
 Nodecard.prototype.reader = function () {
   const reader = document.createElement("div");
   reader.classList.add("reader");
-  reader.innerHTML = this.text;
+
+  const bodyContainer = document.createElement("div");
+  bodyContainer.classList.add("reader__body");
+  bodyContainer.textContent = this.text;
+
+  //const buttonBar = attachButtonBar();
+  //buttonBar.classList.add("nodecard__bar");
+
   const btn = this.closeButton();
-  reader.append(btn);
+  reader.append(bodyContainer, btn);
+  //reader.append(bodyContainer, buttonBar);
+
   return reader;
 };
 
 Nodecard.prototype.editor = function () {
   const editor = document.createElement("div");
   editor.classList.add("editor");
-  editor.innerHTML = `<textarea cols="10" rows="6" placeholder="start typing..." 
-  style="background-color: #D2E5FF;"></textarea>`;
+  //editor.innerHTML = `<textarea cols="16" rows="12" placeholder="start typing..."></textarea>`;
+  editor.innerHTML = `<textarea placeholder="start typing..."></textarea>`;
   const btn = this.closeButton();
   editor.append(btn);
   return editor;

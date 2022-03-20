@@ -1,0 +1,13 @@
+/* Stylesheets loaded by @use are called "modules". */
+
+@use "@material/icon-button/styles";
+
+.material-icons {
+  font-size: 20px !important;
+}
+
+.mdc-icon-button {
+  width: 30px;
+  height: 30px;
+  padding: 3px;
+}

@@ -6,7 +6,8 @@ export const options = {
     shape: "box",
     shadow: true,
     //color: "#D6D7E8",
-    color: "#D2E5FF",
+    //color: "#D2E5FF",
+    color: "#37c0fb",
   },
   physics: {
     enabled: true,
