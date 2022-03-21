@@ -12,9 +12,7 @@ const items = [
 function attachButtonBar(container, card) {
   const buttonBar = document.createElement("div");
   buttonBar.classList.add("button-bar");
-
-  const line = document.createElement("hr");
-  container.append(line, buttonBar);
+  container.append(buttonBar);
 
   if (card.mode == "read") {
     [0, 1, 3, 4].map((i) => {

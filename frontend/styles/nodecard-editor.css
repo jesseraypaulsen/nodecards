@@ -1,0 +1,36 @@
+.nodecard > .editor {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  width: 200px;
+  background-color: #e9e6ed;
+  color: #2d2c2e;
+  border-radius: 2px;
+  padding: 10px;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+.nodecard > .editor > .editor__input {
+  font-family: "Source Sans Pro", sans-serif;
+  height: 150px;
+  background-color: #f4f4f4;
+  /* padding: 10px; */
+}
+
+.nodecard > .editor > .editor__input > textarea {
+  resize: none;
+  height: 150px;
+  width: 180px;
+  border: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 13px;
+  color: #2d2c2e; /* font color */
+  background-color: #f4f4f4;
+  /* border-radius: 2px; */
+}
+/* see nodecard.js for inline size */
+
+.nodecard > .editor > .editor__input > textarea:focus {
+  outline: none;
+}

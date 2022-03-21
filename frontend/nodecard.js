@@ -139,21 +139,17 @@ Nodecard.prototype.reader = function () {
   bodyContainer.classList.add("reader__body");
   bodyContainer.textContent = this.text;
 
-  //const buttonBar = attachButtonBar();
-  //buttonBar.classList.add("nodecard__bar");
-
   reader.append(bodyContainer);
-  //reader.append(bodyContainer, buttonBar);
-
   return reader;
 };
 
 Nodecard.prototype.editor = function () {
   const editor = document.createElement("div");
   editor.classList.add("editor");
+
   const inputContainer = document.createElement("div");
   inputContainer.classList.add("editor__input");
-  inputContainer.innerHTML = `<textarea placeholder="start typing..."></textarea>`;
+  inputContainer.innerHTML = `<textarea placeholder="start typing...">${this.text}</textarea>`;
 
   editor.append(inputContainer);
   return editor;

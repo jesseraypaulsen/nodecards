@@ -1,13 +1,12 @@
 export const options = {
   nodes: {
     font: {
-      size: 10,
+      size: 14,
+      color: "#ffffff",
     },
     shape: "box",
     shadow: true,
-    //color: "#D6D7E8",
-    //color: "#D2E5FF",
-    color: "#37c0fb",
+    color: "#6002EE",
   },
   physics: {
     enabled: true,
