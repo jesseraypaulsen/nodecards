@@ -151,8 +151,11 @@ Nodecard.prototype.reader = function () {
 Nodecard.prototype.editor = function () {
   const editor = document.createElement("div");
   editor.classList.add("editor");
-  //editor.innerHTML = `<textarea cols="16" rows="12" placeholder="start typing..."></textarea>`;
-  editor.innerHTML = `<textarea placeholder="start typing..."></textarea>`;
+  const inputContainer = document.createElement("div");
+  inputContainer.classList.add("editor__input");
+  inputContainer.innerHTML = `<textarea placeholder="start typing..."></textarea>`;
+
+  editor.append(inputContainer);
   return editor;
 };
 

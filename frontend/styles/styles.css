@@ -18,14 +18,9 @@
 .nodecard {
   z-index: 2990;
   position: absolute;
-  /* background-color: #f9f9f9; */
-  /* background-color: #D2E5FF; */
-  /* background-color: #2b7ce9; */
-  /* text-align: center; */
   box-shadow: 8px 8px 18px 0 rgba(0, 0, 0, 0.6),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 2px;
-  font-family: sans-serif;
 }
 
 /* 
@@ -42,8 +37,24 @@ offset-x | offset-y | blur-radius | spread-radius | color
   height: 200px;
   width: 200px;
   background-color: #f4f4f4;
+  color: #777777;
   border-radius: 2px;
-  padding: 0;
+}
+
+.nodecard > .editor > .editor__input > textarea {
+  resize: none;
+  height: 150px;
+  width: 180px;
+  border-radius: 2px;
+  border: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  color: #777777; /* font color */
+  background-color: #f4f4f4;
+}
+/* see nodecard.js for inline size */
+
+.nodecard > .editor > .editor__input > textarea:focus {
+  outline: none;
 }
 
 .nodecard > .reader {
@@ -111,33 +122,6 @@ offset-x | offset-y | blur-radius | spread-radius | color
   flex-direction: column;
   justify-content: space-between;
   height: 200px;
-}
-
-textarea {
-  resize: none;
-  height: 180px;
-  width: 180px;
-  border-radius: 2px;
-  border: 0;
-  font-family: "Source Sans Pro", sans-serif;
-  color: #777777; /* font color */
-  background-color: #f4f4f4;
-}
-/* see nodecard.js for inline size */
-
-textarea:focus {
-  outline: none;
-}
-
-.nodecard-close-btn {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  height: 20px;
-  width: 20px;
-  z-index: 10000;
-  border-top-right-radius: 10px;
-  background-color: #fe7f9c;
 }
 
 /*

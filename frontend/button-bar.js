@@ -64,6 +64,7 @@ function createButtonWithTooltip(item, card) {
   iconButton.setAttribute("aria-describedby", item.id);
   //iconButton.dataset.tooltipId = item.id;
   //setting the data-tooltip-id attribute is an alternative to setting the aria-describedby attribute.
+  //this is how the tooltip gets attached to the button.
 
   const ripple = document.createElement("div");
   ripple.classList.add("mdc-icon-button__ripple");
@@ -88,6 +89,30 @@ function createButtonWithTooltip(item, card) {
     });
   }
 
+  if (item.id == "tooltip-edit") {
+    iconButton.addEventListener("click", (e) => {
+      card.setMode("write");
+    });
+  }
+
+  if (item.id == "tooltip-readonly") {
+    iconButton.addEventListener("click", (e) => {
+      card.setMode("read");
+    });
+  }
+
+  if (item.id == "tooltip-drag") {
+    iconButton.addEventListener("click", (e) => {
+      console.log("drag button clicked");
+    });
+  }
+
+  if (item.id == "tooltip-delete") {
+    iconButton.addEventListener("click", (e) => {
+      console.log("delete button clicked");
+    });
+  }
+
   /* Material Icon-Button
   <button
   class="mdc-icon-button material-icons"
@@ -102,10 +127,8 @@ function createButtonWithTooltip(item, card) {
   const el = document.createElement("div");
   el.style.display = "inline-block";
   el.append(iconButton, tooltip);
-  //buttonBar.append(el);
 
   return { el, iconButton, tooltip };
-  //return buttonBar;
 }
 
 function setupMaterialDesign({ iconButton, tooltip }) {
