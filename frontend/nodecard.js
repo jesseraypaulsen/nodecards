@@ -6,7 +6,7 @@ function Nodecard(o) {
   this.id = o.id;
   this.state = o.state || "floating";
   this.mode = o.mode || "write";
-  this.text = o.text;
+  this.text = o.text || "";
   this.title = limitLength(o.text) || "untitled";
   this.deck = o.deck || null;
   this.databaseId = o.databaseId || null;
@@ -14,10 +14,10 @@ function Nodecard(o) {
   this.dom = null; // see render for the creation of this value
   this.previousMode = null;
 
-  addNodeThenRender(o.pt, o.id, o.text, o.deck, this);
+  addNodeThenRender(o.pt, o.id, o.deck, this);
 }
 
-function addNodeThenRender(pt, id, text, deck, card) {
+function addNodeThenRender(pt, id, deck, card) {
   const label = card.title;
   if (pt) {
     deck.net.body.data.nodes.add({ x: pt.canX, y: pt.canY, id, label });

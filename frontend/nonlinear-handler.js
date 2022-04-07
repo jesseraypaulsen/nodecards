@@ -29,8 +29,6 @@ async function handler(data, deck) {
           pt: pt,
           state: "floating",
           mode: "write",
-          text: "",
-          prelines: false,
         });
         deck.currCard = newCard;
         log("A", 2, deck);

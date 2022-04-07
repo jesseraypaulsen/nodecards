@@ -27,5 +27,6 @@
   display: flex;
   justify-content: space-between;
   background-color: #e9e6ed;
-  padding: 2px;
+  padding: 0;
+  padding-top: 6px;
 }

@@ -7,15 +7,13 @@
   color: #2d2c2e;
   border-radius: 2px;
   padding: 10px;
-  /* justify-content: center; */
-  /* align-items: center; */
+  padding-bottom: 0;
 }
 
 .nodecard > .editor > .editor__input {
   font-family: "Source Sans Pro", sans-serif;
   height: 150px;
   background-color: #f4f4f4;
-  /* padding: 10px; */
 }
 
 .nodecard > .editor > .editor__input > textarea {
@@ -27,9 +25,7 @@
   font-size: 13px;
   color: #2d2c2e; /* font color */
   background-color: #f4f4f4;
-  /* border-radius: 2px; */
 }
-/* see nodecard.js for inline size */
 
 .nodecard > .editor > .editor__input > textarea:focus {
   outline: none;
