@@ -1,3 +1,11 @@
+frontend: `npx parcel index.html`
+(or just `parcel index.html` if you have the Parcel CLI installed).
+backend: `npm run devStart`
+The backend requires that you first install a local instance of ArangoDB.
+The demo is in the demo git branch. The demo does not have a backend.
+
+-------
+
 - Personal Knowledge Management
 - Zettelkasten
 - Memex
@@ -7,8 +15,8 @@
 - <http://eric-blue.com/2009/05/10/15-effective-tools-for-visual-knowledge-management/>
 - <http://eric-blue.com/my-projects/personal-memex/>
 
-- ArangoDB
-- links as first-class citizens
+- ArangoDB is a multi-model database. It's kind of like a hybrid of MongoDB and Neo4j. It lends itself very well to the idea of interconnected notecards. Links are first-class citizens in ArangoDB.
+
 - the readme should answer the what, why, and the how of the project
 some guide questions that will help you out:
   What was your motivation?
@@ -19,7 +27,7 @@ some guide questions that will help you out:
   If your project has a lot of features, consider adding a "Features" section and listing them here.
 - sections
   - title
-  - description - The quality of a README description often differentiates a good project   from a bad project. A good one takes advantage of the opportunity to explain and showcase:
+  - description - A good README explains and showcases:
     - What your application does,
     - Why you used the technologies you used,
     - Some of the challenges you faced and features you hope to implement in the future.

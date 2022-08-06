@@ -1,12 +1,12 @@
 {
-  "devDependencies": {
-    "@parcel/transformer-sass": "^2.3.2",
-    "prettier": "2.3.0"
-  },
   "dependencies": {
     "@material/icon-button": "^13.0.0",
     "@material/tooltip": "^13.0.0",
     "cuid": "^2.1.8",
     "vis-network": "^9.1.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.7.0",
+    "parcel": "^2.7.0"
   }
 }
