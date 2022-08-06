@@ -1,6 +1,5 @@
 export default Nodecard;
 import attachButtonBar from "./button-bar";
-import { updateNodecardDbEntry } from "./data-access";
 
 function Nodecard(o) {
   this.id = o.id;
@@ -49,16 +48,6 @@ Nodecard.prototype.setMode = function (mode) {
         // especially for newly created cards that have no body when they are instantiated.
         let newTitle = limitLength(this.text);
         if (this.title !== newTitle) this.title = newTitle;
-        if (this.deck.settings.write && this.deck.settings.save) {
-          if (this.databaseKey) {
-            const { databaseKey } = this;
-            //databaseKey will not exist if nodecard creation on the database is incomplete.
-            if (timeoutId) clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-              updateNodecardDbEntry(databaseKey, this.text);
-            }, 750);
-          }
-        }
       });
 
       return;
@@ -169,31 +158,15 @@ Nodecard.prototype.log = function () {
   }
 };
 
-// find the center point of a DOM element
-function centerpoint(el) {
-  let centerX = el.offsetLeft + el.offsetWidth / 2;
-  let centerY = el.offsetTop + el.offsetHeight / 2; // find the centerpoint of an element.
-  console.log(`centerX: ${centerX} / centerY: ${centerY}`); // should be equal to click coords.
-}
-
 function limitLength(txt) {
   if (!txt) return false;
   if (txt.length <= 20) return txt;
   return txt.slice(0, 20);
 }
 
-/*
-Nodecard.prototype.canvasTextWrap = (txt, unit) => {
-  txt = limitLength(txt);
-  const lines = [];
-  const reducer = (acc, curr) => acc + curr;
-  let breaks = Math.ceil(txt.length / unit); // round up to nearest integer
-  for (let n = 0; n < breaks; n++) {
-    let nu = n * unit;
-    lines[n] = txt.substring(nu, nu + unit) + "\n\n";
-    // vis-network simply uses the line-break character to format multi-line text on canvas
-  }
-  let wrappedtxt = lines.reduce(reducer);
-  return wrappedtxt;
-};
-*/
+// find the center point of a DOM element
+function centerpoint(el) {
+  let centerX = el.offsetLeft + el.offsetWidth / 2;
+  let centerY = el.offsetTop + el.offsetHeight / 2; // find the centerpoint of an element.
+  console.log(`centerX: ${centerX} / centerY: ${centerY}`); // should be equal to click coords.
+}

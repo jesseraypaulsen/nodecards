@@ -7,7 +7,7 @@ import "./styles/switch-panel.css";
 import "./styles/nodecard-reader.css";
 import "./styles/nodecard-editor.css";
 import "./styles/icon-button.scss";
-import "/styles/tooltip.scss";
+import "./styles/tooltip.scss";
 
 const container = document.querySelector("#container");
 

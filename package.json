@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf .parcel-cache"
+  },
   "dependencies": {
     "@material/icon-button": "^13.0.0",
     "@material/tooltip": "^13.0.0",
