@@ -6,7 +6,7 @@ function Nodecard(o) {
   this.state = o.state || "floating";
   this.mode = o.mode || "write";
   this.text = o.text || "";
-  this.title = limitLength(o.text) || "untitled";
+  this.title = o.title || limitLength(o.text) || "untitled";
   this.deck = o.deck || null;
   this.databaseId = o.databaseId || null;
   this.databaseKey = o.databaseKey || null;

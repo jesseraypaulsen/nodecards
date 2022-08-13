@@ -51,6 +51,7 @@ async function setupNodecards(deck, callback) {
     const options = {
       id: item.id,
       text: item.body,
+      title: item.title,
       pt: null,
       state: "fixed",
       mode: "inert",
@@ -61,7 +62,7 @@ async function setupNodecards(deck, callback) {
       if (i === data.nodecards.length - 1) {
         callback(deck);
       }
-    }, i * 200);
+    }, i * 100);
   });
 }
 
