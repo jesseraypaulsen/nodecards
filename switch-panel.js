@@ -60,6 +60,11 @@ export function setupSwitchPanel(deck) {
     } else if (parent.classList.contains("write")) {
       deck.settings.write = chkValue;
       switchLabel("Writing", chkValue);
+      //write is dependent upon read, so this synchronizes the toggles.
+      const el = parent.parentNode.querySelector(".read").firstElementChild;
+      el.checked = chkValue; //required: assign new state before dispatching change event
+      const ev = new Event("change");
+      el.dispatchEvent(ev);
     } else if (parent.classList.contains("save")) {
       deck.settings.save = chkValue;
       switchLabel("Auto-save", chkValue);
