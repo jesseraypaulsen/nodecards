@@ -1,4 +1,6 @@
 export const options = {
+  // height: "90%",
+  // width: "90%",
   nodes: {
     font: {
       size: 14,
@@ -6,7 +8,8 @@ export const options = {
     },
     shape: "box",
     shadow: true,
-    color: "#6002EE",
+    // color: "#6002EE",
+    color: "#bcb0c4",
   },
   physics: {
     enabled: true,
@@ -15,6 +18,9 @@ export const options = {
     dragView: false, //!!important for keeping nodecards in sync with canvas nodes!!
     zoomView: false, //!!important for the same reason above!!
   },
+  // layout: {
+  //   improvedLayout: true,
+  // },
 };
 
 /*const options = { 

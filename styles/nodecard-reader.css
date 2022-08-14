@@ -1,11 +1,11 @@
 .nodecard > .reader {
   display: flex;
   flex-direction: column;
-  height: 200px;
-  width: 200px;
+  font-size: 13px;
+  height: 20em;
+  width: 30em;
   background-color: #e9e6ed;
   color: #2d2c2e;
-  font-size: 13px;
   border-radius: 2px;
   word-wrap: break-word;
   padding: 10px;
@@ -15,7 +15,7 @@
 .nodecard > .reader > .reader__body {
   font-family: "Source Sans Pro", sans-serif;
   overflow-y: scroll;
-  height: 150px;
+  height: 16em;
   background-color: #f4f4f4;
 }
 

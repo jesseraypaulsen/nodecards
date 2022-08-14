@@ -1,8 +1,9 @@
 .nodecard > .editor {
   display: flex;
   flex-direction: column;
-  height: 200px;
-  width: 200px;
+  font-size: 13px;
+  height: 20em;
+  width: 30em;
   background-color: #e9e6ed;
   color: #2d2c2e;
   border-radius: 2px;
@@ -12,21 +13,30 @@
 
 .nodecard > .editor > .editor__input {
   font-family: "Source Sans Pro", sans-serif;
-  height: 150px;
+  /* height: 150px; */
+  height: 16em;
   background-color: #f4f4f4;
 }
 
 .nodecard > .editor > .editor__input > textarea {
   resize: none;
-  height: 150px;
-  width: 180px;
+  /* height: 150px;
+  width: 180px; */
   border: 0;
   font-family: "Source Sans Pro", sans-serif;
   font-size: 13px;
+  height: 16em;
+  width: 28em;
   color: #2d2c2e; /* font color */
   background-color: #f4f4f4;
+  overflow: -moz-scrollbars-none; /* hide scrollbar without disabling scroll in Firefox */
 }
 
 .nodecard > .editor > .editor__input > textarea:focus {
   outline: none;
+}
+
+/* hide scrollbar without disabling scroll in Chrome */
+.nodecard >.editor >.editor__input > textarea::-webkit-scrollbar {
+  width: 0 !important
 }

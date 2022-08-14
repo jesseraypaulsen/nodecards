@@ -2,9 +2,13 @@ export default Nodecard;
 import attachButtonBar from "./button-bar";
 
 function Nodecard(o) {
+  let htmlText = o.text
+    .replace(/\n/g, "<br>")
+    .replace(/\t/g, "&nbsp; &nbsp; &nbsp; &nbsp;");
   this.id = o.id;
   this.state = o.state || "floating";
   this.mode = o.mode || "write";
+  this.htmlText = htmlText || "";
   this.text = o.text || "";
   this.title = o.title || limitLength(o.text) || "untitled";
   this.deck = o.deck || null;
@@ -40,7 +44,6 @@ Nodecard.prototype.setMode = function (mode) {
       // why does `this` return the nodecard instead of the dom element?
       // Because the dom element is attached to the nodecard. This is different than the
       // closebutton method below.
-      let timeoutId;
       this.dom.addEventListener("keyup", (e) => {
         if (this.state === "floating") this.state = "fixed";
         this.text = e.target.value;
@@ -126,7 +129,8 @@ Nodecard.prototype.reader = function () {
 
   const bodyContainer = document.createElement("div");
   bodyContainer.classList.add("reader__body");
-  bodyContainer.textContent = this.text;
+  //bodyContainer.textContent = this.text;
+  bodyContainer.innerHTML = this.htmlText;
 
   reader.append(bodyContainer);
   return reader;
@@ -146,9 +150,17 @@ Nodecard.prototype.editor = function () {
 
 // used by .move and .render
 Nodecard.prototype.setPosition = function (x, y) {
-  this.dom.style.left = x - 200 / 2 + "px"; // height, width = 100 in styles.css
-  this.dom.style.top = y - 200 / 2 + "px";
+  let width = parseInt(getComputedStyle(this.dom).width.substring(0, 3));
+  let height = parseInt(getComputedStyle(this.dom).height.substring(0, 3));
+
+  this.dom.style.left = x - width / 2 + "px";
+  this.dom.style.top = y - height / 2 + "px";
   this.dom.style.display = "flex";
+
+  /* to confirm that values are correct:
+  console.log(`x is ${x}, y is ${y}, width is ${width}, height is ${height}`);
+  centerpoint(this.dom);
+  */
 };
 
 Nodecard.prototype.log = function () {
@@ -164,7 +176,8 @@ function limitLength(txt) {
   return txt.slice(0, 20);
 }
 
-// find the center point of a DOM element
+// Finds the center point of a DOM element. DO NOT DELETE, even if you're not currently using it.
+// It's very useful for confirming that setPosition has computed the correct values.
 function centerpoint(el) {
   let centerX = el.offsetLeft + el.offsetWidth / 2;
   let centerY = el.offsetTop + el.offsetHeight / 2; // find the centerpoint of an element.

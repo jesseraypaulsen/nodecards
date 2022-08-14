@@ -77,6 +77,7 @@ async function setupLinks(deck) {
     };
     deck.hydrateLink(options);
   });
+  deck.net.fit({ maxZoomLevel: 1, minZoomLevel: 0.6 });
 }
 
 // coordinates provided by options; id not provided.
