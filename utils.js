@@ -13,6 +13,9 @@ export function typeofSelection(params) {
   } else if (params.nodes[0]) {
     // nodecard
     return "NC";
+  } else if (params.edges[0]) {
+    // linkcard
+    return "LC";
   } else {
     return null;
   } // TODO: 'edge'

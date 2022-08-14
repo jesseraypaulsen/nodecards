@@ -21,6 +21,11 @@ async function handler(data, deck) {
     //if (clickedCard) clickedCard.oPt = deck.getNodeCenter(data.nodes[0]);
   }
 
+  // linkcards are currently not implemented
+  if (click === "LC") {
+    console.log(data.edges[0]);
+  }
+
   if (deck.currCard.state === "empty") {
     if (click === "BG") {
       if (deck.settings.write) {
