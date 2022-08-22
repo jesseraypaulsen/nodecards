@@ -2,13 +2,10 @@ export default Nodecard;
 import attachButtonBar from "./button-bar";
 
 function Nodecard(o) {
-  let htmlText = o.text
-    .replace(/\n/g, "<br>")
-    .replace(/\t/g, "&nbsp; &nbsp; &nbsp; &nbsp;");
   this.id = o.id;
   this.state = o.state || "floating";
   this.mode = o.mode || "write";
-  this.htmlText = htmlText || "";
+  this.htmlText = convertTextForHtml(o.text) || "";
   this.text = o.text || "";
   this.title = o.title || limitLength(o.text) || "untitled";
   this.deck = o.deck || null;
@@ -47,6 +44,7 @@ Nodecard.prototype.setMode = function (mode) {
       this.dom.addEventListener("keyup", (e) => {
         if (this.state === "floating") this.state = "fixed";
         this.text = e.target.value;
+        this.htmlText = convertTextForHtml(e.target.value);
         // since title is only derived from body (for now), we need to update the title,
         // especially for newly created cards that have no body when they are instantiated.
         let newTitle = limitLength(this.text);
@@ -157,10 +155,10 @@ Nodecard.prototype.setPosition = function (x, y) {
   this.dom.style.top = y - height / 2 + "px";
   this.dom.style.display = "flex";
 
-  /* to confirm that values are correct:
+  //to confirm that values are correct:
   console.log(`x is ${x}, y is ${y}, width is ${width}, height is ${height}`);
+  console.log(`style.left is ${this.dom.style.left} and style.top is ${this.dom.style.top}`);
   centerpoint(this.dom);
-  */
 };
 
 Nodecard.prototype.log = function () {
@@ -182,4 +180,12 @@ function centerpoint(el) {
   let centerX = el.offsetLeft + el.offsetWidth / 2;
   let centerY = el.offsetTop + el.offsetHeight / 2; // find the centerpoint of an element.
   console.log(`centerX: ${centerX} / centerY: ${centerY}`); // should be equal to click coords.
+}
+
+function convertTextForHtml(txt) {
+  if (txt) {
+    return txt
+      .replace(/\n/g, "<br>")
+      .replace(/\t/g, "&nbsp; &nbsp; &nbsp; &nbsp;");
+  }
 }
