@@ -6,6 +6,7 @@ const items = [
   { id: "tooltip-edit", msg: "Edit", icon: "edit" },
   { id: "tooltip-readonly", msg: "Read only", icon: "edit_off" },
   { id: "tooltip-delete", msg: "Delete", icon: "delete" },
+  { id: "tooltip-link", msg: "Source", icon: "link" },
   { id: "tooltip-inertify", msg: "Inertify", icon: "swipe_down_alt" },
 ];
 
@@ -15,13 +16,13 @@ function attachButtonBar(container, card) {
   container.append(buttonBar);
 
   if (card.mode == "read") {
-    [0, 1, 3, 4].map((i) => {
+    [0, 1, 3, 4, 5].map((i) => {
       const obj = createButtonWithTooltip(items[i], card);
       buttonBar.append(obj.el);
       setupMaterialDesign(obj);
     });
   } else if (card.mode == "write") {
-    [0, 2, 3, 4].map((i) => {
+    [0, 2, 3, 4, 5].map((i) => {
       const obj = createButtonWithTooltip(items[i], card);
       buttonBar.append(obj.el);
       setupMaterialDesign(obj);
@@ -110,6 +111,17 @@ function createButtonWithTooltip(item, card) {
       console.log("delete button clicked");
     });
   }
+
+  if (item.id == "tooltip-link") {
+    if (card.webSource) {
+      iconButton.addEventListener("click", (e) => {
+        console.log("source button clicked");
+        open(card.webSource, "_blank");
+      });
+    } else {
+      iconButton.classList.add("md-inactive")
+    }
+  } 
 
   /* Material Icon-Button
   <button

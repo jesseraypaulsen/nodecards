@@ -13,6 +13,7 @@ async function handler(data, deck) {
     domY: DOM.y,
   };
 
+  console.log(data);
   let click = typeofSelection(data); // 'BG' or 'NC'?
   let clickedCard = null;
 

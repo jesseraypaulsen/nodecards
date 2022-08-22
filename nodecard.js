@@ -13,11 +13,13 @@ function Nodecard(o) {
   this.databaseKey = o.databaseKey || null;
   this.dom = null; // see render for the creation of this value
   this.previousMode = null;
-
+  this.webSource = o.webSource;
+  
   addNodeThenRender(o.pt, o.id, o.deck, this);
 }
 
 function addNodeThenRender(pt, id, deck, card) {
+  console.log(`web source for ${id} is ${card.webSource}`)
   const label = card.title;
   if (pt) {
     deck.net.body.data.nodes.add({ x: pt.canX, y: pt.canY, id, label });
@@ -112,6 +114,7 @@ Nodecard.prototype.render = function (view) {
   //These two lines must occur in this order, or Material Tooltip breaks everything.
   this.deck.container.append(this.dom);
   attachButtonBar(view, this);
+  console.log(`webSource is ${this.webSource}`)
 
   this.setPosition(this.pt.domX, this.pt.domY);
 };

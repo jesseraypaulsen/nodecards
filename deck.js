@@ -52,6 +52,7 @@ async function setupNodecards(deck, callback) {
       id: item.id,
       text: item.body,
       title: item.title,
+      webSource: item.source,
       pt: null,
       state: "fixed",
       mode: "inert",

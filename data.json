@@ -8,224 +8,281 @@
     },
     {
       "id":"section1",
-      "body":"I. THE BURIAL OF THE DEAD",
+      "title":"I. THE BURIAL OF THE DEAD",
+      "body": "April is the cruellest month, breeding\nLilacs out of the dead land, mixing\nMemory and desire, stirring\nDull roots with spring rain.\nWinter kept us warm, covering\nEarth in forgetful snow, feeding\nA little life with dried tubers.\nSummer surprised us, coming over the Starnbergersee\nWith a shower of rain; we stopped in the colonnade,\nAnd went on in sunlight, into the Hofgarten,\nAnd drank coffee, and talked for an hour.\nBin gar keine Russin, stamm’ aus Litauen, echt deutsch.\nAnd when we were children, staying at the archduke’s,\nMy cousin’s, he took me out on a sled,\nAnd I was frightened. He said, Marie,\nMarie, hold on tight. And down we went.\nIn the mountains, there you feel free.\nI read, much of the night, and go south in the winter. \n\n What are the roots that clutch, what branches grow\nOut of this stony rubbish? Son of man,\nYou cannot say, or guess, for you know only\nA heap of broken images, where the sun beats,\nAnd the dead tree gives no shelter, the cricket no relief,\nAnd the dry stone no sound of water. Only\nThere is shadow under this red rock,\n(Come in under the shadow of this red rock),\nAnd I will show you something different from either\nYour shadow at morning striding behind you\nOr your shadow at evening rising to meet you;\nI will show you fear in a handful of dust.\n\t\tFrisch weht der Wind\n\t\tDer Heimat zu\n     \t\tMein Irisch Kind,\n     \t\tWo weilest du?\n“You gave me hyacinths first a year ago;\n“They called me the hyacinth girl.”\n—Yet when we came back, late, from the Hyacinth garden,\nYour arms full, and your hair wet, I could not\nSpeak, and my eyes failed, I was neither\nLiving nor dead, and I knew nothing,\n Looking into the heart of light, the silence.\nOed’ und leer das Meer. \n\n Madame Sosostris, famous clairvoyante,\nHad a bad cold, nevertheless\nIs known to be the wisest woman in Europe,\nWith a wicked pack of cards. Here, said she,\nIs your card, the drowned Phoenician Sailor,\n(Those are pearls that were his eyes. Look!)\nHere is Belladonna, the Lady of the Rocks,\nThe lady of situations.\nHere is the man with three staves, and here the Wheel,\nAnd here is the one-eyed merchant, and this card,\nWhich is blank, is something he carries on his back,\nWhich I am forbidden to see. I do not find\nThe Hanged Man. Fear death by water.\nI see crowds of people, walking round in a ring.\nThank you. If you see dear Mrs. Equitone,\nTell her I bring the horoscope myself:\nOne must be so careful these days. \n\n Unreal City,\nUnder the brown fog of a winter dawn,\nA crowd flowed over London Bridge, so many,\nI had not thought death had undone so many.\nSighs, short and infrequent, were exhaled,\nAnd each man fixed his eyes before his feet.\nFlowed up the hill and down King William Street,\nTo where Saint Mary Woolnoth kept the hours\nWith a dead sound on the final stroke of nine.\nThere I saw one I knew, and stopped him, crying “Stetson!\n“You who were with me in the ships at Mylae!\n“That corpse you planted last year in your garden,\n“Has it begun to sprout? Will it bloom this year?\n“Or has the sudden frost disturbed its bed?\n“Oh keep the Dog far hence, that’s friend to men,\n“Or with his nails he’ll dig it up again!\n“You! hypocrite lecteur!—mon semblable,—mon frère!”\n",
       "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap01"
     },
     {
-      "id":"stanza1",
-      "body": "April is the cruellest month, breeding\nLilacs out of the dead land, mixing\nMemory and desire, stirring\nDull roots with spring rain.\nWinter kept us warm, covering\nEarth in forgetful snow, feeding\nA little life with dried tubers.\nSummer surprised us, coming over the Starnbergersee\nWith a shower of rain; we stopped in the colonnade,\nAnd went on in sunlight, into the Hofgarten,\nAnd drank coffee, and talked for an hour.\nBin gar keine Russin, stamm’ aus Litauen, echt deutsch.\nAnd when we were children, staying at the archduke’s,\nMy cousin’s, he took me out on a sled,\nAnd I was frightened. He said, Marie,\nMarie, hold on tight. And down we went.\nIn the mountains, there you feel free.\nI read, much of the night, and go south in the winter."
-      ,"title":"Stanza 1"
+      "id":"section1-notes1",
+      "body":"Cf. Ezekiel 2:1.",
+      "title":"Line 20"
     },
     {
-      "id":"stanza2",
-      "body":"What are the roots that clutch, what branches grow\nOut of this stony rubbish? Son of man,\nYou cannot say, or guess, for you know only\nA heap of broken images, where the sun beats,\nAnd the dead tree gives no shelter, the cricket no relief,\nAnd the dry stone no sound of water. Only\nThere is shadow under this red rock,\n(Come in under the shadow of this red rock),\nAnd I will show you something different from either\nYour shadow at morning striding behind you\nOr your shadow at evening rising to meet you;\nI will show you fear in a handful of dust.\n\t\tFrisch weht der Wind\n\t\tDer Heimat zu\n     \t\tMein Irisch Kind,\n     \t\tWo weilest du?\n“You gave me hyacinths first a year ago;\n“They called me the hyacinth girl.”\n—Yet when we came back, late, from the Hyacinth garden,\nYour arms full, and your hair wet, I could not\nSpeak, and my eyes failed, I was neither\nLiving nor dead, and I knew nothing,\n Looking into the heart of light, the silence.\nOed’ und leer das Meer."
-      ,"title":"Stanza 2"
+      "id":"section1-notes2",
+      "title":"Line 23",
+      "body":"Cf. Ecclesiastes 12:5."
     },
     {
-      "id":"stanza3",
-      "body":"Madame Sosostris, famous clairvoyante,\nHad a bad cold, nevertheless\nIs known to be the wisest woman in Europe,\nWith a wicked pack of cards. Here, said she,\nIs your card, the drowned Phoenician Sailor,\n(Those are pearls that were his eyes. Look!)\nHere is Belladonna, the Lady of the Rocks,\nThe lady of situations.\nHere is the man with three staves, and here the Wheel,\nAnd here is the one-eyed merchant, and this card,\nWhich is blank, is something he carries on his back,\nWhich I am forbidden to see. I do not find\nThe Hanged Man. Fear death by water.\nI see crowds of people, walking round in a ring.\nThank you. If you see dear Mrs. Equitone,\nTell her I bring the horoscope myself:\nOne must be so careful these days."
-      ,"title":"Stanza 3"
+      "id":"section1-notes3",
+      "title":"Line 31",
+      "body":"V. Tristan und Isolde, i, verses 5-8."
     },
     {
-      "id":"stanza4",
-      "body":"Unreal City,\nUnder the brown fog of a winter dawn,\nA crowd flowed over London Bridge, so many,\nI had not thought death had undone so many.\nSighs, short and infrequent, were exhaled,\nAnd each man fixed his eyes before his feet.\nFlowed up the hill and down King William Street,\nTo where Saint Mary Woolnoth kept the hours\nWith a dead sound on the final stroke of nine.\nThere I saw one I knew, and stopped him, crying “Stetson!\n“You who were with me in the ships at Mylae!\n“That corpse you planted last year in your garden,\n“Has it begun to sprout? Will it bloom this year?\n“Or has the sudden frost disturbed its bed?\n“Oh keep the Dog far hence, that’s friend to men,\n“Or with his nails he’ll dig it up again!\n“You! hypocrite lecteur!—mon semblable,—mon frère!”\n"
-      ,"title":"Stanza 4"
+      "id":"section1-notes4",
+      "title":"Line 42",
+      "body":"Id. iii, verse 24."
+    },
+    {
+      "id":"section1-notes5",
+      "title":"Line 46",
+      "body":"I am not familiar with the exact constitution of the Tarot pack of cards, from which I have obviously departed to suit my own convenience. The Hanged Man, a member of the traditional pack, fits my purpose in two ways: because he is associated in my mind with the Hanged God of Frazer, and because I associate him with the hooded figure in the passage of the disciples to Emmaus in Part V. The Phoenician Sailor and the Merchant appear later; also the “crowds of people,” and Death by Water is executed in Part IV. The Man with Three Staves (an authentic member of the Tarot pack) I associate, quite arbitrarily, with the Fisher King himself."
+    },
+    {
+      "id":"section1-notes6",
+      "title":"Line 60",
+      "body":"Cf. Baudelaire:\n\n\t\t“Fourmillante cité, cité; pleine de rêves,\nOù le spectre en plein jour raccroche le passant.”"
+    },
+    {
+      "id":"section1-notes7",
+      "title":"Line 63",
+      "body":"Cf. Inferno, iii. 55-7.\n\n\t\t\t“si lunga tratta\n\t\tdi gente, ch’io non avrei mai creduto\n\t\tche morte tanta n’avesse disfatta.”"
+    },
+    {
+      "id":"section1-notes8",
+      "title":"Line 64",
+      "body":"Cf. Inferno, iv. 25-7:\n\n\t\t“Quivi, secondo che per ascoltare,\n“non avea pianto, ma’ che di sospiri,\n“che l’aura eterna facevan tremare.”"
+    },
+    {
+      "id":"section1-notes9",
+      "title":"Line 68",
+      "body":"A phenomenon which I have often noticed.\n74. Cf. the Dirge in Webster’s White Devil.\n76. V. Baudelaire, Preface to Fleurs du Mal."
     },
     {
       "id":"section2",
-      "body":"II. A GAME OF CHESS",
+      "title":"II. A GAME OF CHESS",
+      "body":"The Chair she sat in, like a burnished throne,\nGlowed on the marble, where the glass\nHeld up by standards wrought with fruited vines\nFrom which a golden Cupidon peeped out\n(Another hid his eyes behind his wing)\nDoubled the flames of sevenbranched candelabra\nReflecting light upon the table as\nThe glitter of her jewels rose to meet it,\nFrom satin cases poured in rich profusion.\nIn vials of ivory and coloured glass\nUnstoppered, lurked her strange synthetic perfumes,\nUnguent, powdered, or liquid—troubled, confused\nAnd drowned the sense in odours; stirred by the air\nThat freshened from the window, these ascended\nIn fattening the prolonged candle-flames,\nFlung their smoke into the laquearia,\nStirring the pattern on the coffered ceiling.\nHuge sea-wood fed with copper\nBurned green and orange, framed by the coloured stone,\nIn which sad light a carvèd dolphin swam.\nAbove the antique mantel was displayed\nAs though a window gave upon the sylvan scene\nThe change of Philomel, by the barbarous king\nSo rudely forced; yet there the nightingale\nFilled all the desert with inviolable voice\nAnd still she cried, and still the world pursues,\n“Jug Jug” to dirty ears.\nAnd other withered stumps of time\nWere told upon the walls; staring forms\nLeaned out, leaning, hushing the room enclosed.\nFootsteps shuffled on the stair.\nUnder the firelight, under the brush, her hair\nSpread out in fiery points\nGlowed into words, then would be savagely still \n\n “My nerves are bad to-night. Yes, bad. Stay with me.\n“Speak to me. Why do you never speak. Speak.\n“What are you thinking of? What thinking? What?\n“I never know what you are thinking. Think.” \n\n I think we are in rats’ alley\nWhere the dead men lost their bone \n\n What is that noise?”\n \t\t\tThe wind under the door.\n“What is that noise now? What is the wind doing?”\n \t\t\tNothing again nothing.\n \t\t\t\t\t“Do\n“You know nothing? Do you see nothing? Do you remember\n“Nothing \n\n I remember\nThose are pearls that were his eyes.\n“Are you alive, or not? Is there nothing in your head?”\n  \t\t\t\t\tBut\nO O O O that Shakespeherian Rag—\nIt’s so elegant\nSo intelligent\n“What shall I do now? What shall I do?”\nI shall rush out as I am, and walk the street\n“With my hair down, so. What shall we do tomorrow?\n“What shall we ever do?”\n \t\t\t\tThe hot water at ten.\nAnd if it rains, a closed car at four.\nAnd we shall play a game of chess,\nPressing lidless eyes and waiting for a knock upon the doo \n\n When Lil’s husband got demobbed, I said—\nI didn’t mince my words, I said to her myself,\n HURRY UP PLEASE IT’S TIME\nNow Albert’s coming back, make yourself a bit smart.\nHe’ll want to know what you done with that money he gave you\nTo get yourself some teeth. He did, I was there.\nYou have them all out, Lil, and get a nice set,\nHe said, I swear, I can’t bear to look at you.\nAnd no more can’t I, I said, and think of poor Albert,\nHe’s been in the army four years, he wants a good time,\nAnd if you don’t give it him, there’s others will, I said.\nOh is there, she said. Something o’ that, I said.Then I’ll know who to thank, she said, and give me a straight look.\nHURRY UP PLEASE IT’S TIME\nIf you don’t like it you can get on with it, I said.\nOthers can pick and choose if you can’t.\nBut if Albert makes off, it won’t be for lack of telling.\nYou ought to be ashamed, I said, to look so antique.\n(And her only thirty-one.)\nI can’t help it, she said, pulling a long face,\nIt’s them pills I took, to bring it off, she said.\n(She’s had five already, and nearly died of youngThe chemist said it would be all right, but I’ve never been the same.\nYou are a proper fool, I said.\nWell, if Albert won’t leave you alone, there it is, I said,\nWhat you get married for if you don’t want children?\nHURRY UP PLEASE IT’S TIME\nWell, that Sunday Albert was home, they had a hot gammon,\nAnd they asked me in to dinner, to get the beauty of it hot—\nHURRY UP PLEASE IT’S TIME\nHURRY UP PLEASE IT’S TIME\nGoonight Bill. Goonight Lou. Goonight May. Goonigt. \nTa ta. Goonight. Goonight.\nGood night, ladies, good night, sweet ladies, good night, good night.",
       "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap02"
     },
     {
-      "id":"stanza5",
-      "body":"The Chair she sat in, like a burnished throne,\nGlowed on the marble, where the glass\nHeld up by standards wrought with fruited vines\nFrom which a golden Cupidon peeped out\n(Another hid his eyes behind his wing)\nDoubled the flames of sevenbranched candelabra\nReflecting light upon the table as\nThe glitter of her jewels rose to meet it,\nFrom satin cases poured in rich profusion.\nIn vials of ivory and coloured glass\nUnstoppered, lurked her strange synthetic perfumes,\nUnguent, powdered, or liquid—troubled, confused\nAnd drowned the sense in odours; stirred by the air\nThat freshened from the window, these ascended\nIn fattening the prolonged candle-flames,\nFlung their smoke into the laquearia,\nStirring the pattern on the coffered ceiling.\nHuge sea-wood fed with copper\nBurned green and orange, framed by the coloured stone,\nIn which sad light a carvèd dolphin swam.\nAbove the antique mantel was displayed\nAs though a window gave upon the sylvan scene\nThe change of Philomel, by the barbarous king\nSo rudely forced; yet there the nightingale\nFilled all the desert with inviolable voice\nAnd still she cried, and still the world pursues,\n“Jug Jug” to dirty ears.\nAnd other withered stumps of time\nWere told upon the walls; staring forms\nLeaned out, leaning, hushing the room enclosed.\nFootsteps shuffled on the stair.\nUnder the firelight, under the brush, her hair\nSpread out in fiery points\nGlowed into words, then would be savagely still."
-      ,"title":"Stanza 5"
+      "id":"section2-notes1",
+      "title":"Line 77",
+      "body":"Cf. Antony and Cleopatra, II. ii., l. 190."
     },
     {
-      "id":"stanza6",
-      "body":"“My nerves are bad to-night. Yes, bad. Stay with me.\n“Speak to me. Why do you never speak. Speak.\n“What are you thinking of? What thinking? What?\n“I never know what you are thinking. Think.”\n"
-      ,"title":"Stanza 6"
+      "id":"section2-notes2",
+      "title":"Line 92",
+      "body":"Laquearia. V. Aeneid, I. 726:\n\ndependent lychni laquearibus aureis\nincensi, et noctem flammis funalia vincunt."
     },
     {
-      "id":"stanza7",
-      "body":"I think we are in rats’ alley\nWhere the dead men lost their bones."
-      ,"title":"Stanza 7"
+      "id":"section2-notes3",
+      "title":"Line 98",
+      "body":"Sylvan scene. V. Milton, Paradise Lost, iv. 140."
     },
     {
-      "id":"stanza8",
-      "body":"“What is that noise?”\n \t\t\tThe wind under the door.\n“What is that noise now? What is the wind doing?”\n \t\t\tNothing again nothing.\n \t\t\t\t\t“Do\n“You know nothing? Do you see nothing? Do you remember\n“Nothing?”"
-      ,"title":"Stanza 8"
+      "id":"section2-notes4",
+      "title":"Line 99",
+      "body":"V. Ovid, Metamorphoses, vi, Philomela.\n100. Cf. Part III, l. 204."
     },
     {
-      "id":"stanza9",
-      "body":"I remember\nThose are pearls that were his eyes.\n“Are you alive, or not? Is there nothing in your head?”\n  \t\t\t\t\tBut\nO O O O that Shakespeherian Rag—\nIt’s so elegant\nSo intelligent\n“What shall I do now? What shall I do?”\nI shall rush out as I am, and walk the street\n“With my hair down, so. What shall we do tomorrow?\n“What shall we ever do?”\n \t\t\t\tThe hot water at ten.\nAnd if it rains, a closed car at four.\nAnd we shall play a game of chess,\nPressing lidless eyes and waiting for a knock upon the door."
-      ,"title":"Stanza 9"
+      "id":"section2-notes5",
+      "title":"Line 115",
+      "body":"Cf. Part III, l. 195.\n118. Cf. Webster: “Is the wind in that door still?”"
     },
     {
-      "id":"stanza10",
-      "body":"When Lil’s husband got demobbed, I said—\nI didn’t mince my words, I said to her myself,\n HURRY UP PLEASE IT’S TIME\nNow Albert’s coming back, make yourself a bit smart.\nHe’ll want to know what you done with that money he gave you\nTo get yourself some teeth. He did, I was there.\nYou have them all out, Lil, and get a nice set,\nHe said, I swear, I can’t bear to look at you.\nAnd no more can’t I, I said, and think of poor Albert,\nHe’s been in the army four years, he wants a good time,\nAnd if you don’t give it him, there’s others will, I said.\nOh is there, she said. Something o’ that, I said.Then I’ll know who to thank, she said, and give me a straight look.\nHURRY UP PLEASE IT’S TIME\nIf you don’t like it you can get on with it, I said.\nOthers can pick and choose if you can’t.\nBut if Albert makes off, it won’t be for lack of telling.\nYou ought to be ashamed, I said, to look so antique.\n(And her only thirty-one.)\nI can’t help it, she said, pulling a long face,\nIt’s them pills I took, to bring it off, she said.\n(She’s had five already, and nearly died of youngThe chemist said it would be all right, but I’ve never been the same.\nYou are a proper fool, I said.\nWell, if Albert won’t leave you alone, there it is, I said,\nWhat you get married for if you don’t want children?\nHURRY UP PLEASE IT’S TIME\nWell, that Sunday Albert was home, they had a hot gammon,\nAnd they asked me in to dinner, to get the beauty of it hot—\nHURRY UP PLEASE IT’S TIME\nHURRY UP PLEASE IT’S TIME\nGoonight Bill. Goonight Lou. Goonight May. Goonigt. \nTa ta. Goonight. Goonight.\nGood night, ladies, good night, sweet ladies, good night, good night."  
-      ,"title":"Stanza 10"
+      "id":"section2-notes6",
+      "title":"Line 126",
+      "body":"Cf. Part I, l. 37, 48."
+    },
+    {
+      "id":"section2-notes7",
+      "title":"Line 138",
+      "body":"Cf. the game of chess in Middleton’s Women beware Women."
     },
     {
       "id":"section3",
-      "body":"III. THE FIRE SERMON",
+      "title":"III. THE FIRE SERMON",
+      "body":"The river’s tent is broken: the last fingers of leaf\nClutch and sink into the wet bank. The wind\nCrosses the brown land, unheard. The nymphs are departed.\nSweet Thames, run softly, till I end my song.\nThe river bears no empty bottles, sandwich papers,\nSilk handkerchiefs, cardboard boxes, cigarette ends\nOr other testimony of summer nights. The nymphs are departed.\nAnd their friends, the loitering heirs of city directors;\n  Departed, have left no addresses.\nBy the waters of Leman I sat down and wept . . .\nSweet Thames, run softly till I end my song,\nSweet Thames, run softly, for I speak not loud or long.\nBut at my back in a cold blast I hear\nThe rattle of the bones, and chuckle spread from ear to ear.\nA rat crept softly through the vegetation\nDragging its slimy belly on the bank\nWhile I was fishing in the dull canal\nOn a winter evening round behind the gashouse\n              Musing upon the king my brother’s wreck\nAnd on the king my father’s death before him.\nWhite bodies naked on the low damp ground\nAnd bones cast in a little low dry garret,\nRattled by the rat’s foot only, year to year.\nBut at my back from time to time I hear\nThe sound of horns and motors, which shall bring\nSweeney to Mrs. Porter in the spring.\nO the moon shone bright on Mrs. Porter\nAnd on her daughter\n They wash their feet in soda water\nEt O ces voix d’enfants, chantant dans la coupole! Twit twit twit\nJug jug jug jug jug jug\nSo rudely forc’d.\nTereu Unreal City\nUnder the brown fog of a winter noon\nMr. Eugenides, the Smyrna merchant\nUnshaven, with a pocket full of currants\n C.i.f. London: documents at sight,\nAsked me in demotic French\nTo luncheon at the Cannon Street Hotel\nFollowed by a weekend at the Metropole. At the violet hour, when the eyes and back\nTurn upward from the desk, when the human engine waits\nLike a taxi throbbing waiting,\nI Tiresias, though blind, throbbing between two lives,\nOld man with wrinkled female breasts, can see\nAt the violet hour, the evening hour that strives\n Homeward, and brings the sailor home from sea,\nThe typist home at teatime, clears her breakfast, lights\nHer stove, and lays out food in tins.\nOut of the window perilously spread\nHer drying combinations touched by the sun’s last rays,\nOn the divan are piled (at night her bed)\nStockings, slippers, camisoles, and stays.\nI Tiresias, old man with wrinkled dugs\nPerceived the scene, and foretold the rest—\nI too awaited the expected guest.\n He, the young man carbuncular, arrives,\nA small house agent’s clerk, with one bold stare,\nOne of the low on whom assurance sits\nAs a silk hat on a Bradford millionaire.\nThe time is now propitious, as he guesses,\nThe meal is ended, she is bored and tired,\nEndeavours to engage her in caresses\nWhich still are unreproved, if undesired.\nFlushed and decided, he assaults at once;\nExploring hands encounter no defence;\n His vanity requires no response,\nAnd makes a welcome of indifference.\n(And I Tiresias have foresuffered all\nEnacted on this same divan or bed;\nI who have sat by Thebes below the wall\nAnd walked among the lowest of the dead.)\nBestows one final patronising kiss,\nAnd gropes his way, finding the stairs unlit . . .\n She turns and looks a moment in the glass,\nHardly aware of her departed lover;\n Her brain allows one half-formed thought to pass:\n“Well now that’s done: and I’m glad it’s over.”\nWhen lovely woman stoops to folly and\nPaces about her room again, alone,\nShe smooths her hair with automatic hand,\nAnd puts a record on the gramophone.\n This music crept by me upon the waters”\nAnd along the Strand, up Queen Victoria Street.\nO City city, I can sometimes hear\nBeside a public bar in Lower Thames Street,\n The pleasant whining of a mandoline\nAnd a clatter and a chatter from within\nWhere fishmen lounge at noon: where the walls\nOf Magnus Martyr hold\nInexplicable splendour of Ionian white and gold.\n The river sweats\nOil and tar\nThe barges drift\nWith the turning tide\nRed sails\n Wide\nTo leeward, swing on the heavy spar.\nThe barges wash\nDrifting logs\nDown Greenwich reach\nPast the Isle of Dogs.\n     Weialala leia\n     Wallala leialala\nElizabeth and Leicester\nBeating oars\n The stern was formed\nA gilded shell\nRed and gold\nThe brisk swell\nRippled both shores\nSouthwest wind\nCarried down stream\nThe peal of bells\nWhite towers\n     \t\tWeialala leia\n \t\tWallala leialala\n Trams and dusty trees.\nHighbury bore me. Richmond and Kew\nUndid me. By Richmond I raised my knees\nSupine on the floor of a narrow canoe.” My feet are at Moorgate, and my heart\nUnder my feet. After the event\nHe wept. He promised ‘a new start’.\nI made no comment. What should I resent?”\n“On Margate Sands.\n  I can connect\nNothing with nothing.\nThe broken fingernails of dirty hands.\nMy people humble people who expect\nNothing.”\n     \t\tla la To Carthage then I came\n Burning burning burning burning\nO Lord Thou pluckest me out\nO Lord Thou pluckest\n burning",
       "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap03"
     },
-    { 
-      "id":"stanza11",
-      "body": "The river’s tent is broken: the last fingers of leaf\nClutch and sink into the wet bank. The wind\nCrosses the brown land, unheard. The nymphs are departed.\nSweet Thames, run softly, till I end my song.\nThe river bears no empty bottles, sandwich papers,\nSilk handkerchiefs, cardboard boxes, cigarette ends\nOr other testimony of summer nights. The nymphs are departed.\nAnd their friends, the loitering heirs of city directors;\n  Departed, have left no addresses.\nBy the waters of Leman I sat down and wept . . .\nSweet Thames, run softly till I end my song,\nSweet Thames, run softly, for I speak not loud or long.\nBut at my back in a cold blast I hear\nThe rattle of the bones, and chuckle spread from ear to ear.\nA rat crept softly through the vegetation\nDragging its slimy belly on the bank\nWhile I was fishing in the dull canal\nOn a winter evening round behind the gashouse\n              Musing upon the king my brother’s wreck\nAnd on the king my father’s death before him.\nWhite bodies naked on the low damp ground\nAnd bones cast in a little low dry garret,\nRattled by the rat’s foot only, year to year.\nBut at my back from time to time I hear\nThe sound of horns and motors, which shall bring\nSweeney to Mrs. Porter in the spring.\nO the moon shone bright on Mrs. Porter\nAnd on her daughter\n                                        They wash their feet in soda water\nEt O ces voix d’enfants, chantant dans la coupole!"
-      ,"title":"Stanza 11"
+    {
+      "id":"section3-notes1",
+      "title":"Line 176",
+      "body":"V. Spenser, Prothalamion.\n"
     },
     {
-      "id": "stanza12",
-      "body": "Twit twit twit\nJug jug jug jug jug jug\nSo rudely forc’d.\nTereu",
-      "title":"Stanza 12"
+      "id":"section3-notes2",
+      "title":"Line 192",
+      "body":"Cf. The Tempest, I. ii.\n"
     },
     {
-      "id":"stanza13",
-      "body":"Unreal City\nUnder the brown fog of a winter noon\nMr. Eugenides, the Smyrna merchant\nUnshaven, with a pocket full of currants\n                              C.i.f. London: documents at sight,\nAsked me in demotic French\nTo luncheon at the Cannon Street Hotel\nFollowed by a weekend at the Metropole."
-      ,"title":"Stanza 13"
+      "id":"section3-notes3",
+      "title":"Line 196",
+      "body":"Cf. Marvell, To His Coy Mistress.\n"
     },
     {
-      "id":"stanza14",
-      "body":"At the violet hour, when the eyes and back\nTurn upward from the desk, when the human engine waits\nLike a taxi throbbing waiting,\nI Tiresias, though blind, throbbing between two lives,\nOld man with wrinkled female breasts, can see\nAt the violet hour, the evening hour that strives\n                     Homeward, and brings the sailor home from sea,\nThe typist home at teatime, clears her breakfast, lights\nHer stove, and lays out food in tins.\nOut of the window perilously spread\nHer drying combinations touched by the sun’s last rays,\nOn the divan are piled (at night her bed)\nStockings, slippers, camisoles, and stays.\nI Tiresias, old man with wrinkled dugs\nPerceived the scene, and foretold the rest—\nI too awaited the expected guest.\n                                     He, the young man carbuncular, arrives,\nA small house agent’s clerk, with one bold stare,\nOne of the low on whom assurance sits\nAs a silk hat on a Bradford millionaire.\nThe time is now propitious, as he guesses,\nThe meal is ended, she is bored and tired,\nEndeavours to engage her in caresses\nWhich still are unreproved, if undesired.\nFlushed and decided, he assaults at once;\nExploring hands encounter no defence;\n                                 His vanity requires no response,\nAnd makes a welcome of indifference.\n(And I Tiresias have foresuffered all\nEnacted on this same divan or bed;\nI who have sat by Thebes below the wall\nAnd walked among the lowest of the dead.)\nBestows one final patronising kiss,\nAnd gropes his way, finding the stairs unlit . . .\n"
-      ,"title":"Stanza 14"
+      "id":"section3-notes4",
+      "title":"Line 197",
+      "body":"Cf. Day, Parliament of Bees:\n\n“When of the sudden, listening, you shall hear,\n“A noise of horns and hunting, which shall bring\n“Actaeon to Diana in the spring,\n“Where all shall see her naked skin . . .”"
     },
     {
-      "id":"stanza15",
-      "body":"She turns and looks a moment in the glass,\nHardly aware of her departed lover;\n Her brain allows one half-formed thought to pass:\n“Well now that’s done: and I’m glad it’s over.”\nWhen lovely woman stoops to folly and\nPaces about her room again, alone,\nShe smooths her hair with automatic hand,\nAnd puts a record on the gramophone.\n"
-      ,"title":"Stanza 15"
+      "id":"section3-notes5",
+      "title":"Line 199",
+      "body":"I do not know the origin of the ballad from which these lines are taken: it was reported to me from Sydney, Australia."
     },
     {
-      "id":"stanza16",
-      "body":"“This music crept by me upon the waters”\nAnd along the Strand, up Queen Victoria Street.\nO City city, I can sometimes hear\nBeside a public bar in Lower Thames Street,\n The pleasant whining of a mandoline\nAnd a clatter and a chatter from within\nWhere fishmen lounge at noon: where the walls\nOf Magnus Martyr hold\nInexplicable splendour of Ionian white and gold."
-      ,"title":"Stanza 16"
+      "id":"section3-notes6",
+      "title":"Line 202",
+      "body":"V. Verlaine, Parsifal."
     },
     {
-      "id":"stanza17",
-      "body":"The river sweats\nOil and tar\nThe barges drift\nWith the turning tide\nRed sails\n Wide\nTo leeward, swing on the heavy spar.\nThe barges wash\nDrifting logs\nDown Greenwich reach\nPast the Isle of Dogs.\n     Weialala leia\n     Wallala leialala\nElizabeth and Leicester\nBeating oars\n                                                     The stern was formed\nA gilded shell\nRed and gold\nThe brisk swell\nRippled both shores\nSouthwest wind\nCarried down stream\nThe peal of bells\nWhite towers\n     \t\tWeialala leia\n \t\tWallala leialala"
-      ,"title":"Stanza 17"
+      "id":"section3-notes7",
+      "title":"Line 210",
+      "body":"The currants were quoted at a price “carriage and insurance free to London”; and the Bill of Lading etc. were to be handed to the buyer upon payment of the sight draft."
     },
     {
-      "id":"stanza18",
-      "body":"“Trams and dusty trees.\nHighbury bore me. Richmond and Kew\nUndid me. By Richmond I raised my knees\nSupine on the floor of a narrow canoe.”"
-      ,"title":"Stanza 18"
+      "id":"section3-notes8",
+      "title":"Line 210",
+      "body":"“Carriage and insurance free”] “cost, insurance and freight”-Editor."
     },
     {
-      "id":"stanza19",
-      "body":"“My feet are at Moorgate, and my heart\nUnder my feet. After the event\nHe wept. He promised ‘a new start’.\nI made no comment. What should I resent?”\n“On Margate Sands.\n  I can connect\nNothing with nothing.\nThe broken fingernails of dirty hands.\nMy people humble people who expect\nNothing.”\n     \t\tla la"
-      ,"title":"Stanza 19"
+      "id":"section3-notes9",
+      "title":"Line 218",
+      "body":"Tiresias, although a mere spectator and not indeed a “character,” is yet the most important personage in the poem, uniting all the rest. Just as the one-eyed merchant, seller of currants, melts into the Phoenician Sailor, and the latter is not wholly distinct from Ferdinand Prince of Naples, so all the women are one woman, and the two sexes meet in Tiresias. What Tiresias sees, in fact, is the substance of the poem. The whole passage from Ovid is of great anthropological interest:\n\n‘. . . Cum Iunone iocos et maior vestra profecto est\nQuam, quae contingit maribus,’ dixisse, ‘voluptas.’\nIlla negat; placuit quae sit sententia docti\nQuaerere Tiresiae: venus huic erat utraque nota.\nNam duo magnorum viridi coeuntia silva\nCorpora serpentum baculi violaverat ictu\nDeque viro factus, mirabile, femina septem\nEgerat autumnos; octavo rursus eosdem\nVidit et ‘est vestrae si tanta potentia plagae,’\nDixit ‘ut auctoris sortem in contraria mutet,\nNunc quoque vos feriam!’ percussis anguibus isdem\nForma prior rediit genetivaque venit imago.\nArbiter hic igitur sumptus de lite iocosa\nDicta Iovis firmat; gravius Saturnia iusto\nNec pro materia fertur doluisse suique\nIudicis aeterna damnavit lumina nocte,\nAt pater omnipotens (neque enim licet inrita cuiquam\nFacta dei fecisse deo) pro lumine adempto\nScire futura dedit poenamque levavit honore."
     },
     {
-      "id":"stanza20",
-      "body":"To Carthage then I came",
-      "title":"Stanza 20"
+      "id":"section3-notes10",
+      "title":"Line 221",
+      "body":"This may not appear as exact as Sappho’s lines, but I had in mind the “longshore” or “dory” fisherman, who returns at nightfall."
     },
     {
-      "id":"stanza21",
-      "body":"Burning burning burning burning\nO Lord Thou pluckest me out\nO Lord Thou pluckest\n"
-      ,"title":"Stanza 21"
+      "id":"section3-notes11",
+      "title":"Line 253",
+      "body":"V. Goldsmith, the song in The Vicar of Wakefield."
     },
     {
-      "id":"stanza22",
-      "body":"burning",
-      "title":"Stanza 22"
+      "id":"section3-notes12",
+      "title":"Line 257",
+      "body":"V. The Tempest, as above."
+    },
+    {
+      "id":"section3-notes13",
+      "title":"Line 264",
+      "body":"The interior of St. Magnus Martyr is to my mind one of the finest among Wren’s interiors. See The Proposed Demolition of Nineteen City Churches (P. S. King & Son, Ltd.)."
+    },
+    {
+      "id":"section3-notes14",
+      "title":"Line 266",
+      "body":"The Song of the (three) Thames-daughters begins here. From line 292 to 306 inclusive they speak in turn. V. Götterdämmerung, III. i: the Rhine-daughters."
+    },
+    {
+      "id":"section3-notes15",
+      "title":"Line 279",
+      "body":"V. Froude, Elizabeth, Vol. I, ch. iv, letter of De Quadra to Philip of Spain:\n“In the afternoon we were in a barge, watching the games on the river. (The queen) was alone with Lord Robert and myself on the poop, when they began to talk nonsense, and went so far that Lord Robert at last said, as I was on the spot there was no reason why they should not be married if the queen pleased.”"
+    },
+    {
+      "id":"section3-notes16",
+      "title":"Line 293",
+      "body":"Cf. Purgatorio, v. 133:\n\n“Ricorditi di me, che son la Pia;\nSiena mi fe’, disfecemi Maremma.”"
+    },
+    {
+      "id":"section3-notes17",
+      "title":"Line 307",
+      "body":"V. St. Augustine’s Confessions: “to Carthage then I came, where a cauldron of unholy loves sang all about mine ears.”"
+    },
+    {
+      "id":"section3-notes18",
+      "title":"Line 308",
+      "body":"The complete text of the Buddha’s Fire Sermon (which corresponds in importance to the Sermon on the Mount) from which these words are taken, will be found translated in the late Henry Clarke Warren’s Buddhism in Translation (Harvard Oriental Series). Mr. Warren was one of the great pioneers of Buddhist studies in the Occident."
+    },
+    {
+      "id":"section3-notes19",
+      "title":"Line 309",
+      "body":"From St. Augustine’s Confessions again. The collocation of these two representatives of eastern and western asceticism, as the culmination of this part of the poem, is not an accident."
     },
     {
       "id":"section4",
-      "body":"IV. DEATH BY FIRE",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap04"
-    },
-    {
-      "id":"stanza23",
-      "body":"PHLEBAS the Phoenician, a fortnight dead,\nForgot the cry of gulls, and the deep sea swell\nAnd the profit and loss.\n\t\t\t⁠A current under sea\nPicked his bones in whispers. As he rose and fell\nHe passed the stages of his age and youth\nEntering the whirlpool.\n\t\t\t⁠Gentile or Jew\nO you who turn the wheel and look to windward,\nConsider Phlebas, who was once handsome and tall as you."
-      ,"title":"Stanza 23"
+      "title":"IV. DEATH BY FIRE",
+      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap04",
+      "body":"\t\t\t\t\tI sat upon the shore\nFishing, with the arid plain behind me\nShall I at least set my lands in order?\nLondon Bridge is falling down falling down falling down\nPoi s’ascose nel foco che gli affina\nQuando fiam ceu chelidon — O swallow swallow\nLe Prince d’Aquitaine à la tour abolie\nThese fragments I have shored against my ruins\nWhy then Ile fit you. Hieronymo’s mad againe.\nDatta. Dayadhvam. Damyata.\n\n PHLEBAS the Phoenician, a fortnight dead,\nForgot the cry of gulls, and the deep sea swell\nAnd the profit and loss.\n\t\t\t⁠A current under sea\nPicked his bones in whispers. As he rose and fell\nHe passed the stages of his age and youth\nEntering the whirlpool.\n\t\t\t⁠Gentile or Jew\nO you who turn the wheel and look to windward,\nConsider Phlebas, who was once handsome and tall as you."
     },
     {
       "id":"section5",
-      "body":"V. WHAT THE THUNDER SAID",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap05"
+      "title":"V. WHAT THE THUNDER SAID",
+      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap05",
+      "body":"After the torchlight red on sweaty faces\nAfter the frosty silence in the gardens\nAfter the agony in stony places\nThe shouting and the crying\nPrison and palace and reverberation\nOf thunder of spring over distant mountains\nHe who was living is now dead\nWe who were living are now dying\nWith a little patience,\nHere is no water but only rock\nRock and no water and the sandy road\nThe road winding above among the mountains\nWhich are mountains of rock without water\nIf there were water we should stop and drink\nAmongst the rock one cannot stop or think\nSweat is dry and feet are in the sand\nIf there were only water amongst the rock\nDead mountain mouth of carious teeth that cannot spit\nHere one can neither stand nor lie nor sit\nThere is not even silence in the mountains\nBut dry sterile thunder without rain\nThere is not even solitude in the mountains\nBut red sullen faces sneer and snarl\nFrom doors of mudcracked houses\n\nAnd no rock\nIf there were rock\nAnd also water\nAnd water\nA spring\nA pool among the rock\nIf there were the sound of water only\nNot the cicada\nAnd dry grass singing\nBut sound of water over a rock\nWhere the hermit-thrush sings in the pine trees\nDrip drop drip drop drop drop drop\n\t\t\t\t\tBut there is no water\n\nWho is the third who walks always beside you?\nWhen I count, there are only you and I together\nBut when I look ahead up the white road\nThere is always another one walking beside you\nGliding wrapt in a brown mantle, hooded\nI do not know whether a man or a woman\n—But who is that on the other side of you?\n\n\nWhat is that sound high in the air\nMurmur of maternal lamentation\nWho are those hooded hordes swarming\nOver endless plains, stumbling in cracked earth\nRinged by the flat horizon only\nWhat is the city over the mountains\nCracks and reforms and bursts in the violet air\nFalling towers\nJerusalem Athens Alexandria\nVienna London\nUnreal\n\n\nA woman drew her long black hair out tight\nAnd fiddled whisper music on those strings\nAnd bats with baby faces in the violet light\nWhistled, and beat their wings\nAnd crawled head downward down a blackened wall\nAnd upside down in air were towers\nTolling reminiscent bells, that kept the hours\nAnd voices singing out of empty cisterns and exhausted wells.\n\nIn this decayed hole among the mountains\nIn the faint moonlight, the grass is singing\nOver the tumbled graves, about the chapel\nThere is the empty chapel, only the wind’s home.\nIt has no windows, and the door swings,\nDry bones can harm no one.\nOnly a cock stood on the rooftree\nCo co rico co co rico\nIn a flash of lightning. Then a damp gust\nBringing rain\n\nGanga was sunken, and the limp leavesWaited for rain, while the black clouds\nGathered far distant, over Himavant.\nThe jungle crouched, humped in silence.\nThen spoke the thunder\nDA\nDatta: what have we given?\nMy friend, blood shaking my heart\nThe awful daring of a moment’s surrender\nWhich an age of prudence can never retract\nBy this, and this only, we have existed\nWhich is not to be found in our obituaries\nOr in memories draped by the beneficent spider\nOr under seals broken by the lean solicitor\nIn our empty rooms\nDA\nDayadhvam: I have heard the key\nTurn in the door once and turn once only\nWe think of the key, each in his prison\nThinking of the key, each confirms a prison\nOnly at nightfall, aetherial rumours\nRevive for a moment a broken Coriolanus\nDA\nDamyata: The boat responded\nGaily, to the hand expert with sail and oar\nThe sea was calm, your heart would have responded\nGaily, when invited, beating obedient\nTo controlling hands\n\n \n\t\t\t\t\tI sat upon the shore\nFishing, with the arid plain behind me\nShall I at least set my lands in order?\nLondon Bridge is falling down falling down falling down\nPoi s’ascose nel foco che gli affina\nQuando fiam ceu chelidon — O swallow swallow\nLe Prince d’Aquitaine à la tour abolie\nThese fragments I have shored against my ruins\nWhy then Ile fit you. Hieronymo’s mad againe.\nDatta. Dayadhvam. Damyata.\n\n\n\t\t\tShantih    shantih    shantih,"
     },
     {
-      "id":"stanza24",
-      "body":"After the torchlight red on sweaty faces\nAfter the frosty silence in the gardens\nAfter the agony in stony places\nThe shouting and the crying\nPrison and palace and reverberation\nOf thunder of spring over distant mountains\nHe who was living is now dead\nWe who were living are now dying\nWith a little patience",
-      "title":"Stanza 24"
+      "id":"section5-notes1",
+      "body":"In the first part of Part V three themes are employed: the journey to Emmaus, the approach to the Chapel Perilous (see Miss Weston’s book) and the present decay of eastern Europe.",
+      "title":"Line 322"
     },
     {
-      "id":"stanza25",
-      "body":"Here is no water but only rock\nRock and no water and the sandy road\nThe road winding above among the mountains\nWhich are mountains of rock without water\nIf there were water we should stop and drink\nAmongst the rock one cannot stop or think\nSweat is dry and feet are in the sand\nIf there were only water amongst the rock\nDead mountain mouth of carious teeth that cannot spit\nHere one can neither stand nor lie nor sit\nThere is not even silence in the mountains\nBut dry sterile thunder without rain\nThere is not even solitude in the mountains\nBut red sullen faces sneer and snarl\nFrom doors of mudcracked houses",
-      "title":"Stanza 25"
+      "id":"section5-notes2",
+      "title":"Line 357", 
+      "body": "This is Turdus aonalaschkae pallasii, the hermit-thrush which I have heard in Quebec County. Chapman says (Handbook of Birds of Eastern North America) “it is most at home in secluded woodland and thickety retreats. . . . Its notes are not remarkable for variety or volume, but in purity and sweetness of tone and exquisite modulation they are unequalled.” Its “water-dripping song” is justly celebrated.\n"
     },
     {
-      "id":"stanza26",
-      "body":"And no rock\nIf there were rock\nAnd also water\nAnd water\nA spring\nA pool among the rock\nIf there were the sound of water only\nNot the cicada\nAnd dry grass singing\nBut sound of water over a rock\nWhere the hermit-thrush sings in the pine trees\nDrip drop drip drop drop drop drop\n\t\t\t\t\tBut there is no water\n\n"
-      ,"title":"Stanza 26"
+      "id":"section5-notes3",
+      "title":"Line 360",
+      "body":"The following lines were stimulated by the account of one of the Antarctic expeditions (I forget which, but I think one of Shackleton’s): it was related that the party of explorers, at the extremity of their strength, had the constant delusion that there was one more member than could actually be counted."
     },
     {
-      "id":"stanza27",
-      "body":"Who is the third who walks always beside you?\nWhen I count, there are only you and I together\nBut when I look ahead up the white road\nThere is always another one walking beside you\nGliding wrapt in a brown mantle, hooded\nI do not know whether a man or a woman\n—But who is that on the other side of you?\n\n",
-      "title":"Stanza 27"
+      "id":"section5-notes4",
+      "title":"Lines 366-76",
+      "body":"Cf. Hermann Hesse, Blick ins Chaos:\n“Schon ist halb Europa, schon ist zumindest der halbe Osten Europas auf dem Wege zum Chaos, fährt betrunken im heiligem Wahn am Abgrund entlang und singt dazu, singt betrunken und hymnisch wie Dmitri Karamasoff sang. Ueber diese Lieder lacht der Bürger beleidigt, der Heilige und Seher hört sie mit Tränen.”"
     },
     {
-      "id":"stanza28",
-      "body":"What is that sound high in the air\nMurmur of maternal lamentation\nWho are those hooded hordes swarming\nOver endless plains, stumbling in cracked earth\nRinged by the flat horizon only\nWhat is the city over the mountains\nCracks and reforms and bursts in the violet air\nFalling towers\nJerusalem Athens Alexandria\nVienna London\nUnreal\n\n",
-      "title":"Stanza 28"
+      "id":"section5-notes5",
+      "title":"Lines 401",
+      "body":"“Datta, dayadhvam, damyata” (Give, sympathize, control). The fable of the meaning of the Thunder is found in the Brihadaranyaka—Upanishad, 5, 1. A translation is found in Deussen’s Sechzig Upanishads des Veda, p. 489.\n"
     },
     {
-      "id":"stanza29",
-      "body":"A woman drew her long black hair out tight\nAnd fiddled whisper music on those strings\nAnd bats with baby faces in the violet light\nWhistled, and beat their wings\nAnd crawled head downward down a blackened wall\nAnd upside down in air were towers\nTolling reminiscent bells, that kept the hours\nAnd voices singing out of empty cisterns and exhausted wells.\n\n",
-      "title":"Stanza 29"
+      "id":"section5-notes6",
+      "title":"Line 407",
+      "body":"Cf. Webster, The White Devil, v. vi:\n\n\t\t“. . . they’ll remarry\n\tEre the worm pierce your winding-sheet, ere the spider\n\tMake a thin curtain for your epitaphs.”"
     },
     {
-      "id":"stanza30",
-      "body":"In this decayed hole among the mountains\nIn the faint moonlight, the grass is singing\nOver the tumbled graves, about the chapel\nThere is the empty chapel, only the wind’s home.\nIt has no windows, and the door swings,\nDry bones can harm no one.\nOnly a cock stood on the rooftree\nCo co rico co co rico\nIn a flash of lightning. Then a damp gust\nBringing rain\n\n",
-      "title":"Stanza 30"
+      "id":"section5-notes7",
+      "title":"Line 411",
+      "body":"Cf. Inferno, xxxiii. 46:\n\n\t“ed io sentii chiavar l’uscio di sotto\n\tall’orribile torre.”\n\nAlso F. H. Bradley, Appearance and Reality, p. 346:\n“My external sensations are no less private to myself than are my thoughts or my feelings. In either case my experience falls within my own circle, a circle closed on the outside; and, with all its elements alike, every sphere is opaque to the others which surround it. . . . In brief, regarded as an existence which appears in a soul, the whole world for each is peculiar and private to that soul.”"
+
     },
     {
-      "id":"stanza31",
-      "body":"Ganga was sunken, and the limp leavesWaited for rain, while the black clouds\nGathered far distant, over Himavant.\nThe jungle crouched, humped in silence.\nThen spoke the thunder\nDA\nDatta: what have we given?\nMy friend, blood shaking my heart\nThe awful daring of a moment’s surrender\nWhich an age of prudence can never retract\nBy this, and this only, we have existed\nWhich is not to be found in our obituaries\nOr in memories draped by the beneficent spider\nOr under seals broken by the lean solicitor\nIn our empty rooms\nDA\nDayadhvam: I have heard the key\nTurn in the door once and turn once only\nWe think of the key, each in his prison\nThinking of the key, each confirms a prison\nOnly at nightfall, aetherial rumours\nRevive for a moment a broken Coriolanus\nDA\nDamyata: The boat responded\nGaily, to the hand expert with sail and oar\nThe sea was calm, your heart would have responded\nGaily, when invited, beating obedient\nTo controlling hands\n\n",
-      "title":"Stanza 31"
+      "id":"section5-notes8",
+      "title":"Line 424",
+      "body":"V. Weston, From Ritual to Romance; chapter on the Fisher King.\n"
     },
     {
-      "id":"stanza32",
-      "body":"\t\t\t\t\tI sat upon the shore\nFishing, with the arid plain behind me\nShall I at least set my lands in order?\nLondon Bridge is falling down falling down falling down\nPoi s’ascose nel foco che gli affina\nQuando fiam ceu chelidon — O swallow swallow\nLe Prince d’Aquitaine à la tour abolie\nThese fragments I have shored against my ruins\nWhy then Ile fit you. Hieronymo’s mad againe.\nDatta. Dayadhvam. Damyata.\n\n",
-      "title":"Stanza 32"
+      "id":"section5-notes9",
+      "title":"Line 427",
+      "body":"V. Purgatorio, xxvi. 148.\n\n\t“‘Ara vos prec per aquella valor\n\t‘que vos guida al som de l’escalina,\n\t‘sovegna vos a temps de ma dolor.’\n\tPoi s’ascose nel foco che gli affina.”"
     },
     {
-      "id":"stanza33",
-      "body":"\t\t\tShantih    shantih    shantih,",
-      "title":"Stanza 33"
+      "id":"section5-notes10",
+      "title":"Line 428",
+      "body":"V. Pervigilium Veneris. Cf. Philomela in Parts II and III.\n"
+
+    },
+    {
+      "id":"section5-notes11",
+      "title":"Line 429",
+      "body":"V. Gerard de Nerval, Sonnet El Desdichado."
+    },
+    {
+      "id":"section5-notes12",
+      "title":"Line 431",
+      "body":"V. Kyd’s Spanish Tragedy."
+    },
+    {
+      "id":"section5-notes13",
+      "title":"Line 433",
+      "body":"Shantih. Repeated as here, a formal ending to an Upanishad. ‘The Peace which passeth understanding’ is a feeble translation of the content of this word."
     },
     {
       "id":"section6",
-      "body":"NOTES ON THE WASTE LAND",
       "title":"NOTES ON THE WASTE LAND",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
-    },
-    {
-      "id":"notes1",
       "body":"Not only the title, but the plan and a good deal of the incidental symbolism of the poem were suggested by Miss Jessie L. Weston’s book on the Grail legend: From Ritual to Romance (Macmillan, Cambridge) Indeed, so deeply am I indebted, Miss Weston’s book will elucidate the difficulties of the poem much better than my notes can do; and I recommend it (apart from the great interest of the book itself) to any who think such elucidation of the poem worth the trouble. To another work of anthropology I am indebted in general, one which has influenced our generation profoundly; I mean The Golden Bough; I have used especially the two volumes Adonis, Attis, Osiris. Anyone who is acquainted with these works will immediately recognise in the poem certain references to vegetation ceremonies.",
-      "title":"1"
-    },
-    {
-      "id":"notes2",
-      "body":"I. THE BURIAL OF THE DEAD\nLine 20. Cf. Ezekiel 2:1.\n23. Cf. Ecclesiastes 12:5.\n31. V. Tristan und Isolde, i, verses 5-8.\n42. Id. iii, verse 24.\n46. I am not familiar with the exact constitution of the Tarot pack of cards, from which I have obviously departed to suit my own convenience. The Hanged Man, a member of the traditional pack, fits my purpose in two ways: because he is associated in my mind with the Hanged God of Frazer, and because I associate him with the hooded figure in the passage of the disciples to Emmaus in Part V. The Phoenician Sailor and the Merchant appear later; also the “crowds of people,” and Death by Water is executed in Part IV. The Man with Three Staves (an authentic member of the Tarot pack) I associate, quite arbitrarily, with the Fisher King himself.\n60. Cf. Baudelaire:\n\n\t\t“Fourmillante cité, cité; pleine de rêves,\nOù le spectre en plein jour raccroche le passant.”\n\n63. Cf. Inferno, iii. 55-7.\n\n\t\t\t“si lunga tratta\n\t\tdi gente, ch’io non avrei mai creduto\n\t\tche morte tanta n’avesse disfatta.”\n\n64. Cf. Inferno, iv. 25-7:\n\n\t\t“Quivi, secondo che per ascoltare,\n“non avea pianto, ma’ che di sospiri,\n“che l’aura eterna facevan tremare.”\n\n68. A phenomenon which I have often noticed.\n74. Cf. the Dirge in Webster’s White Devil.\n76. V. Baudelaire, Preface to Fleurs du Mal.\n"
-      ,"title":"2"
-    },
-    {
-      "id":"notes3",
-      "body":"II. A GAME OF CHESS\n77. Cf. Antony and Cleopatra, II. ii., l. 190.\n92. Laquearia. V. Aeneid, I. 726:\n\ndependent lychni laquearibus aureis\nincensi, et noctem flammis funalia vincunt.\n\n98. Sylvan scene. V. Milton, Paradise Lost, iv. 140.\n99. V. Ovid, Metamorphoses, vi, Philomela.\n100. Cf. Part III, l. 204.\n115. Cf. Part III, l. 195.\n118. Cf. Webster: “Is the wind in that door still?”\n126. Cf. Part I, l. 37, 48.\n138. Cf. the game of chess in Middleton’s Women beware Women."
-      ,"title":"3"
-    },
-    {
-      "id":"notes4",
-      "body":"III. THE FIRE SERMON\n\n176. V. Spenser, Prothalamion.\n192. Cf. The Tempest, I. ii.\n196. Cf. Marvell, To His Coy Mistress.\n197. Cf. Day, Parliament of Bees:\n\n“When of the sudden, listening, you shall hear,\n“A noise of horns and hunting, which shall bring\n“Actaeon to Diana in the spring,\n“Where all shall see her naked skin . . .”\n\n199. I do not know the origin of the ballad from which these lines are taken: it was reported to me from Sydney, Australia.\n202. V. Verlaine, Parsifal.\n210. The currants were quoted at a price “carriage and insurance free to London”; and the Bill of Lading etc. were to be handed to the buyer upon payment of the sight draft.\n210. “Carriage and insurance free”] “cost, insurance and freight”-Editor.\n218. Tiresias, although a mere spectator and not indeed a “character,” is yet the most important personage in the poem, uniting all the rest. Just as the one-eyed merchant, seller of currants, melts into the Phoenician Sailor, and the latter is not wholly distinct from Ferdinand Prince of Naples, so all the women are one woman, and the two sexes meet in Tiresias. What Tiresias sees, in fact, is the substance of the poem. The whole passage from Ovid is of great anthropological interest:\n\n‘. . . Cum Iunone iocos et maior vestra profecto est\nQuam, quae contingit maribus,’ dixisse, ‘voluptas.’\nIlla negat; placuit quae sit sententia docti\nQuaerere Tiresiae: venus huic erat utraque nota.\nNam duo magnorum viridi coeuntia silva\nCorpora serpentum baculi violaverat ictu\nDeque viro factus, mirabile, femina septem\nEgerat autumnos; octavo rursus eosdem\nVidit et ‘est vestrae si tanta potentia plagae,’\nDixit ‘ut auctoris sortem in contraria mutet,\nNunc quoque vos feriam!’ percussis anguibus isdem\nForma prior rediit genetivaque venit imago.\nArbiter hic igitur sumptus de lite iocosa\nDicta Iovis firmat; gravius Saturnia iusto\nNec pro materia fertur doluisse suique\nIudicis aeterna damnavit lumina nocte,\nAt pater omnipotens (neque enim licet inrita cuiquam\nFacta dei fecisse deo) pro lumine adempto\nScire futura dedit poenamque levavit honore.\n\n221. This may not appear as exact as Sappho’s lines, but I had in mind the “longshore” or “dory” fisherman, who returns at nightfall.\n253. V. Goldsmith, the song in The Vicar of Wakefield.\n257. V. The Tempest, as above.\n264. The interior of St. Magnus Martyr is to my mind one of the finest among Wren’s interiors. See The Proposed Demolition of Nineteen City Churches (P. S. King & Son, Ltd.).\n266. The Song of the (three) Thames-daughters begins here. From line 292 to 306 inclusive they speak in turn. V. Götterdämmerung, III. i: the Rhine-daughters.\n279. V. Froude, Elizabeth, Vol. I, ch. iv, letter of De Quadra to Philip of Spain:\n“In the afternoon we were in a barge, watching the games on the river. (The queen) was alone with Lord Robert and myself on the poop, when they began to talk nonsense, and went so far that Lord Robert at last said, as I was on the spot there was no reason why they should not be married if the queen pleased.”\n293. Cf. Purgatorio, v. 133:\n\n“Ricorditi di me, che son la Pia;\nSiena mi fe’, disfecemi Maremma.”\n\n307. V. St. Augustine’s Confessions: “to Carthage then I came, where a cauldron of unholy loves sang all about mine ears.”\n308. The complete text of the Buddha’s Fire Sermon (which corresponds in importance to the Sermon on the Mount) from which these words are taken, will be found translated in the late Henry Clarke Warren’s Buddhism in Translation (Harvard Oriental Series). Mr. Warren was one of the great pioneers of Buddhist studies in the Occident.\n309. From St. Augustine’s Confessions again. The collocation of these two representatives of eastern and western asceticism, as the culmination of this part of the poem, is not an accident.",
-      "title":"4"
-    },
-    {
-      "id":"notes5",
-      "body":"V. WHAT THE THUNDER SAID\n\nIn the first part of Part V three themes are employed: the journey to Emmaus, the approach to the Chapel Perilous (see Miss Weston’s book) and the present decay of eastern Europe.\n357. This is Turdus aonalaschkae pallasii, the hermit-thrush which I have heard in Quebec County. Chapman says (Handbook of Birds of Eastern North America) “it is most at home in secluded woodland and thickety retreats. . . . Its notes are not remarkable for variety or volume, but in purity and sweetness of tone and exquisite modulation they are unequalled.” Its “water-dripping song” is justly celebrated.\n360. The following lines were stimulated by the account of one of the Antarctic expeditions (I forget which, but I think one of Shackleton’s): it was related that the party of explorers, at the extremity of their strength, had the constant delusion that there was one more member than could actually be counted.\n366-76. Cf. Hermann Hesse, Blick ins Chaos:\n“Schon ist halb Europa, schon ist zumindest der halbe Osten Europas auf dem Wege zum Chaos, fährt betrunken im heiligem Wahn am Abgrund entlang und singt dazu, singt betrunken und hymnisch wie Dmitri Karamasoff sang. Ueber diese Lieder lacht der Bürger beleidigt, der Heilige und Seher hört sie mit Tränen.”\n401. “Datta, dayadhvam, damyata” (Give, sympathize, control). The fable of the meaning of the Thunder is found in the Brihadaranyaka—Upanishad, 5, 1. A translation is found in Deussen’s Sechzig Upanishads des Veda, p. 489.\n407. Cf. Webster, The White Devil, v. vi:\n\n\t\t“. . . they’ll remarry\n\tEre the worm pierce your winding-sheet, ere the spider\n\tMake a thin curtain for your epitaphs.”\n\n411. Cf. Inferno, xxxiii. 46:\n\n\t“ed io sentii chiavar l’uscio di sotto\n\tall’orribile torre.”\n\nAlso F. H. Bradley, Appearance and Reality, p. 346:\n“My external sensations are no less private to myself than are my thoughts or my feelings. In either case my experience falls within my own circle, a circle closed on the outside; and, with all its elements alike, every sphere is opaque to the others which surround it. . . . In brief, regarded as an existence which appears in a soul, the whole world for each is peculiar and private to that soul.”\n424. V. Weston, From Ritual to Romance; chapter on the Fisher King.\n427. V. Purgatorio, xxvi. 148.\n\n\t“‘Ara vos prec per aquella valor\n\t‘que vos guida al som de l’escalina,\n\t‘sovegna vos a temps de ma dolor.’\n\tPoi s’ascose nel foco che gli affina.”\n\n428. V. Pervigilium Veneris. Cf. Philomela in Parts II and III.\n429. V. Gerard de Nerval, Sonnet El Desdichado.\n431. V. Kyd’s Spanish Tragedy.\n433. Shantih. Repeated as here, a formal ending to an Upanishad. ‘The Peace which passeth understanding’ is a feeble translation of the content of this word.",
-      "title":"5"
+      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
     },
     { 
       "id":"padoutthepoem",
@@ -243,22 +300,47 @@
     {
       "id": "a1",
       "_to": "section1",
-      "_from": "stanza1"
+      "_from": "section1-notes1"
     },
     {
       "id": "a2",
       "_to": "section1",
-      "_from": "stanza2"
+      "_from": "section1-notes2"
     },
     {
       "id": "a3",
       "_to": "section1",
-      "_from": "stanza3"
+      "_from": "section1-notes3"
     },
     {
       "id": "a4",
       "_to": "section1",
-      "_from": "stanza4"
+      "_from": "section1-notes4"
+    },
+    {
+      "id": "a5",
+      "_to": "section1",
+      "_from": "section1-notes5"
+    },
+    {
+      "id": "a6",
+      "_to": "section1",
+      "_from": "section1-notes6"
+    },
+    {
+      "id": "a7",
+      "_to": "section1",
+      "_from": "section1-notes7"
+    },
+    {
+      "id": "a8",
+      "_to": "section1",
+      "_from": "section1-notes8"
+    },
+    {
+      "id": "a9",
+      "_to": "section1",
+      "_from": "section1-notes9"
     },
     {
       "id": "b",
@@ -268,32 +350,37 @@
     {
       "id": "b1",
       "_to": "section2",
-      "_from": "stanza5"
+      "_from": "section2-notes1"
     },
     {
       "id": "b2",
       "_to": "section2",
-      "_from": "stanza6"
+      "_from": "section2-notes2"
     },
     {
       "id": "b3",
       "_to": "section2",
-      "_from": "stanza7"
+      "_from": "section2-notes3"
     },
     {
       "id": "b4",
       "_to": "section2",
-      "_from": "stanza8"
+      "_from": "section2-notes4"
     },
     {
       "id": "b5",
       "_to": "section2",
-      "_from": "stanza9"
+      "_from": "section2-notes5"
     },
     {
       "id": "b6",
       "_to": "section2",
-      "_from": "stanza10"
+      "_from": "section2-notes6"
+    },
+    {
+      "id": "b7",
+      "_to": "section2",
+      "_from": "section2-notes7"
     },
     {
       "id": "c",
@@ -303,72 +390,102 @@
     {
       "id": "c1",
       "_to": "section3",
-      "_from": "stanza11"
+      "_from": "section3-notes1"
     },
     {
       "id": "c2",
       "_to": "section3",
-      "_from": "stanza12"
+      "_from": "section3-notes2"
     },
         {
       "id": "c3",
       "_to": "section3",
-      "_from": "stanza13"
+      "_from": "section3-notes3"
     },
         {
       "id": "c4",
       "_to": "section3",
-      "_from": "stanza14"
+      "_from": "section3-notes4"
     },
         {
       "id": "c5",
       "_to": "section3",
-      "_from": "stanza15"
+      "_from": "section3-notes5"
     },
         {
       "id": "c6",
       "_to": "section3",
-      "_from": "stanza16"
+      "_from": "section3-notes6"
     },
         {
       "id": "c7",
       "_to": "section3",
-      "_from": "stanza17"
+      "_from": "section3-notes7"
     },
         {
       "id": "c8",
       "_to": "section3",
-      "_from": "stanza18"
+      "_from": "section3-notes8"
     },
         {
       "id": "c9",
       "_to": "section3",
-      "_from": "stanza19"
+      "_from": "section3-notes9"
     },
         {
       "id": "c10",
       "_to": "section3",
-      "_from": "stanza20"
+      "_from": "section3-notes10"
     },
         {
       "id": "c11",
       "_to": "section3",
-      "_from": "stanza21"
+      "_from": "section3-notes11"
     },
-        {
+    {
       "id": "c12",
       "_to": "section3",
-      "_from": "stanza22"
+      "_from": "section3-notes12"
+    },
+    {
+      "id": "c13",
+      "_to": "section3",
+      "_from": "section3-notes13"
+    },
+    {
+      "id": "c14",
+      "_to": "section3",
+      "_from": "section3-notes14"
+    },
+    {
+      "id": "c15",
+      "_to": "section3",
+      "_from": "section3-notes15"
+    },
+    {
+      "id": "c16",
+      "_to": "section3",
+      "_from": "section3-notes16"
+    },
+    {
+      "id": "c17",
+      "_to": "section3",
+      "_from": "section3-notes17"
+    },
+    {
+      "id": "c18",
+      "_to": "section3",
+      "_from": "section3-notes18"
+    },
+    {
+      "id": "c19",
+      "_to": "section3",
+      "_from": "section3-notes19"
     },
     {
       "id": "d",
       "_to": "section4",
       "_from": "titlecard"
-    },
-    {
-      "id": "d1",
-      "_to": "section4",
-      "_from": "stanza23"
     },
     {
       "id": "e",
@@ -378,85 +495,75 @@
     {
       "id": "e1",
       "_to": "section5",
-      "_from": "stanza24"
+      "_from": "section5-notes1"
     },
-        {
+    {
       "id": "e2",
       "_to": "section5",
-      "_from": "stanza25"
+      "_from": "section5-notes2"
     },
         {
       "id": "e3",
       "_to": "section5",
-      "_from": "stanza26"
+      "_from": "section5-notes3"
     },
         {
       "id": "e4",
       "_to": "section5",
-      "_from": "stanza27"
+      "_from": "section5-notes4"
     },
         {
       "id": "e5",
       "_to": "section5",
-      "_from": "stanza28"
+      "_from": "section5-notes5"
     },
         {
       "id": "e6",
       "_to": "section5",
-      "_from": "stanza29"
+      "_from": "section5-notes6"
     },
         {
       "id": "e7",
       "_to": "section5",
-      "_from": "stanza30"
+      "_from": "section5-notes7"
     },
         {
       "id": "e8",
       "_to": "section5",
-      "_from": "stanza31"
+      "_from": "section5-notes8"
     },
     {
       "id": "e9",
       "_to": "section5",
-      "_from": "stanza32"
+      "_from": "section5-notes9"
     },
     {
       "id": "e10",
       "_to": "section5",
-      "_from": "stanza33"
+      "_from": "section5-notes10"
+    },
+    {
+      "id": "e11",
+      "_to": "section5",
+      "_from": "section5-notes11"
+    },
+    {
+      "id": "e12",
+      "_to": "section5",
+      "_from": "section5-notes12"
+    },
+    {
+      "id": "e13",
+      "_to": "section5",
+      "_from": "section5-notes13"
     },
     {
       "id": "f",
       "_to": "section6",
       "_from": "titlecard"
     },
-    {
-      "id": "f1",
-      "_to": "section6",
-      "_from": "notes1"
-    },
-    {
-      "id": "f2",
-      "_to": "section6",
-      "_from": "notes2"
-    },
-    {
-      "id": "f3",
-      "_to": "section6",
-      "_from": "notes3"
-    },
-    {
-      "id": "f4",
-      "_to": "section6",
-      "_from": "notes4"
-    },
-    {
-      "id": "f5",
-      "_to": "section6",
-      "_from": "notes5"
-    },
     { 
-      "id": "z",
+      "id": "g",
       "_to": "section6",
       "_from": "padoutthepoem",
       "edgetype": "annotation"
