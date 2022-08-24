@@ -10,10 +10,10 @@ body {
 
 #container {
   position: relative;
-  border: 1px solid black;
 }
 
 #graph-container {
+  height: 90vh;
   border: 1px solid blue;
 }
 

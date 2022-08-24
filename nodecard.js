@@ -46,7 +46,7 @@ Nodecard.prototype.setMode = function (mode) {
         if (this.state === "floating") this.state = "fixed";
         this.text = e.target.value;
         this.htmlText = convertTextForHtml(e.target.value);
-        // since title is only derived from body (for now), we need to update the title,
+        // since title is often derived from body, we need to update the title,
         // especially for newly created cards that have no body when they are instantiated.
         let newTitle = limitLength(this.text);
         if (this.title !== newTitle) this.title = newTitle;
@@ -154,23 +154,6 @@ Nodecard.prototype.setPosition = function (x, y) {
   this.dom.style.left = x - width / 2 + "px";
   this.dom.style.top = y - height / 2 + "px";
   this.dom.style.display = "flex";
-
-  console.log('container and canvas positions and dimensions:')
-  const containerVals = this.dom.parentElement.getBoundingClientRect()
-  console.log(containerVals)
-  const canvasVals = this.dom.parentElement.querySelector("#graph-container").getBoundingClientRect();
-  console.log(canvasVals)
-
-  console.log(this.deck.net.body.container.firstChild.canvas)
-  console.log(this.deck.net.body.container)
-  console.log(this.deck.net.body.container.firstChild.offsetLeft)
-  console.log(this.deck.net.body.container.firstChild.offsetTop)
-  //to confirm that values are correct:
-  console.log(`x is ${x}, y is ${y}, width is ${width}, height is ${height}`);
-  console.log(`card left is ${this.dom.style.left}, card right is ${this.dom.style.right}, card top is ${this.dom.style.top}, card bottom is ${this.dom.style.bottom}`);
-  centerpoint(this.dom);
-  console.log(`card's offsetParent`)
-  console.log(this.dom.offsetParent)
 };
 
 Nodecard.prototype.log = function () {
