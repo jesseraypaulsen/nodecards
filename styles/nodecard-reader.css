@@ -13,7 +13,7 @@
 }
 
 .nodecard > .reader > .reader__body {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: Times, "Times New Roman", Georgia, serif;
   overflow-y: scroll;
   height: 16em;
   background-color: #f4f4f4;

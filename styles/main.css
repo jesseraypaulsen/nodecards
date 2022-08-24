@@ -4,15 +4,16 @@
   padding: 0;
 }
 
+body {
+  padding: 3em;
+}
+
 #container {
   position: relative;
-  padding: 3em;
   border: 1px solid black;
 }
 
 #graph-container {
-  width: 95%;
-  height: 80vh;
   border: 1px solid blue;
 }
 

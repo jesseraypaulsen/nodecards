@@ -19,7 +19,6 @@ function Nodecard(o) {
 }
 
 function addNodeThenRender(pt, id, deck, card) {
-  console.log(`web source for ${id} is ${card.webSource}`)
   const label = card.title;
   if (pt) {
     deck.net.body.data.nodes.add({ x: pt.canX, y: pt.canY, id, label });
@@ -114,7 +113,6 @@ Nodecard.prototype.render = function (view) {
   //These two lines must occur in this order, or Material Tooltip breaks everything.
   this.deck.container.append(this.dom);
   attachButtonBar(view, this);
-  console.log(`webSource is ${this.webSource}`)
 
   this.setPosition(this.pt.domX, this.pt.domY);
 };
@@ -130,7 +128,6 @@ Nodecard.prototype.reader = function () {
 
   const bodyContainer = document.createElement("div");
   bodyContainer.classList.add("reader__body");
-  //bodyContainer.textContent = this.text;
   bodyContainer.innerHTML = this.htmlText;
 
   reader.append(bodyContainer);
@@ -158,10 +155,22 @@ Nodecard.prototype.setPosition = function (x, y) {
   this.dom.style.top = y - height / 2 + "px";
   this.dom.style.display = "flex";
 
+  console.log('container and canvas positions and dimensions:')
+  const containerVals = this.dom.parentElement.getBoundingClientRect()
+  console.log(containerVals)
+  const canvasVals = this.dom.parentElement.querySelector("#graph-container").getBoundingClientRect();
+  console.log(canvasVals)
+
+  console.log(this.deck.net.body.container.firstChild.canvas)
+  console.log(this.deck.net.body.container)
+  console.log(this.deck.net.body.container.firstChild.offsetLeft)
+  console.log(this.deck.net.body.container.firstChild.offsetTop)
   //to confirm that values are correct:
   console.log(`x is ${x}, y is ${y}, width is ${width}, height is ${height}`);
-  console.log(`style.left is ${this.dom.style.left} and style.top is ${this.dom.style.top}`);
+  console.log(`card left is ${this.dom.style.left}, card right is ${this.dom.style.right}, card top is ${this.dom.style.top}, card bottom is ${this.dom.style.bottom}`);
   centerpoint(this.dom);
+  console.log(`card's offsetParent`)
+  console.log(this.dom.offsetParent)
 };
 
 Nodecard.prototype.log = function () {
@@ -177,8 +186,8 @@ function limitLength(txt) {
   return txt.slice(0, 20);
 }
 
-// Finds the center point of a DOM element. DO NOT DELETE, even if you're not currently using it.
-// It's very useful for confirming that setPosition has computed the correct values.
+// Finds the center point of a DOM element relative to the element that its offsetParent property refers to. 
+// DO NOT DELETE, even if you're not currently using it. It's very useful for confirming that setPosition has computed the correct values.
 function centerpoint(el) {
   let centerX = el.offsetLeft + el.offsetWidth / 2;
   let centerY = el.offsetTop + el.offsetHeight / 2; // find the centerpoint of an element.

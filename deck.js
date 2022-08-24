@@ -24,7 +24,10 @@ export default function Deck() {
 // static factory method
 Deck.initialize = function (container, options, handler, graphRenderer) {
   const deck = new Deck();
-  deck.container = container;
+  const graphContainer = document.createElement("div");
+  graphContainer.id = "graph-container";
+  container.append(graphContainer);
+  deck.container = graphContainer;
   deck.renderingOptions = options;
   setupGraphRenderer(graphRenderer, deck);
   setupSwitchPanel(deck);
@@ -33,11 +36,8 @@ Deck.initialize = function (container, options, handler, graphRenderer) {
 };
 
 function setupGraphRenderer(graphRenderer, deck) {
-  const graphContainer = document.createElement("div");
-  graphContainer.id = "graph-container";
-  deck.container.append(graphContainer);
   const options = deck.renderingOptions;
-  deck.net = new graphRenderer.Network(graphContainer, {}, options);
+  deck.net = new graphRenderer.Network(deck.container, {}, options);
   //TODO: deck.graphRenderer = new graphRendererFacade(vis);
 }
 
@@ -68,7 +68,6 @@ async function setupNodecards(deck, callback) {
 }
 
 async function setupLinks(deck) {
-  console.log(`setupLinks called`);
   data.links.map((item, i) => {
     const options = {
       source: item._from,
@@ -103,8 +102,6 @@ Deck.prototype.hydrateCard = function (options) {
 
 Deck.prototype.createLink = function (options) {
   options.deck = this;
-  console.log(`from createLink, here's options`);
-  console.log(options); //edgetype:'tangent'
   const link = buildLink(options);
   const id = cuid(); //create new id
   link.setId(id);
@@ -114,9 +111,7 @@ Deck.prototype.createLink = function (options) {
 
 Deck.prototype.hydrateLink = function ({ source, target, edgetype, id }) {
   const options = { sourceId: source, targetId: target, edgetype, deck: this };
-
   const link = buildLink(options);
-  console.log(`${source}, ${target}`);
   link.setId(id);
   link.addToDeck();
   link.render();
