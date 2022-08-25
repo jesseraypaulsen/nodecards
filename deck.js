@@ -63,7 +63,7 @@ async function setupNodecards(deck, callback) {
       if (i === data.nodecards.length - 1) {
         callback(deck);
       }
-    }, i * 100);
+    }, i * 35);
   });
 }
 

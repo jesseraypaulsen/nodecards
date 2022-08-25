@@ -70,7 +70,13 @@ Nodecard.prototype.setMode = function (mode) {
   if (this.mode === "inert") {
     this.log();
 
-    if (this.dom) this.dom.remove();
+    if (this.dom) {
+      this.dom.classList.add("contract")
+      // delay the removal of the DOM element, otherwise the contract animation doesn't occur
+      setTimeout(() => {
+        this.dom.remove();
+      }, 500)
+    }
 
     this.deck.net.body.data.nodes.update({
       id: this.id,
@@ -93,6 +99,7 @@ Nodecard.prototype.render = function (view) {
   if (!this.dom) {
     this.dom = document.createElement("div");
     this.dom.classList.add("nodecard");
+    this.dom.classList.add("expand")
   }
   // make canvas node less visible. can't use the hidden property because it turns edges off.
   this.deck.net.body.data.nodes.update({
@@ -113,8 +120,12 @@ Nodecard.prototype.render = function (view) {
   //These two lines must occur in this order, or Material Tooltip breaks everything.
   this.deck.container.append(this.dom);
   attachButtonBar(view, this);
-
   this.setPosition(this.pt.domX, this.pt.domY);
+
+  // remove the class to prevent animation from occurring when changing nodecard modes. but it must be delayed or the animation does not work at all.
+  setTimeout(()=> {
+    this.dom.classList.remove("expand");
+  }, 1000)
 };
 
 Nodecard.prototype.move = function ({ domX, domY, canX, canY }) {

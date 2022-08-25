@@ -26,10 +26,36 @@ body {
   border-radius: 2px;
 }
 
+.nodecard.expand {
+  animation: expandCard .5s;
+}
+
+.nodecard.contract {
+  animation: contractCard .5s;
+}
+
 .button-bar {
   display: flex;
   justify-content: space-between;
   background-color: #e9e6ed;
   padding: 0;
   padding-top: 6px;
+}
+
+@keyframes expandCard {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes contractCard {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
 }
