@@ -75,6 +75,8 @@ Nodecard.prototype.setMode = function (mode) {
       // delay the removal of the DOM element, otherwise the contract animation doesn't occur
       setTimeout(() => {
         this.dom.remove();
+        this.dom.classList.remove("contract");
+        this.dom.classList.add("expand");
       }, 500)
     }
 
