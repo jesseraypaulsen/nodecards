@@ -25,8 +25,8 @@ export function setupSwitchPanel(deck) {
   <span class="toggler-switch">Auto-save Off</span>
   </label>    
   <label class="switch physics">
-    <input type="checkbox" />
-    <span class="toggler-switch">Physics Off</span>
+  <input type="checkbox" />
+  <span class="toggler-switch">Physics Off</span>
   </label>
   </div>
   `;

@@ -1,5 +1,6 @@
 import { MDCTooltip } from "@material/tooltip";
 import { MDCRipple } from "@material/ripple";
+import { turnTogglerSwitchOff } from "./switch-panel";
 
 const items = [
   { id: "tooltip-drag", msg: "Drag", icon: "drag_indicator" },
@@ -101,9 +102,39 @@ function createButtonWithTooltip(item, card) {
   }
 
   if (item.id == "tooltip-drag") {
-    iconButton.addEventListener("click", (e) => {
-      console.log("drag button clicked");
-    });
+
+    iconButton.addEventListener("mousedown", (e) => {
+      e.preventDefault(); // required in order to fire/catch the mouseup event. Why? No idea.
+      turnTogglerSwitchOff(); // physics must be turned off for dragging to work.
+      let move = true;
+      let prevX = e.x;
+      let prevY = e.y;
+      
+      const container = card.deck.container;
+      container.addEventListener("mouseup", (e) => {
+        move = false;
+      }, { once: true }); // the last arg removes event listener after it runs once
+      
+      container.addEventListener("mousemove", moveHandler)
+      function moveHandler(e) {
+        if (move) {
+          let deltaX = e.x - prevX;
+          let deltaY = e.y - prevY;
+          const pos = card.deck.getNodeCenter(card.id)
+
+          card.deck.net.moveNode(card.id, pos.canX + deltaX, pos.canY + deltaY);
+          card.setPosition(pos.domX + deltaX, pos.domY + deltaY);
+          // using Nodecard.prototype.move() causes internal error in vis-network/BarnesHutSolver.js,"too much recursion"
+          prevX = e.x;
+          prevY = e.y;
+        } else {
+          container.removeEventListener("mousemove", moveHandler)
+        }
+      }
+
+      //https://stackoverflow.com/q/4936324 -> self-destructing event listener
+
+    })
   }
 
   if (item.id == "tooltip-delete") {

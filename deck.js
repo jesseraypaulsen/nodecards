@@ -28,7 +28,8 @@ Deck.initialize = function (container, options, handler, graphRenderer) {
   graphContainer.id = "graph-container";
   container.append(graphContainer);
   deck.container = graphContainer;
-  deck.renderingOptions = options;
+  deck.renderingOptions = options;  
+  
   setupGraphRenderer(graphRenderer, deck);
   setupSwitchPanel(deck);
   setListener(deck, handler);
@@ -38,12 +39,17 @@ Deck.initialize = function (container, options, handler, graphRenderer) {
 function setupGraphRenderer(graphRenderer, deck) {
   const options = deck.renderingOptions;
   deck.net = new graphRenderer.Network(deck.container, {}, options);
+  //deck.net.fit({ maxZoomLevel: 1, minZoomLevel: 0.6 });
   //TODO: deck.graphRenderer = new graphRendererFacade(vis);
 }
 
 function setListener(deck, handler) {
   deck.listener = (e) => handler(e, deck);
   deck.net.on("click", deck.listener);
+  deck.net.on("dragging", (e) => {
+    console.log(`here's dragging event for the canvas renderer (see deck.js -> setListener)`)
+    console.log(e)
+  })
 }
 
 async function setupNodecards(deck, callback) {
