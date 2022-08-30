@@ -107,8 +107,6 @@ function createButtonWithTooltip(item, card) {
       e.preventDefault(); // required in order to fire/catch the mouseup event. Why? No idea.
       turnTogglerSwitchOff(); // physics must be turned off for dragging to work.
       let move = true;
-      let prevX = e.x;
-      let prevY = e.y;
       
       const container = card.deck.container;
       container.addEventListener("mouseup", (e) => {
@@ -117,29 +115,26 @@ function createButtonWithTooltip(item, card) {
       
       container.addEventListener("mousemove", moveHandler)
       function moveHandler(e) {
+        let dx = e.movementX*1.6;  //the factor is a crude hack that compensates for a delay between mouse and element position
+        let dy = e.movementY*1.6;
         if (move) {
-          let deltaX = e.x - prevX;
-          let deltaY = e.y - prevY;
           const pos = card.deck.getNodeCenter(card.id)
 
-          card.deck.net.moveNode(card.id, pos.canX + deltaX, pos.canY + deltaY);
-          card.setPosition(pos.domX + deltaX, pos.domY + deltaY);
+          card.deck.net.moveNode(card.id, pos.canX + dx, pos.canY + dy);
+          card.setPosition(pos.domX + dx, pos.domY + dy);
           // using Nodecard.prototype.move() causes internal error in vis-network/BarnesHutSolver.js,"too much recursion"
-          prevX = e.x;
-          prevY = e.y;
+
         } else {
           container.removeEventListener("mousemove", moveHandler)
         }
       }
-
-      //https://stackoverflow.com/q/4936324 -> self-destructing event listener
-
     })
   }
 
   if (item.id == "tooltip-delete") {
     iconButton.addEventListener("click", (e) => {
       console.log("delete button clicked");
+      card.deck.discard(card.id);
     });
   }
 
