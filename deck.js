@@ -1,6 +1,6 @@
 import Nodecard from "./nodecard";
 import buildLink from "./link";
-import { setupSwitchPanel } from "./switch-panel";
+import { setupSwitchPanel, turnTogglerSwitchOff } from "./switch-panel";
 import cuid from "cuid";
 const data = require("./data.json");
 
@@ -84,6 +84,9 @@ async function setupLinks(deck) {
     deck.hydrateLink(options);
   });
   deck.net.fit({ maxZoomLevel: 1, minZoomLevel: 0.6 });
+  setTimeout(() => {
+    turnTogglerSwitchOff();
+  }, 2000)
 }
 
 // coordinates provided by options; id not provided.
