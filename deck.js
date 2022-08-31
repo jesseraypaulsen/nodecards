@@ -148,6 +148,8 @@ Deck.prototype.discard = function (id) {
       this.stack.splice(i, 1);
     }
   });
+
+  this.currCard = { state: "empty" };
 };
 
 Deck.prototype.getNodeCenter = function (id) {
