@@ -107,7 +107,7 @@ function createButtonWithTooltip(item, card) {
       e.preventDefault(); // required in order to fire/catch the mouseup event. Why? No idea.
       turnTogglerSwitchOff(); // physics must be turned off for dragging to work.
       let move = true;
-      
+
       const container = card.deck.container;
       container.addEventListener("mouseup", (e) => {
         move = false;
@@ -115,6 +115,7 @@ function createButtonWithTooltip(item, card) {
       
       container.addEventListener("mousemove", moveHandler)
       function moveHandler(e) {
+
         let dx = e.movementX*1.6;  //the 1.6 factor is a crude hack that compensates for a delay between mouse and element position.
         let dy = e.movementY*1.6;  //the movementX/movementY properties on the event object return the difference between successive mouse positions.
         if (move) {
@@ -149,22 +150,18 @@ function createButtonWithTooltip(item, card) {
     } else {
       iconButton.classList.add("md-inactive")
     }
-  } 
-
-  /* Material Icon-Button
-  <button
-  class="mdc-icon-button material-icons"
-  aria-describedby="${item.id}"
-    >
-    <div class="mdc-icon-button__ripple"></div>
-    <span class="mdc-icon-button__focus-ring"></span>
-    ${item.icon}
-    </button>
-    */
+  }
 
   const el = document.createElement("div");
   el.style.display = "inline-block";
   el.append(iconButton, tooltip);
+
+  // remove the Drag button's tooltip after the button is clicked, because when the card is dragged the tooltip's position does not synch with the card's
+  if (item.id === "tooltip-drag") {
+    el.addEventListener("mousedown", e => {
+      tooltip.remove();
+    })
+  }
 
   return { el, iconButton, tooltip };
 }
