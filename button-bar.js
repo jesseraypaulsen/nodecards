@@ -115,14 +115,16 @@ function createButtonWithTooltip(item, card) {
       
       container.addEventListener("mousemove", moveHandler)
       function moveHandler(e) {
-        let dx = e.movementX*1.6;  //the factor is a crude hack that compensates for a delay between mouse and element position
-        let dy = e.movementY*1.6;
+        let dx = e.movementX*1.6;  //the 1.6 factor is a crude hack that compensates for a delay between mouse and element position.
+        let dy = e.movementY*1.6;  //the movementX/movementY properties on the event object return the difference between successive mouse positions.
         if (move) {
           const pos = card.deck.getNodeCenter(card.id)
 
           card.deck.net.moveNode(card.id, pos.canX + dx, pos.canY + dy);
           card.setPosition(pos.domX + dx, pos.domY + dy);
           // using Nodecard.prototype.move() causes internal error in vis-network/BarnesHutSolver.js,"too much recursion"
+          
+          card.pt = card.deck.getNodeCenter(card.id); // this property must be updated, because Nodecard.prototype.render uses it to position nodecards.
 
         } else {
           container.removeEventListener("mousemove", moveHandler)

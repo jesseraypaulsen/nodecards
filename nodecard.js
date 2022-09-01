@@ -100,7 +100,6 @@ Nodecard.prototype.setMode = function (mode) {
 Nodecard.prototype.render = function (view) {
   if (!this.dom) {
     this.dom = document.createElement("div");
-    this.dom.setAttribute("draggable", "true");
     this.dom.classList.add("nodecard");
     this.dom.classList.add("expand")
   }
