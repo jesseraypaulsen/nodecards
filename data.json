@@ -88,49 +88,55 @@
       "id":"section2-notes1",
       "title":"Line 77",
       "body":"Cf. Antony and Cleopatra, II. ii., l. 190.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://gutenberg.org/files/100/100-h/100-h.htm#sceneII_3.2"
     },
     {
       "id":"section2-notes2",
       "title":"Line 92",
       "body":"Laquearia. V. Aeneid, I. 726:\n\ndependent lychni laquearibus aureis\nincensi, et noctem flammis funalia vincunt.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://gutenberg.org/files/227/227-h/227-h.htm#liber01"
     },
     {
       "id":"section2-notes3",
       "title":"Line 98",
       "body":"Sylvan scene. V. Milton, Paradise Lost, iv. 140.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://gutenberg.org/files/26/26-h/26-h.htm#chap04"
     },
     {
       "id":"section2-notes4",
       "title":"Line 99",
-      "body":"V. Ovid, Metamorphoses, vi, Philomela.\n100. Cf. Part III, l. 204.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "body":"V. Ovid, Metamorphoses, vi, Philomela.",
+      "source":"https://gutenberg.org/files/21765/21765-h/21765-h.htm#bookVI"
     },
     {
       "id":"section2-notes5",
-      "title":"Line 115",
-      "body":"Cf. Part III, l. 195.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "title":"Line 100",
+      "body":"Cf. Part III, l. 204.",
+      "source":"https://gutenberg.org/files/21765/21765-h/21765-h.htm#bookVI"
     },
     {
       "id":"section2-notes6",
+      "title":"Line 115",
+      "body":"Cf. Part III, l. 195.",
+      "source":"https://gutenberg.org/files/21765/21765-h/21765-h.htm#bookVI"
+    },
+    {
+      "id":"section2-notes7",
       "title":"Line 118",
       "body":"Cf. Webster: “Is the wind in that door still?”",
       "source":"https://en.wikipedia.org/wiki/The_Devil%27s_Law_Case"
     },
     {
-      "id":"section2-notes7",
+      "id":"section2-notes8",
       "title":"Line 126",
       "body":"Cf. Part I, l. 37, 48.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/The_Devil%27s_Law_Case"
     },
     {
-      "id":"section2-notes8",
+      "id":"section2-notes9",
       "title":"Line 138",
       "body":"Cf. the game of chess in Middleton’s Women beware Women.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/Women_Beware_Women"
     },
     {
       "id":"section3",
@@ -142,25 +148,25 @@
       "id":"section3-notes1",
       "title":"Line 176",
       "body":"V. Spenser, Prothalamion.\n",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/Prothalamion"
     },
     {
       "id":"section3-notes2",
       "title":"Line 192",
       "body":"Cf. The Tempest, I. ii.\n",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://gutenberg.org/files/23042/23042-h/23042-h.htm#sceneI_2"
     },
     {
       "id":"section3-notes3",
       "title":"Line 196",
       "body":"Cf. Marvell, To His Coy Mistress.\n",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/To_His_Coy_Mistress"
     },
     {
       "id":"section3-notes4",
       "title":"Line 197",
       "body":"Cf. Day, Parliament of Bees:\n\n“When of the sudden, listening, you shall hear,\n“A noise of horns and hunting, which shall bring\n“Actaeon to Diana in the spring,\n“Where all shall see her naked skin . . .”"
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      ,"source":"https://en.wikipedia.org/wiki/The_Parliament_of_Bees"
     },
     {
       "id":"section3-notes5",
@@ -172,7 +178,7 @@
       "id":"section3-notes6",
       "title":"Line 202",
       "body":"V. Verlaine, Parsifal.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://www.monsalvat.no/verlaine.htm"
     },
     {
       "id":"section3-notes7",
@@ -182,76 +188,70 @@
     },
     {
       "id":"section3-notes8",
-      "title":"Line 210",
-      "body":"“Carriage and insurance free”] “cost, insurance and freight”-Editor.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
-    },
-    {
-      "id":"section3-notes9",
       "title":"Line 218",
       "body":"Tiresias, although a mere spectator and not indeed a “character,” is yet the most important personage in the poem, uniting all the rest. Just as the one-eyed merchant, seller of currants, melts into the Phoenician Sailor, and the latter is not wholly distinct from Ferdinand Prince of Naples, so all the women are one woman, and the two sexes meet in Tiresias. What Tiresias sees, in fact, is the substance of the poem. The whole passage from Ovid is of great anthropological interest:\n\n‘. . . Cum Iunone iocos et maior vestra profecto est\nQuam, quae contingit maribus,’ dixisse, ‘voluptas.’\nIlla negat; placuit quae sit sententia docti\nQuaerere Tiresiae: venus huic erat utraque nota.\nNam duo magnorum viridi coeuntia silva\nCorpora serpentum baculi violaverat ictu\nDeque viro factus, mirabile, femina septem\nEgerat autumnos; octavo rursus eosdem\nVidit et ‘est vestrae si tanta potentia plagae,’\nDixit ‘ut auctoris sortem in contraria mutet,\nNunc quoque vos feriam!’ percussis anguibus isdem\nForma prior rediit genetivaque venit imago.\nArbiter hic igitur sumptus de lite iocosa\nDicta Iovis firmat; gravius Saturnia iusto\nNec pro materia fertur doluisse suique\nIudicis aeterna damnavit lumina nocte,\nAt pater omnipotens (neque enim licet inrita cuiquam\nFacta dei fecisse deo) pro lumine adempto\nScire futura dedit poenamque levavit honore."
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      ,"source":"http://www.thelatinlibrary.com/ovid/ovid.met3.shtml"
       
     },
     {
-      "id":"section3-notes10",
+      "id":"section3-notes9",
       "title":"Line 221",
       "body":"This may not appear as exact as Sappho’s lines, but I had in mind the “longshore” or “dory” fisherman, who returns at nightfall.",
       "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
     },
     {
-      "id":"section3-notes11",
+      "id":"section3-notes10",
       "title":"Line 253",
       "body":"V. Goldsmith, the song in The Vicar of Wakefield.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/The_Vicar_of_Wakefield"
+    },
+    {
+      "id":"section3-notes11",
+      "title":"Line 257",
+      "body":"V. The Tempest, as above.",
+      "source":"https://gutenberg.org/files/23042/23042-h/23042-h.htm"
     },
     {
       "id":"section3-notes12",
-      "title":"Line 257",
-      "body":"V. The Tempest, as above.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "title":"Line 264",
+      "body":"The interior of St. Magnus Martyr is to my mind one of the finest among Wren’s interiors. See The Proposed Demolition of Nineteen City Churches (P. S. King & Son, Ltd.)."
+      ,"source":"https://archive.org/details/cu31924015376233"
     },
     {
       "id":"section3-notes13",
-      "title":"Line 264",
-      "body":"The interior of St. Magnus Martyr is to my mind one of the finest among Wren’s interiors. See The Proposed Demolition of Nineteen City Churches (P. S. King & Son, Ltd.)."
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "title":"Line 266",
+      "body":"The Song of the (three) Thames-daughters begins here. From line 292 to 306 inclusive they speak in turn. V. Götterdämmerung, III. i: the Rhine-daughters."
+      ,"source":"https://en.wikipedia.org/wiki/G%C3%B6tterd%C3%A4mmerung"
     },
     {
       "id":"section3-notes14",
-      "title":"Line 266",
-      "body":"The Song of the (three) Thames-daughters begins here. From line 292 to 306 inclusive they speak in turn. V. Götterdämmerung, III. i: the Rhine-daughters."
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "title":"Line 279",
+      "body":"V. Froude, Elizabeth, Vol. I, ch. iv, letter of De Quadra to Philip of Spain:\n“In the afternoon we were in a barge, watching the games on the river. (The queen) was alone with Lord Robert and myself on the poop, when they began to talk nonsense, and went so far that Lord Robert at last said, as I was on the spot there was no reason why they should not be married if the queen pleased.”"
+      ,"source":"https://archive.org/details/in.ernet.dli.2015.551996"
     },
     {
       "id":"section3-notes15",
-      "title":"Line 279",
-      "body":"V. Froude, Elizabeth, Vol. I, ch. iv, letter of De Quadra to Philip of Spain:\n“In the afternoon we were in a barge, watching the games on the river. (The queen) was alone with Lord Robert and myself on the poop, when they began to talk nonsense, and went so far that Lord Robert at last said, as I was on the spot there was no reason why they should not be married if the queen pleased.”"
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
-    },
-    {
-      "id":"section3-notes16",
       "title":"Line 293",
       "body":"Cf. Purgatorio, v. 133:\n\n“Ricorditi di me, che son la Pia;\nSiena mi fe’, disfecemi Maremma.”",
       "source":"https://digitaldante.columbia.edu/intertext/index.html#purgatorio_5"
     },
     {
-      "id":"section3-notes17",
+      "id":"section3-notes16",
       "title":"Line 307",
       "body":"V. St. Augustine’s Confessions: “to Carthage then I came, where a cauldron of unholy loves sang all about mine ears.”",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://faculty.georgetown.edu/jod/augustine/Pusey/book03"
+    },
+    {
+      "id":"section3-notes17",
+      "title":"Line 308",
+      "body":"The complete text of the Buddha’s Fire Sermon (which corresponds in importance to the Sermon on the Mount) from which these words are taken, will be found translated in the late Henry Clarke Warren’s Buddhism in Translation (Harvard Oriental Series). Mr. Warren was one of the great pioneers of Buddhist studies in the Occident."
+      ,"source":"https://www.sacred-texts.com/bud/bits/index.htm"
     },
     {
       "id":"section3-notes18",
-      "title":"Line 308",
-      "body":"The complete text of the Buddha’s Fire Sermon (which corresponds in importance to the Sermon on the Mount) from which these words are taken, will be found translated in the late Henry Clarke Warren’s Buddhism in Translation (Harvard Oriental Series). Mr. Warren was one of the great pioneers of Buddhist studies in the Occident."
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
-    },
-    {
-      "id":"section3-notes19",
       "title":"Line 309",
       "body":"From St. Augustine’s Confessions again. The collocation of these two representatives of eastern and western asceticism, as the culmination of this part of the poem, is not an accident."
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      ,"source":"https://faculty.georgetown.edu/jod/Englishconfessions.html"
     },
     {
       "id":"section4",
@@ -275,7 +275,7 @@
       "id":"section5-notes2",
       "title":"Line 357", 
       "body": "This is Turdus aonalaschkae pallasii, the hermit-thrush which I have heard in Quebec County. Chapman says (Handbook of Birds of Eastern North America) “it is most at home in secluded woodland and thickety retreats. . . . Its notes are not remarkable for variety or volume, but in purity and sweetness of tone and exquisite modulation they are unequalled.” Its “water-dripping song” is justly celebrated.\n"
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      ,"source":"https://archive.org/details/handbookofbirdso00cha"
     },
     {
       "id":"section5-notes3",
@@ -287,13 +287,13 @@
       "id":"section5-notes4",
       "title":"Lines 366-76",
       "body":"Cf. Hermann Hesse, Blick ins Chaos:\n“Schon ist halb Europa, schon ist zumindest der halbe Osten Europas auf dem Wege zum Chaos, fährt betrunken im heiligem Wahn am Abgrund entlang und singt dazu, singt betrunken und hymnisch wie Dmitri Karamasoff sang. Ueber diese Lieder lacht der Bürger beleidigt, der Heilige und Seher hört sie mit Tränen.”"
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      ,"source":"https://archive.org/details/bub_gb_vKbrAc4LfyYC"
     },
     {
       "id":"section5-notes5",
       "title":"Lines 401",
       "body":"“Datta, dayadhvam, damyata” (Give, sympathize, control). The fable of the meaning of the Thunder is found in the Brihadaranyaka—Upanishad, 5, 1. A translation is found in Deussen’s Sechzig Upanishads des Veda, p. 489.\n"
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      ,"source":"https://en.wikipedia.org/wiki/Brihadaranyaka_Upanishad"
     },
     {
       "id":"section5-notes6",
@@ -311,7 +311,7 @@
       "id":"section5-notes8",
       "title":"Line 424",
       "body":"V. Weston, From Ritual to Romance; chapter on the Fisher King.\n",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/From_Ritual_to_Romance"
     },
     {
       "id":"section5-notes9",
@@ -323,25 +323,25 @@
       "id":"section5-notes10",
       "title":"Line 428",
       "body":"V. Pervigilium Veneris. Cf. Philomela in Parts II and III.\n",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/Pervigilium_Veneris"
     },
     {
       "id":"section5-notes11",
       "title":"Line 429",
       "body":"V. Gerard de Nerval, Sonnet El Desdichado.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://allpoetry.com/poem/8587855-El-Desdichado-by-Gerard-de-Nerval"
     },
     {
       "id":"section5-notes12",
       "title":"Line 431",
       "body":"V. Kyd’s Spanish Tragedy.",
-      "source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      "source":"https://en.wikipedia.org/wiki/The_Spanish_Tragedy"
     },
     {
       "id":"section5-notes13",
       "title":"Line 433",
       "body":"Shantih. Repeated as here, a formal ending to an Upanishad. ‘The Peace which passeth understanding’ is a feeble translation of the content of this word."
-      ,"source":"https://gutenberg.org/files/1321/1321-h/1321-h.htm#chap06"
+      ,"source":"https://en.wikipedia.org/wiki/Shanti"
     },
     {
       "id":"section6",
@@ -463,6 +463,11 @@
       "_from": "section2-notes8"
     },
     {
+      "id": "b9",
+      "_to": "section2",
+      "_from": "section2-notes9"
+    },
+    {
       "id": "c",
       "_to": "section3",
       "_from": "titlecard"
@@ -556,11 +561,6 @@
       "id": "c18",
       "_to": "section3",
       "_from": "section3-notes18"
-    },
-    {
-      "id": "c19",
-      "_to": "section3",
-      "_from": "section3-notes19"
     },
     {
       "id": "d",
