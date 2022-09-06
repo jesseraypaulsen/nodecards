@@ -4,8 +4,7 @@ import nonlinearHandler from "./nonlinear-handler";
 import * as vis from "vis-network";
 import "./styles/main.css";
 import "./styles/switch-panel.css";
-import "./styles/nodecard-reader.css";
-import "./styles/nodecard-editor.css";
+import "./styles/nodecard.css";
 import "./styles/icon-button.scss";
 import "./styles/tooltip.scss";
 

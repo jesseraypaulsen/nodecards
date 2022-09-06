@@ -14,7 +14,11 @@ const items = [
 function attachButtonBar(container, card) {
   const buttonBar = document.createElement("div");
   buttonBar.classList.add("button-bar");
-  container.append(buttonBar);
+  //container.append(buttonBar);
+  if (card.dom.lastElementChild.classList.contains("button-bar")) {
+    card.dom.lastElementChild.remove();
+  }
+  card.dom.append(buttonBar);
 
   if (card.mode == "read") {
     [0, 1, 3, 4, 5].map((i) => {
@@ -102,7 +106,7 @@ function createButtonWithTooltip(item, card) {
   }
 
   if (item.id == "tooltip-drag") {
-
+    iconButton.style.cursor = "grab";
     iconButton.addEventListener("mousedown", (e) => {
       e.preventDefault(); // required in order to fire/catch the mouseup event. Why? No idea.
       turnTogglerSwitchOff(); // physics must be turned off for dragging to work.

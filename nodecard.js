@@ -138,24 +138,18 @@ Nodecard.prototype.move = function ({ domX, domY, canX, canY }) {
 Nodecard.prototype.reader = function () {
   const reader = document.createElement("div");
   reader.classList.add("reader");
-
-  const bodyContainer = document.createElement("div");
-  bodyContainer.classList.add("reader__body");
-  bodyContainer.innerHTML = this.htmlText;
-
-  reader.append(bodyContainer);
+  reader.innerHTML = this.htmlText;
   return reader;
 };
 
 Nodecard.prototype.editor = function () {
-  const editor = document.createElement("div");
+  /*const editor = document.createElement("div");
   editor.classList.add("editor");
-
-  const inputContainer = document.createElement("div");
-  inputContainer.classList.add("editor__input");
-  inputContainer.innerHTML = `<textarea placeholder="start typing...">${this.text}</textarea>`;
-
-  editor.append(inputContainer);
+  editor.innerHTML = `<textarea placeholder="start typing...">${this.text}</textarea>`;
+  return editor;*/
+  const editor = document.createElement("textarea");
+  editor.classList.add("editor");
+  editor.value = this.text;
   return editor;
 };
 

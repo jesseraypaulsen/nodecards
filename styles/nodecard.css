@@ -1,0 +1,102 @@
+
+.nodecard {
+    z-index: 2990;
+    position: absolute;
+    box-shadow: 0 4px 8px 0 rgba(96, 2, 238), 0 6px 20px 0 rgba(96, 2, 238);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    height: 20em;
+    width: 30em;
+    font-size: 1em;
+    background-color: #e9e6ed;
+    color: #2d2c2e;
+    border-radius: 2px;
+    padding: 10px;
+    padding-bottom: 0;
+    /* word-wrap: break-word; */
+}
+
+/* selects both .reader and .editor */
+.nodecard > :first-child {
+    font-family: Times, "Times New Roman", Georgia, serif;
+    background-color: #f4f4f4;
+    line-height: 1.6;
+    padding: 1em;
+    height: 17em;
+    width: 28.75em;
+}
+
+/* .reader only */
+
+.nodecard > .reader {
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* hide scrollbar for IE and Edge */
+    scrollbar-width: none; /* hide scrollbar for Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.nodecard > .reader::-webkit-scrollbar {
+    display: none;
+}
+    
+/* .editor only */
+
+.nodecard > .editor {
+    resize: none;
+    border: 0;
+    color: inherit;
+    overflow: -moz-scrollbars-none; /* hide scrollbar without disabling scroll in Firefox */
+}
+
+/* hide scrollbar without disabling scroll in Chrome */
+.nodecard > .editor::-webkit-scrollbar {
+    width: 0 !important
+}
+
+.nodecard > .editor:focus {
+    outline: none;
+}
+
+/* Button bar */
+
+.button-bar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #e9e6ed;
+    padding: 0;
+    padding-top: .4em;
+    position: absolute;
+    bottom: 0;
+    left: .2em;
+    right: .2em;
+}
+
+/* Animations for expanding and contracting cards */
+
+.nodecard.expand {
+    animation: expandCard .5s;
+}
+
+.nodecard.contract {
+    animation: contractCard .5s;
+}
+
+
+@keyframes expandCard {
+    from {
+    transform: scale(0);
+    }
+    to {
+    transform: scale(1);
+    }
+}
+
+@keyframes contractCard {
+    from {
+    transform: scale(1);
+    }
+    to {
+    transform: scale(0);
+    }
+}
