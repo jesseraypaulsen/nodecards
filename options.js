@@ -9,7 +9,8 @@ export const options = {
     shape: "box",
     shadow: true,
     // color: "#6002EE",
-    color: "#bcb0c4",
+    // color: "#bcb0c4",
+    color: "#CCABDE"
   },
   physics: {
     enabled: true,

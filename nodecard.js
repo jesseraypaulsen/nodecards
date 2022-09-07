@@ -1,4 +1,5 @@
 export default Nodecard;
+//import attachButtonBar from "./button-bar";
 import attachButtonBar from "./button-bar";
 
 function Nodecard(o) {
@@ -121,7 +122,7 @@ Nodecard.prototype.render = function (view) {
   }
   //These two lines must occur in this order, or Material Tooltip breaks everything.
   this.deck.container.append(this.dom);
-  attachButtonBar(view, this);
+  attachButtonBar(this);
   this.setPosition(this.pt.domX, this.pt.domY);
 
   // remove the class to prevent animation from occurring when changing nodecard modes. but it must be delayed or the animation does not work at all.
