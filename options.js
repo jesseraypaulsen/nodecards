@@ -3,7 +3,7 @@ export const options = {
   // width: "90%",
   nodes: {
     font: {
-      size: 14,
+      // size: 20,
       color: "#ffffff",
     },
     shape: "box",
@@ -13,7 +13,7 @@ export const options = {
     color: "#CCABDE"
   },
   physics: {
-    enabled: true,
+    enabled: false,
   },
   interaction: {
     dragView: false, //!!important for keeping nodecards in sync with canvas nodes!!

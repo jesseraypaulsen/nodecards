@@ -1,5 +1,4 @@
 export default Nodecard;
-//import attachButtonBar from "./button-bar";
 import attachButtonBar from "./button-bar";
 
 function Nodecard(o) {
@@ -15,6 +14,7 @@ function Nodecard(o) {
   this.dom = null; // see render for the creation of this value
   this.previousMode = null;
   this.webSource = o.webSource;
+  this.canvasFont = o.canvasFont;
   
   addNodeThenRender(o.pt, o.id, o.deck, this);
 }
@@ -22,9 +22,9 @@ function Nodecard(o) {
 function addNodeThenRender(pt, id, deck, card) {
   const label = card.title;
   if (pt) {
-    deck.net.body.data.nodes.add({ x: pt.canX, y: pt.canY, id, label });
+    deck.net.body.data.nodes.add({ x: pt.x, y: pt.y, id, label, font: card.canvasFont });
   } else {
-    deck.net.body.data.nodes.add({ id, label });
+    deck.net.body.data.nodes.add({ id, label, font: card.canvasFont });
   }
   card.pt = deck.getNodeCenter(id);
 }
@@ -85,7 +85,7 @@ Nodecard.prototype.setMode = function (mode) {
       id: this.id,
       label: this.title,
       shape: "box",
-      font: { size: 10 },
+      font: this.canvasFont,
       shadow: true,
       opacity: 1,
     });
@@ -144,10 +144,6 @@ Nodecard.prototype.reader = function () {
 };
 
 Nodecard.prototype.editor = function () {
-  /*const editor = document.createElement("div");
-  editor.classList.add("editor");
-  editor.innerHTML = `<textarea placeholder="start typing...">${this.text}</textarea>`;
-  return editor;*/
   const editor = document.createElement("textarea");
   editor.classList.add("editor");
   editor.value = this.text;

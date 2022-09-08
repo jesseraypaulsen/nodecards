@@ -1,5 +1,5 @@
 import { typeofSelection } from "./utils";
-import { turnTogglerSwitchOff } from "./switch-panel";
+import { turnPhysicsOff } from "./switch-panel";
 export default handler;
 
 async function handler(data, deck) {
@@ -81,7 +81,7 @@ async function handler(data, deck) {
   if (deck.currCard.state === "fixed") {
     if (click === "BG") {
       log("E", 1, deck);
-      turnTogglerSwitchOff();
+      turnPhysicsOff();
       const sourceId = deck.currCard.id;
       deck.currCard.setMode("inert");
 

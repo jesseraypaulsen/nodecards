@@ -1,8 +1,10 @@
 import Nodecard from "./nodecard";
 import buildLink from "./link";
-import { setupSwitchPanel, turnTogglerSwitchOff } from "./switch-panel";
+import { setupSwitchPanel, turnPhysicsOff } from "./switch-panel";
 import cuid from "cuid";
 const data = require("./data.json");
+
+
 
 export default function Deck() {
   this.stack = [];
@@ -59,17 +61,26 @@ async function setupNodecards(deck, callback) {
       text: item.body,
       title: item.title,
       webSource: item.source,
-      pt: null,
+      pt: item.pt,
       state: "fixed",
       mode: "inert",
       prelines: true,
+      canvasFont: { size: item.size }
     };
-    setTimeout(() => {
+
+    if (deck.settings.physics) {
+      setTimeout(() => {
+        deck.hydrateCard(options);
+        if (i === data.nodecards.length - 1) {
+          callback(deck);
+        }
+      }, i * 35);
+    } else {
       deck.hydrateCard(options);
       if (i === data.nodecards.length - 1) {
         callback(deck);
       }
-    }, i * 35);
+    }
   });
 }
 
@@ -84,9 +95,11 @@ async function setupLinks(deck) {
     deck.hydrateLink(options);
   });
   deck.net.fit({ maxZoomLevel: 1, minZoomLevel: 0.6 });
-  setTimeout(() => {
-    turnTogglerSwitchOff();
-  }, 2000)
+  if (deck.settings.physics) {
+    setTimeout(() => {
+      turnPhysicsOff();
+    }, 4000)
+  }
 }
 
 // coordinates provided by options; id not provided.

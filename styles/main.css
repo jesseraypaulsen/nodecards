@@ -5,14 +5,16 @@
 }
 
 body {
-  padding: 3em;
+  height: 100vh;
+  padding: 7em;
 }
 
 #container {
+  height: 100%;
   position: relative;
 }
 
 #graph-container {
-  height: 90vh;
-  /* border: 1px solid blue; */
+  height: 100%;
+  border: 1px solid blue;
 }

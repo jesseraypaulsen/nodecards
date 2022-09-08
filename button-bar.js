@@ -4,7 +4,7 @@ import editIcon from "./icons/edit.png";
 import editOffIcon from "./icons/edit_off.png";
 import linkIcon from "./icons/link.png";
 import inertifyIcon from "./icons/swipe_down_alt.png";
-import { turnTogglerSwitchOff } from "./switch-panel";
+import { turnPhysicsOff } from "./switch-panel";
 
 
 function attachButtonBar(card) {
@@ -86,7 +86,7 @@ function createButton(obj) {
 
 function drag(e, card) {
     e.preventDefault(); // required in order to fire/catch the mouseup event. Why? No idea.
-    turnTogglerSwitchOff(); // physics must be turned off for dragging to work.
+    turnPhysicsOff(); // physics must be turned off for dragging to work.
     let move = true;
 
     const container = card.deck.container;

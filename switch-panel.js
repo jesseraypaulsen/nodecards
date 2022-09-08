@@ -78,7 +78,7 @@ export function setupSwitchPanel(deck) {
 
 // turn off physics via switch, to keep the renderer's physics setting in synch with switch state.
 // see nonlinear-handler.
-export function turnTogglerSwitchOff() {
+export function turnPhysicsOff() {
   const togglerSwitch = document.querySelector(".physics").firstElementChild;
   togglerSwitch.checked = false;
 
