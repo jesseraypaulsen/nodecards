@@ -1,15 +1,10 @@
 export const options = {
-  // height: "90%",
-  // width: "90%",
   nodes: {
     font: {
-      // size: 20,
       color: "#ffffff",
     },
     shape: "box",
     shadow: true,
-    // color: "#6002EE",
-    // color: "#bcb0c4",
     color: "#CCABDE"
   },
   physics: {
@@ -18,10 +13,7 @@ export const options = {
   interaction: {
     dragView: false, //!!important for keeping nodecards in sync with canvas nodes!!
     zoomView: false, //!!important for the same reason above!!
-  },
-  // layout: {
-  //   improvedLayout: true,
-  // },
+  }
 };
 
 /*const options = { 

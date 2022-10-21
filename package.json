@@ -10,7 +10,8 @@
     "@material/tooltip": "^13.0.0",
     "cuid": "^2.1.8",
     "express": "^4.18.1",
-    "vis-network": "^9.1.0"
+    "vis-network": "^9.1.0",
+    "xstate": "^4.33.6"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.7.0",
