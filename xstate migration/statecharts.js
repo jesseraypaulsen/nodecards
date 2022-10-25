@@ -1,4 +1,4 @@
-import { createMachine, assign, spawn, send, sendParent } from 'xstate';
+import { createMachine, assign, spawn, send, sendParent, sendUpdate } from 'xstate';
 
 
 const cardMachine = ({id,text,label}) => createMachine({
@@ -16,8 +16,8 @@ const cardMachine = ({id,text,label}) => createMachine({
       entry: (context,event) => {
         // TODO: get dom element
         console.log(`active`)
-        const card = nodecards.filter(card => card.id === context.id)[0]
-        card.open()
+        //const card = nodecards.filter(card => card.id === context.id)[0]
+        //card.open()
       }, 
       states: {
         read: {
@@ -46,6 +46,9 @@ const cardMachine = ({id,text,label}) => createMachine({
       on: {
         BRANCH: {
           actions: sendParent((context, event) => ({ type: "BRANCHBUTTON.CLICK", load: context }))
+        },
+        INERTIFY: {
+          target: 'inert'
         }
       }
     },
@@ -198,11 +201,14 @@ export const deckMachine = (createCard) => createMachine({
   actions: {
     createNewCard: assign({
       cards: (context, event) => {
-        const newCard = createCard(event); //TODO: createCard function
+        //createCard(event);
+        const { id, label, text} = event;
         return context.cards.concat({
-          ...newCard,
-          ref: spawn(cardMachine(newCard))
-          .onTransition((state) => { console.log('child machine:', state.value, state.context)})
+          id,
+          ref: spawn(cardMachine({id,label,text}), { sync: true })
+          .onTransition((state) => { 
+            console.log('child machine:', state.value, state.context)
+          })
         })
       }
     })

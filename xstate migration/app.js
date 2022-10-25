@@ -4,17 +4,26 @@ import { typeofSelection } from "../utils";
 import { interpret } from 'xstate';
 import { deckMachine } from "./statecharts"
 
+const nodecards = [];
+
 const container = document.querySelector("#container");
 
 const network = new vis.Network(container, {}, options);
 
+const handler = (e) => {
+  const eventType = typeofSelection(e)
+  console.log(`handler: ${e.nodes[0]}`)
+  if (eventType === "NC") service.send({ type: "CARD.CLICK", id: e.nodes[0] })
+}
+
+network.on("click", handler)
+
 const data = [
-  { id:"1", label: "1", text: "the first card"},
-  { id:"2", label: "2", text: "the second card"},
-  { id:"3", label: "3", text: "the third card"}
+  { id:"one", label: "1", text: "the first card"},
+  { id:"two", label: "2", text: "the second card"},
+  { id:"three", label: "3", text: "the third card"}
 ];
 
-const nodecards = [];
 
 function createCard({id,label,text}) {
   console.log(`createCard!`)
@@ -28,29 +37,29 @@ function createCard({id,label,text}) {
       console.log(`card ${id} opened for reading and writing!`) 
     }
   })
-  
-  return {
-    id,
-    label,
-    text
-  }
 }
 
 const machine = deckMachine(createCard);
 
 const service = interpret(machine).onTransition((state) => {
-  console.log(state.value, state.context);
+  /*console.log('state.event', state.event)
+  console.log('state.value', state.value)
+  console.log('state.context', state.context)
+  console.log('state.children', state.children)*/
+  
+  // child state, enabled by {sync: true} arg to spawn()
+  if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
+    //console.log(state.event.state.value)
+    //console.log(state.children[state.event.id])
+    //console.log(state.event.state.context)
+    console.log(state.event.state)
+    createCard(state.event.state.context)
+  }
+  // TODO: deck.render(state)
 });
 
 service.start();
 
-const handler = (e) => {
-  const eventType = typeofSelection(e)
-  console.log(`handler: ${e.nodes[0]}`)
-  if (eventType === "NC") service.send({ type: "CARD.CLICK", id: e.nodes[0] })
-}
-
-network.on("click", handler)
 
 (function(data) {
   data.map(({id,label,text}) => {
@@ -58,3 +67,5 @@ network.on("click", handler)
   })
   service.send({type:"INIT.COMPLETE"})
 }(data))
+
+//TODO: redirect current functionality via Deck
