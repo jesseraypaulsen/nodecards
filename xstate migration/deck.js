@@ -17,7 +17,6 @@ export default class Deck {
   }
 
   createCard({id,label,text}) {
-    console.log(`Deck.createCard called`)
     this.graphRenderer.body.data.nodes.add({ id, label });
     // TODO: create dom element
     this.nodecards.push({
@@ -31,22 +30,21 @@ export default class Deck {
   }
 
   createLink({id,label,to,from}) {
-    console.log(`Deck.createLink called`)
     this.graphRenderer.body.data.edges.add({id,label,from,to})
     this.links.push({id,label,from,to})
   }
 
   render(state) {
-    // child state, enabled by {sync: true} arg to spawn()
     if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
+      // child state, enabled by {sync: true} arg to spawn()
       this.createCard(state.event.state.context)
     } 
-    if (state.event.type === "CREATELINK") {
+    else if (state.event.type === "CREATELINK") {
       const {id,label,from,to} = state.event;
       this.createLink({id,label,to,from});
     }
-    if (state.event.type === "xstate.update" && state.event.state.event.type === "OPEN") {
-      const card = this.nodecards.filter(card => card.id === state.event.state.context.id)[0]
+    else if (state.event.type === "xstate.update" && state.event.state.event.type === "OPEN") {
+      const card = this.nodecards.find(card => card.id === state.event.state.context.id)
       card.open()
     }
     console.log(state)

@@ -13,13 +13,6 @@ const cardMachine = ({id,text,label}) => createMachine({
   states: {
     active: {
       initial: 'read',
-      entry: (context,event) => {
-        // TODO: get dom element
-        console.log(`active`)
-        console.log(event)
-        //const card = nodecards.filter(card => card.id === context.id)[0]
-        //card.open()
-      }, 
       states: {
         read: {
           on: {
@@ -80,7 +73,7 @@ export const deckMachine = createMachine({
             "CARD.CLICK": {
               actions: (context, event) => {
                 console.log(`card clicked: ${event.id}`)
-                const card = context.cards.filter(card => event.id === card.id)[0]
+                const card = context.cards.find(card => event.id === card.id)
                 card.ref.send({ type: "OPEN" })
               }
             }
@@ -204,16 +197,26 @@ export const deckMachine = createMachine({
   actions: {
     createNewCard: assign({
       cards: (context, event) => {
-        const { id, label, text} = event;
+        const { id, label, text } = event;
         return context.cards.concat({
           id,
           ref: spawn(cardMachine({id,label,text}), { sync: true })
           .onTransition((state) => { 
-            console.log('child machine ->', 'state.value:', state.value, 'state.context:', state.context)
+            //console.log('child machine ->', 'state.value:', state.value, 'state.context:', state.context)
           })
         })
       }
     }),
-    createNewLink: (context,event) => console.log(`link created: ${context}`)
+    createNewLink: assign({
+      links: (context, event) => {
+        const { id, label, from, to } = event;
+        return context.links.concat({
+          id,
+          label,
+          from,
+          to
+        })
+      }
+    })
   }
 })
