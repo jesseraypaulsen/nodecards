@@ -1,6 +1,7 @@
 export default class Deck {
-  constructor(graphRenderer) {
+  constructor(graphRenderer, send) {
     this.graphRenderer = graphRenderer;
+    this.send = send;
     this.nodecards = []
   }
 
@@ -18,6 +19,13 @@ export default class Deck {
     })
   }
 
+  init(data) {
+    data.map(({id,label,text}) => {
+      this.send({type:"CREATECARD", id, label, text})
+    })
+    this.send({type:"INIT.COMPLETE"})
+  }
+
   render(state) {
     // child state, enabled by {sync: true} arg to spawn()
     if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
@@ -27,6 +35,7 @@ export default class Deck {
       const card = this.nodecards.filter(card => card.id === state.event.state.context.id)[0]
       card.open()
     }
+    console.log(state)
   }
 }
 

@@ -25,17 +25,11 @@ const data = [
   { id:"three", label: "3", text: "the third card"}
 ];
 
-const deck = new Deck(network)
+const deck = new Deck(network, service.send)
 
 service.onTransition((state) => {
-  deck.render(state)
+  if (state.event.type === "xstate.init") deck.init(data)
+  else deck.render(state)
 });
 
 service.start();
-
-(function(data) {
-  data.map(({id,label,text}) => {
-    service.send({type:"CREATECARD", id, label, text})
-  })
-  service.send({type:"INIT.COMPLETE"})
-}(data))
