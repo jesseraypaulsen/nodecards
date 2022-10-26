@@ -3,12 +3,13 @@ import * as vis from "vis-network";
 import { typeofSelection } from "../utils";
 import { interpret } from 'xstate';
 import { deckMachine } from "./statecharts"
-
-const nodecards = [];
+import Deck from './deck'
 
 const container = document.querySelector("#container");
 
 const network = new vis.Network(container, {}, options);
+
+const service = interpret(deckMachine);
 
 const handler = (e) => {
   const eventType = typeofSelection(e)
@@ -24,42 +25,13 @@ const data = [
   { id:"three", label: "3", text: "the third card"}
 ];
 
+const deck = new Deck(network)
 
-function createCard({id,label,text}) {
-  console.log(`createCard!`)
-  network.body.data.nodes.add({ id, label });
-  // TODO: create dom element
-  nodecards.push({
-    id,
-    label,
-    text,
-    open: () => { 
-      console.log(`card ${id} opened for reading and writing!`) 
-    }
-  })
-}
-
-const machine = deckMachine(createCard);
-
-const service = interpret(machine).onTransition((state) => {
-  /*console.log('state.event', state.event)
-  console.log('state.value', state.value)
-  console.log('state.context', state.context)
-  console.log('state.children', state.children)*/
-  
-  // child state, enabled by {sync: true} arg to spawn()
-  if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
-    //console.log(state.event.state.value)
-    //console.log(state.children[state.event.id])
-    //console.log(state.event.state.context)
-    console.log(state.event.state)
-    createCard(state.event.state.context)
-  }
-  // TODO: deck.render(state)
+service.onTransition((state) => {
+  deck.render(state)
 });
 
 service.start();
-
 
 (function(data) {
   data.map(({id,label,text}) => {
@@ -67,5 +39,3 @@ service.start();
   })
   service.send({type:"INIT.COMPLETE"})
 }(data))
-
-//TODO: redirect current functionality via Deck

@@ -16,6 +16,7 @@ const cardMachine = ({id,text,label}) => createMachine({
       entry: (context,event) => {
         // TODO: get dom element
         console.log(`active`)
+        console.log(event)
         //const card = nodecards.filter(card => card.id === context.id)[0]
         //card.open()
       }, 
@@ -60,7 +61,7 @@ const cardMachine = ({id,text,label}) => createMachine({
   }
 })
 
-export const deckMachine = (createCard) => createMachine({
+export const deckMachine = createMachine({
   predictableActionArguments: true,
   id: 'deck',
   type: 'parallel',
@@ -80,8 +81,7 @@ export const deckMachine = (createCard) => createMachine({
               actions: (context, event) => {
                 console.log(`card clicked: ${event.id}`)
                 const card = context.cards.filter(card => event.id === card.id)[0]
-                console.log(card)
-                card.ref.send("OPEN")
+                card.ref.send({ type: "OPEN" })
               }
             }
           },
@@ -150,7 +150,7 @@ export const deckMachine = (createCard) => createMachine({
         initializing: {
           on: {
             "CREATECARD": {
-              actions: ['createNewCard', () => { console.log(`CREATECARD!`) }]
+              actions: 'createNewCard'
             },
             "INIT.COMPLETE": {
               actions: send("DECK.READONLY")
@@ -201,13 +201,12 @@ export const deckMachine = (createCard) => createMachine({
   actions: {
     createNewCard: assign({
       cards: (context, event) => {
-        //createCard(event);
         const { id, label, text} = event;
         return context.cards.concat({
           id,
           ref: spawn(cardMachine({id,label,text}), { sync: true })
           .onTransition((state) => { 
-            console.log('child machine:', state.value, state.context)
+            console.log('child machine ->', 'state.value:', state.value, 'state.context:', state.context)
           })
         })
       }

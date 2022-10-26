@@ -1,28 +1,32 @@
-class Deck {
-  constructor(graphRenderer, container, options) {
-    /*this.machine = interpret(deckMachine(this)).onTransition((state) => {
-      console.log(state.value, state.context);
-    });*/
-    this.graphRenderer = new graphRenderer(container, {}, options);
-    this.cards = []
+export default class Deck {
+  constructor(graphRenderer) {
+    this.graphRenderer = graphRenderer;
+    this.nodecards = []
   }
 
-  createCard(data) {
-    this.cards.push(new Nodecard(data))
-  }
-
-  renderNode(id,label) {
-    this.graphRenderer.body.data.nodes.add({ id, label }); 
+  createCard({id,label,text}) {
+    console.log(`Deck.createCard called`)
+    this.graphRenderer.body.data.nodes.add({ id, label });
+    // TODO: create dom element
+    this.nodecards.push({
+      id,
+      label,
+      text,
+      open: () => { 
+        console.log(`card ${id} opened for reading and writing!`) 
+      }
+    })
   }
 
   render(state) {
-    // this will execute when the state changes
-    console.log(state.value, state.context);
-    /* 
-      state.context.cards.map(card => {
-        Nodecard[card.ref]
-      })
-    */
+    // child state, enabled by {sync: true} arg to spawn()
+    if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
+      this.createCard(state.event.state.context)
+    }
+    if (state.event.type === "xstate.update" && state.event.state.event.type === "OPEN") {
+      const card = this.nodecards.filter(card => card.id === state.event.state.context.id)[0]
+      card.open()
+    }
   }
 }
 
