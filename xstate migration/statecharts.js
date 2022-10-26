@@ -152,6 +152,9 @@ export const deckMachine = createMachine({
             "CREATECARD": {
               actions: 'createNewCard'
             },
+            "CREATELINK": {
+              actions: 'createNewLink'
+            },
             "INIT.COMPLETE": {
               actions: send("DECK.READONLY")
             }
@@ -210,6 +213,7 @@ export const deckMachine = createMachine({
           })
         })
       }
-    })
+    }),
+    createNewLink: (context,event) => console.log(`link created: ${context}`)
   }
 })

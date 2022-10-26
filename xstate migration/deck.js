@@ -2,7 +2,18 @@ export default class Deck {
   constructor(graphRenderer, send) {
     this.graphRenderer = graphRenderer;
     this.send = send;
-    this.nodecards = []
+    this.nodecards = [];
+    this.links = [];
+  }
+  
+  init(data) {
+    data.cards.map(({id,label,text}) => {
+      this.send({type:"CREATECARD", id, label, text })
+    })
+    data.links.map(({id,label,from,to}) => {
+      this.send({type:"CREATELINK", id, label, from, to })
+    })
+    this.send({type:"INIT.COMPLETE"})
   }
 
   createCard({id,label,text}) {
@@ -19,17 +30,20 @@ export default class Deck {
     })
   }
 
-  init(data) {
-    data.map(({id,label,text}) => {
-      this.send({type:"CREATECARD", id, label, text})
-    })
-    this.send({type:"INIT.COMPLETE"})
+  createLink({id,label,to,from}) {
+    console.log(`Deck.createLink called`)
+    this.graphRenderer.body.data.edges.add({id,label,from,to})
+    this.links.push({id,label,from,to})
   }
 
   render(state) {
     // child state, enabled by {sync: true} arg to spawn()
     if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
       this.createCard(state.event.state.context)
+    } 
+    if (state.event.type === "CREATELINK") {
+      const {id,label,from,to} = state.event;
+      this.createLink({id,label,to,from});
     }
     if (state.event.type === "xstate.update" && state.event.state.event.type === "OPEN") {
       const card = this.nodecards.filter(card => card.id === state.event.state.context.id)[0]
