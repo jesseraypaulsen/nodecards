@@ -19,20 +19,19 @@ function attachButtonBar(card) {
     {
         name: "Edit",
         icon: editIcon,
-        //handler: (e) => edit(card),
-        handler: (e) => card.deck.send({ type: "edit", id: card.id, data: e }),
+        handler: () => card.deck.send({ type: "CARD.EDIT", id: card.id }),
         active: true
     },
     {
         name: "Read Only",
         icon: editOffIcon,
-        handler: (e) => card.deck.send({ type: "read", id: card.id, data: e }),
+        handler: () => card.deck.send({ type: "CARD.READ", id: card.id }),
         active: true
     },
     {
         name: "Delete",
         icon: deleteIcon,
-        handler: (e) => card.deck.send({ type: "discard", id: card.id, data: e }),
+        handler: () => card.deck.send({ type: "CARD.DISCARD", id: card.id }),
         active: true
     },
     {
@@ -44,7 +43,7 @@ function attachButtonBar(card) {
     {
         name: "Inertify",
         icon: inertifyIcon,
-        handler: (e) => card.deck.send({ type: "CARD.INERTIFY", id: card.id, data: e }),
+        handler: () => card.deck.send({ type: "CARD.INERTIFY", id: card.id }),
         active: true
     }
   ]
@@ -100,7 +99,7 @@ function drag(e, card) {
     if (move) {
       const pos = card.getNodeCenter()
 
-      card.deck.net.moveNode(card.id, pos.canX + dx, pos.canY + dy);
+      card.deck.graphRenderer.moveNode(card.id, pos.canX + dx, pos.canY + dy);
       card.setPosition(pos.domX + dx, pos.domY + dy);
       // using Nodecard.prototype.move() causes internal error in vis-network/BarnesHutSolver.js,"too much recursion"
     } else {

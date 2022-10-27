@@ -16,18 +16,14 @@ const cardMachine = ({id,text,label}) => createMachine({
       states: {
         read: {
           on: {
-            "CLICKBUTTON.EDIT": {
-              actions: sendParent((context, event) => ({ type: "CARD.EDIT", load: context }))
-            },
             "SWITCH.EDIT": {
               target: "edit"
-            } // when the 'edit' button is clicked, "CLICKBUTTON.EDIT" is fired to check if deckMachine is 'modifiable'.
-            // if so, deckMachine fires "SWITCH.EDIT"
+            } 
           }
         },
         edit: {
           on: {
-            "CLICKBUTTON.READ": { target: 'read' }, // this transition can occur if deckMachine is in 'readOnly' or 'modifiable'.
+            "SWITCH.READ": { target: 'read' }, // this transition can occur if deckMachine is in 'readOnly' or 'modifiable'.
             TYPING: { 
               actions: [
                 assign({ text: (_, event) => event.value }),
@@ -81,7 +77,13 @@ export const deckMachine = createMachine({
                 const card = context.cards.find(card => event.id === card.id)
                 card.ref.send({ type: "INERTIFY" })
               }
-            }
+            },
+            "CARD.READ": {
+              actions: (context,event) => {
+                const card = context.cards.find(card => event.id === card.id)
+                card.ref.send({ type: "SWITCH.READ" })
+              }
+            },
           },
           entry: send({ type: "PHYSICS.OFF" }),  // switch physics off when deck is active
           states: {
@@ -115,13 +117,7 @@ export const deckMachine = createMachine({
                 },
                 regular: {
                   on: {
-                    "BRANCHBUTTON.CLICK": { target: "linkcreation" },
-                    "CARD.EDIT": { 
-                      actions: (context, event) => {
-                        const card = context.cards.filter(card => card.id === event.load.id)
-                        card.ref.send({ type: ""})
-                      }
-                    }
+                    "BRANCHBUTTON.CLICK": { target: "linkcreation" }
                   }
                 }
               },
@@ -134,14 +130,17 @@ export const deckMachine = createMachine({
                 "BUTTON.CREATECARD": {
                   actions: 'createNewCard'
                 },
-                  "CLICK.EDGE": {
-                    // popup button for deleting the edge
-                  }, 
-                  "CARD.EDIT": {
-                    // send 'edit' transition on the card's ref
-                    // context.card.ref.send({ target: 'edit' })
+                "CLICK.EDGE": {
+                  // popup button for deleting the edge
+                }, 
+                "CARD.EDIT": {
+                  actions: (context,event) => {
+                    console.log('active.modifiable -> CARD.EDIT')
+                    const card = context.cards.find(card => event.id === card.id)
+                    card.ref.send({ type: "SWITCH.EDIT" })
                   }
                 }
+              }
             }
           }
         },
@@ -154,7 +153,7 @@ export const deckMachine = createMachine({
               actions: 'createNewLink'
             },
             "INIT.COMPLETE": {
-              actions: send("DECK.READONLY")
+              actions: send("DECK.MODIFIABLE") //send("DECK.READONLY")
             }
           }
         },
