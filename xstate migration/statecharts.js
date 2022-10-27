@@ -1,4 +1,4 @@
-import { createMachine, assign, spawn, send, sendParent, sendUpdate } from 'xstate';
+import { createMachine, assign, spawn, send, sendParent } from 'xstate';
 
 
 const cardMachine = ({id,text,label}) => createMachine({
@@ -72,9 +72,14 @@ export const deckMachine = createMachine({
             "PHYSICS.ON": { target: "disabled" }, // switch deck to disabled mode if physics gets turned on
             "CARD.CLICK": {
               actions: (context, event) => {
-                console.log(`card clicked: ${event.id}`)
                 const card = context.cards.find(card => event.id === card.id)
                 card.ref.send({ type: "OPEN" })
+              }
+            },
+            "CARD.INERTIFY": {
+              actions: (context,event) => {
+                const card = context.cards.find(card => event.id === card.id)
+                card.ref.send({ type: "INERTIFY" })
               }
             }
           },

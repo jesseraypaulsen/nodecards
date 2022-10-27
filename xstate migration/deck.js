@@ -1,6 +1,9 @@
+import Nodecard from "./nodecard"
+
 export default class Deck {
-  constructor(graphRenderer, send) {
+  constructor(graphRenderer, container, send) {
     this.graphRenderer = graphRenderer;
+    this.container = container;
     this.send = send;
     this.nodecards = [];
     this.links = [];
@@ -18,22 +21,15 @@ export default class Deck {
 
   createCard({id,label,text}) {
     this.graphRenderer.body.data.nodes.add({ id, label });
-    // TODO: create dom element
-    this.nodecards.push({
-      id,
-      label,
-      text,
-      open: () => { 
-        console.log(`card ${id} opened for reading and writing!`) 
-      }
-    })
+    const card = new Nodecard(id,label,text,this)
+    this.nodecards.push(card)
   }
 
   createLink({id,label,to,from}) {
     this.graphRenderer.body.data.edges.add({id,label,from,to})
     this.links.push({id,label,from,to})
   }
-
+  
   render(state) {
     if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
       // child state, enabled by {sync: true} arg to spawn()
@@ -45,25 +41,15 @@ export default class Deck {
     }
     else if (state.event.type === "xstate.update" && state.event.state.event.type === "OPEN") {
       const card = this.nodecards.find(card => card.id === state.event.state.context.id)
-      card.open()
+      console.log('card', card)
+      console.log(state.event.state.value)
+      card.open(state.event.state.value)
+    }
+    else if (state.event.type === "xstate.update" && state.event.state.event.type === "INERTIFY") {
+      const card = this.nodecards.find(card => card.id === state.event.state.context.id)
+      card.inertify()
     }
     console.log(state)
   }
 }
 
-class Nodecard {
-  constructor({id,label,text}) {
-    this.id = id;
-    // TODO: create dom element
-  }
-  
-  inert(cardState) {
-    this.renderNode(id,label) // 'this' should point to the deck instance?
-  }
-
-  read(cardState) {}
-
-  edit(cardState) {}
-}
-
-class Link {}

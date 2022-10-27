@@ -4,6 +4,12 @@ import { typeofSelection } from "../utils";
 import { interpret } from 'xstate';
 import { deckMachine } from "./statecharts"
 import Deck from './deck'
+import "../styles/main.css";
+import "../styles/switch-panel.css";
+import "../styles/nodecard.css";
+import "../styles/icon-button.scss";
+import "../styles/tooltip.scss";
+
 
 const container = document.querySelector("#container");
 
@@ -32,7 +38,7 @@ const data = {
   ]
 };
 
-const deck = new Deck(network, service.send)
+const deck = new Deck(network, container, service.send)
 
 service.onTransition((state) => {
   if (state.event.type === "xstate.init") deck.init(data)
