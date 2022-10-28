@@ -18,3 +18,8 @@ body {
   height: 100%;
   /* border: 1px solid blue; */
 }
+
+/* see switch-panel.css for use */
+:root {
+  --switch-color: #b3a5f7;
+}

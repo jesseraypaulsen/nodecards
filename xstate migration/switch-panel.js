@@ -4,27 +4,60 @@ export function setupSwitchPanel(deck) {
   deck.container.append(cp);
 
   cp.innerHTML = `
-  <div class="cp-dropdown-btn">&#9881;</div>
-  <div class="cp-dropdown">
+    <div class="cp-dropdown-btn">&#9881;</div>
+    <div class="cp-dropdown">
 
-    <label class="switch persist">
-      <input type="checkbox" />
-      <span class="toggler-switch">Persist</span>
-    </label>
+      <span class="close-button">x</span>
 
-    <label class="switch physics">
-      <input type="checkbox" />
-      <span class="toggler-switch">Physics</span>
-    </label>
+      <label class="switch persist">
+        <input type="checkbox" />
+        <span class="toggler-switch">Persist</span>
+      </label>
 
-    <select>
-      <option>Read Only</option>
-      <option>Modify</option>
-      <option>Disable</option>
-    </select>
+      <label class="switch physics">
+        <input type="checkbox" />
+        <span class="toggler-switch">Physics</span>
+      </label>
 
-  </div>
+      <select>
+        <option>Read Only</option>
+        <option>Modify</option>
+        <option>Disable</option>
+      </select>
+
+    </div>
   `;
+
+  
+  
+  /*
+  const parent = e.target.parentNode;
+  const sibling = e.target.nextElementSibling;
+  if (parent.classList.contains("nonlinear")) {
+    
+    deck.settings.nonlinear = chkValue;
+    //nonlinear is dependent on writing, so this synchronizes the toggles.
+    const el = parent.parentNode.querySelector(".write").firstElementChild;
+    el.checked = chkValue; //required: assign new state before dispatching change event
+    const ev = new Event("change");
+    el.dispatchEvent(ev);
+  } 
+  */
+  
+  const closeButton = document.querySelector(".close-button");
+  const dropDownButton = document.querySelector(".cp-dropdown-btn");
+  const physSwitch = document.querySelector(".physics").firstElementChild;
+  const persSwitch = document.querySelector(".persist").firstElementChild;
+ 
+  const closeHandler = (e) => {
+    dropDownButton.style.display = "block";
+    e.target.parentNode.style.display = "none";
+  }
+
+  const dropDownHandler = (e) => {
+    e.target.nextElementSibling.style.display = "flex";
+    e.target.style.display = "none";
+  }
 
   const physHandler = (e) => {
     const chkValue = e.target.checked;
@@ -38,27 +71,11 @@ export function setupSwitchPanel(deck) {
     //deck.settings.save = chkValue;
     chkValue ? deck.send('PERSIST.ON') : deck.send('PERSIST.OFF');
   };
-  
-  
-  /*
-  const parent = e.target.parentNode;
-  const sibling = e.target.nextElementSibling;
-  if (parent.classList.contains("nonlinear")) {
 
-    deck.settings.nonlinear = chkValue;
-    //nonlinear is dependent on writing, so this synchronizes the toggles.
-    const el = parent.parentNode.querySelector(".write").firstElementChild;
-    el.checked = chkValue; //required: assign new state before dispatching change event
-    const ev = new Event("change");
-    el.dispatchEvent(ev);
-  } 
-  */
-
-  const physSwitch = document.querySelector(".physics").firstElementChild;
-  physSwitch.addEventListener('change', physHandler)
-
-  const persSwitch = document.querySelector(".persist").firstElementChild;
-  persSwitch.addEventListener('change', persHandler)
+  closeButton.addEventListener('click', closeHandler);
+  dropDownButton.addEventListener('click', dropDownHandler);
+  physSwitch.addEventListener('change', physHandler);
+  persSwitch.addEventListener('change', persHandler);
   
 
 }
