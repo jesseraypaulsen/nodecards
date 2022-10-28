@@ -19,35 +19,21 @@ export function setupSwitchPanel(deck) {
         <span class="toggler-switch">Physics</span>
       </label>
 
-      <select>
-        <option>Read Only</option>
-        <option>Modify</option>
-        <option>Disable</option>
+      <select class="deck-modes">
+        <option value="DECK.READONLY">Read Only</option>
+        <option value="DECK.MODIFIABLE">Modify</option>
+        <option value="DECK.DISABLE">Disable</option>
       </select>
 
     </div>
   `;
 
   
-  
-  /*
-  const parent = e.target.parentNode;
-  const sibling = e.target.nextElementSibling;
-  if (parent.classList.contains("nonlinear")) {
-    
-    deck.settings.nonlinear = chkValue;
-    //nonlinear is dependent on writing, so this synchronizes the toggles.
-    const el = parent.parentNode.querySelector(".write").firstElementChild;
-    el.checked = chkValue; //required: assign new state before dispatching change event
-    const ev = new Event("change");
-    el.dispatchEvent(ev);
-  } 
-  */
-  
   const closeButton = document.querySelector(".close-button");
   const dropDownButton = document.querySelector(".cp-dropdown-btn");
-  const physSwitch = document.querySelector(".physics").firstElementChild;
-  const persSwitch = document.querySelector(".persist").firstElementChild;
+  const physicsSwitch = document.querySelector(".physics").firstElementChild;
+  const persistSwitch = document.querySelector(".persist").firstElementChild;
+  const selectMode = document.querySelector(".deck-modes");
  
   const closeHandler = (e) => {
     dropDownButton.style.display = "block";
@@ -59,23 +45,27 @@ export function setupSwitchPanel(deck) {
     e.target.style.display = "none";
   }
 
-  const physHandler = (e) => {
+  const userEvent = (type) => ({ type, sentByUser: true })
+
+  const physicsHandler = (e) => {
     const chkValue = e.target.checked;
-    //deck.settings.physics = chkValue; 
-    chkValue ? deck.send('PHYSICS.ON') : deck.send('PHYSICS.OFF');
-    //setPhysics(chkValue, deck); // move to deck.render
+    chkValue ? deck.send(userEvent('PHYSICS.ON')) : deck.send(userEvent('PHYSICS.OFF'));
   }
 
-  const persHandler = (e) => {
+  const persistHandler = (e) => {
     const chkValue = e.target.checked;
-    //deck.settings.save = chkValue;
     chkValue ? deck.send('PERSIST.ON') : deck.send('PERSIST.OFF');
   };
 
+  const selectHandler = (e) => {
+    deck.send(userEvent(e.target.value))
+  }
+
   closeButton.addEventListener('click', closeHandler);
   dropDownButton.addEventListener('click', dropDownHandler);
-  physSwitch.addEventListener('change', physHandler);
-  persSwitch.addEventListener('change', persHandler);
+  physicsSwitch.addEventListener('change', physicsHandler);
+  persistSwitch.addEventListener('change', persistHandler);
+  selectMode.addEventListener('change', selectHandler);
   
 
 }
@@ -84,7 +74,7 @@ export function setupSwitchPanel(deck) {
 // see nonlinear-handler.
 export function turnPhysicsOff() {
   const togglerSwitch = document.querySelector(".physics").firstElementChild;
-  togglerSwitch.checked = false;
+  togglerSwitch.checked = false; //required: assign new state before dispatching change event
 
   let e = new Event("change");
   togglerSwitch.dispatchEvent(e);

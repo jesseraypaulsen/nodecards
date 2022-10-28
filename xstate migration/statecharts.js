@@ -85,7 +85,7 @@ export const deckMachine = createMachine({
               }
             },
           },
-          entry: send({ type: "PHYSICS.OFF" }),  // switch physics off when deck is active
+          entry: send({ type: "PHYSICS.OFF", sentByUser: false }),  // switch physics off when deck is active
           states: {
             readOnly: {
               // popup buttons do not appear, each card's branch and edit buttons are disabled. 'edit' is not possible on cards.
@@ -187,7 +187,7 @@ export const deckMachine = createMachine({
           on: {
             "PHYSICS.OFF": { target: 'disabled' }
           },
-          entry: send({ type: "DECK.DISABLE" })
+          entry: send({ type: "DECK.DISABLE", sentByUser: false })
         },
         disabled: {
           on: {

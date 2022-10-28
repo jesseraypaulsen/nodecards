@@ -29,8 +29,24 @@ export default class Deck {
     this.graphRenderer.body.data.edges.add({id,label,from,to})
     this.links.push({id,label,from,to})
   }
+
+  synchronizeSwitchPanelWithState(state) {
+    const selectElement = this.container.querySelector(".deck-modes")
+    const toggleElement = this.container.querySelector(".physics").firstElementChild;
+
+    if (state.event.type === "PHYSICS.OFF" && !state.event.sentByUser) {
+      //not sent by user! change toggler to reflect the state!
+      toggleElement.checked = false;
+    }
+    if (state.event.type === "DECK.DISABLE" && !state.event.sentByUser) {
+      //not sent by user! change value of select element to reflect the state!
+      selectElement.value = "DECK.DISABLE";
+    }
+  }
   
   render(state) {
+    this.synchronizeSwitchPanelWithState(state)
+
     if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
       // child state, enabled by {sync: true} arg to spawn()
       this.createCard(state.event.state.context)
@@ -65,6 +81,18 @@ export default class Deck {
     }
     else if (state.event.type === "PERSIST.ON") {
       console.log(`persistence on`)
+    }
+    else if (state.event.type === "DECK.READONLY") {
+      // "DECK.READONLY": { target: 'mode.active.readOnly' }
+      console.log(`deck has switched to Read Only mode`)
+    }
+    else if (state.event.type === "DECK.MODIFIABLE") {
+      console.log(`deck has switched to Modify mode`)
+      // "DECK.MODIFIABLE": { target: 'mode.active.modifiable' }
+    }
+    else if (state.event.type === "DECK.DISABLE") {
+      console.log(`deck has switched to Disabled mode`)
+      // "DECK.DISABLE": { target: 'mode.disabled' }
     }
     console.log(state)
   }
