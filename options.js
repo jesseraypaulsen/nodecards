@@ -5,10 +5,10 @@ export const options = {
     },
     shape: "box",
     shadow: true,
-    color: "#CCABDE"
+    color: "#b3a5f7"
   },
   physics: {
-    enabled: false,
+    enabled: true
   },
   interaction: {
     dragView: false, //!!important for keeping nodecards in sync with canvas nodes!!

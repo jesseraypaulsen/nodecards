@@ -67,15 +67,4 @@ export function setupSwitchPanel(deck) {
   persistSwitch.addEventListener('change', persistHandler);
   selectMode.addEventListener('change', selectHandler);
   
-
-}
-
-// turn off physics via switch, to keep the renderer's physics setting in synch with switch state.
-// see nonlinear-handler.
-export function turnPhysicsOff() {
-  const togglerSwitch = document.querySelector(".physics").firstElementChild;
-  togglerSwitch.checked = false; //required: assign new state before dispatching change event
-
-  let e = new Event("change");
-  togglerSwitch.dispatchEvent(e);
 }

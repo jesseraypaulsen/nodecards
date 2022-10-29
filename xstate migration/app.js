@@ -13,8 +13,7 @@ import "../styles/tooltip.scss";
 
 
 const container = document.querySelector("#container");
-
-const network = new vis.Network(container, {}, {...options, physics: { enabled: true}});
+const network = new vis.Network(container, {}, options);
 
 const service = interpret(deckMachine);
 
@@ -43,6 +42,7 @@ const deck = new Deck(network, container, service.send)
 setupSwitchPanel(deck)
 
 service.onTransition((state) => {
+  console.log(state)
   if (state.event.type === "xstate.init") deck.init(data)
   else deck.render(state)
 });

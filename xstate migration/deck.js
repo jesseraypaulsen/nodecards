@@ -1,4 +1,5 @@
 import Nodecard from "./nodecard"
+import { deckMachine } from "./statecharts";
 
 export default class Deck {
   constructor(graphRenderer, container, send) {
@@ -16,7 +17,10 @@ export default class Deck {
     data.links.map(({id,label,from,to}) => {
       this.send({type:"CREATELINK", id, label, from, to })
     })
-    this.send({type:"INIT.COMPLETE"})
+    setTimeout(() => {
+      this.send({type:"INIT.COMPLETE"})
+    },1000) // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
+           
   }
 
   createCard({id,label,text}) {
@@ -31,6 +35,8 @@ export default class Deck {
   }
 
   synchronizeSwitchPanelWithState(state) {
+
+    //these should probably be "controlled components", so that their internal state is in sync with app state.
     const selectElement = this.container.querySelector(".deck-modes")
     const toggleElement = this.container.querySelector(".physics").firstElementChild;
 
@@ -94,7 +100,15 @@ export default class Deck {
       console.log(`deck has switched to Disabled mode`)
       // "DECK.DISABLE": { target: 'mode.disabled' }
     }
-    console.log(state)
   }
 }
 
+/*TODO: 
+ - cards should close when deck mode transitions to disabled. (DONE)
+ 
+ - Physics should be turned on during initialization, and then turned off when it's complete. (DONE)
+ 
+ - when the deck mode is active.readOnly the button should be disabled
+ 
+ - https://xstate.js.org/docs/guides/states.html#state-changed     -> render function
+ */

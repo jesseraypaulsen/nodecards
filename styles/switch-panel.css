@@ -25,15 +25,16 @@
   flex-direction: column;
   justify-content: space-between;
   height: 200px;
-  box-shadow: .5em .5em;
+  box-shadow: 0.5em 0.5em;
 }
 
 .cp-dropdown .close-button {
   align-self: flex-end;
   cursor: pointer;
-  background-color: var(--switch-color);
+  background-color: var(--main-color);
   color: white;
-  padding: .3em;
+  padding: 0.3em;
+  border: .5px solid black;
 }
 
 /*
@@ -56,7 +57,7 @@ https://www.w3schools.com/howto/howto_css_switch.asp
 }
 
 .toggler-switch {
-  padding: .5em;
+  padding: 0.5em;
   text-align: right;
   position: absolute;
   cursor: pointer;
@@ -83,11 +84,11 @@ https://www.w3schools.com/howto/howto_css_switch.asp
 }
 
 input:checked + .toggler-switch {
-  background-color: var(--switch-color);
+  background-color: var(--main-color);
 }
 
 input:focus + .toggler-switch {
-  box-shadow: 0 0 1px var(--switch-color);
+  box-shadow: 0 0 1px var(--main-color);
 }
 
 input:checked + .toggler-switch:before {

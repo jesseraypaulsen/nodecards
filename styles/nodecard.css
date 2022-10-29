@@ -2,8 +2,7 @@
 .nodecard {
     z-index: 2990;
     position: absolute;
-    /* box-shadow: 0 4px 8px 0 rgba(96, 2, 238), 0 6px 20px 0 rgba(96, 2, 238); */
-    box-shadow: 0 4px 8px 0 #CCABDE, 0 6px 20px 0 #CCABDE;
+    box-shadow: 0 0 10px 0 var(--main-color);
     border-radius: 2px;
     display: flex;
     flex-direction: column;

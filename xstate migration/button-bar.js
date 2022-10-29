@@ -4,8 +4,6 @@ import editIcon from "../icons/edit.png";
 import editOffIcon from "../icons/edit_off.png";
 import linkIcon from "../icons/link.png";
 import inertifyIcon from "../icons/swipe_down_alt.png";
-//import { turnPhysicsOff } from "./switch-panel";
-
 
 function attachButtonBar(card) {
     

@@ -18,7 +18,7 @@ const cardMachine = ({id,text,label}) => createMachine({
           on: {
             "SWITCH.EDIT": {
               target: "edit"
-            } 
+            }
           }
         },
         edit: {
@@ -153,11 +153,18 @@ export const deckMachine = createMachine({
               actions: 'createNewLink'
             },
             "INIT.COMPLETE": {
-              actions: send("DECK.MODIFIABLE") //send("DECK.READONLY")
+              actions: send("DECK.READONLY")
             }
           }
         },
-        disabled: {} // disables all Nodecards functionality, leaving just the naked graph renderer.
+        disabled: {
+          // in this state, all Nodecards functionality is disabled, leaving just the naked graph renderer.
+          entry: (context, event) => {
+            context.cards.forEach(card => {
+              card.ref.send('INERTIFY')
+            })
+          }
+        } 
       },
       on: {
         "DECK.READONLY": { target: 'mode.active.readOnly' },
@@ -181,8 +188,13 @@ export const deckMachine = createMachine({
       }
     },
     physics: {
-      initial: 'disabled',
+      initial: 'initializing',
       states: {
+        initializing: {
+          on: {
+            "PHYSICS.OFF": { target: 'disabled' }
+          }
+        },
         enabled: {
           on: {
             "PHYSICS.OFF": { target: 'disabled' }
