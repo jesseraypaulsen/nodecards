@@ -34,7 +34,7 @@ export default class Deck {
   }
 
   synchronizeSwitchPanelWithState(state) {
-    //like "controlled components", their internal state is in sync with app state
+    //like "controlled components", their internal state should be in sync with app state
     const selectElement = this.container.querySelector(".deck-modes");
     const toggleElement =
       this.container.querySelector(".physics").firstElementChild;
@@ -49,77 +49,66 @@ export default class Deck {
     }
   }
 
-  render(state) {
+  renderNodecard(state) {
+    const childState = state.event.state;
+    const childEvent = state.event.state.event;
+  
+    if (childEvent.type === "xstate.init")  this.createCard(childState.context);
+  
+    if (childEvent.type === "OPEN") {
+      const card = this.nodecards.find((card) => card.id === childState.context.id);
+      card.open(childState);
+    }
+  
+    if (childState.value === "inert") {
+      const card = this.nodecards.find((card) => card.id === childState.context.id);
+      card.inertify(childState);
+    }
+  
+    if (childEvent.type === "SWITCH.EDIT" || childEvent.type === "SWITCH.READ") {
+      const card = this.nodecards.find((card) => card.id === childState.context.id);
+      card.renderState(childState)
+      /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
+      So evaluating the event type is necessary, because we only want to renderState when there's a change. 
+      state.changed doesn't seem to help because you can't do "state.value.changed" and active is a compound state. */
+    }
+  
+    if (childEvent.type === "TYPING") {
+      const card = this.nodecards.find(card => card.id === childState.context.id)
+      card.domElement.firstElementChild.value = childEvent.text;
+    }
+  }
 
-    console.log(state.changed)
+  renderDeck(state) {
+    const eventType = state.event.type;
     this.synchronizeSwitchPanelWithState(state);
-    
-    if (
-      // child state, enabled by {sync: true} arg to spawn()
-      state.event.type === "xstate.update" &&
-      state.event.state.event.type === "xstate.init"
-      ) {
-        this.createCard(state.event.state.context);
-      } else if (
-      state.event.type === "xstate.update" &&
-      state.event.state.event.type === "OPEN"
-      ) {
-        const card = this.nodecards.find(
-          (card) => card.id === state.event.state.context.id
-          );
-          card.open(state.event.state);
-        } else if (
-          state.event.type === "xstate.update" &&
-          state.event.state.value === "inert"
-          ) {
-            const card = this.nodecards.find(
-        (card) => card.id === state.event.state.context.id
-      );
-      card.inertify(state.event.state);
-    } 
-    
-    
-    else if (state.event.type === "CREATELINK") {
+    if (eventType === "CREATELINK") {
       const { id, label, from, to } = state.event;
       this.createLink({ id, label, to, from });
-    } else if (state.event.type === "PHYSICS.OFF") {
+    } else if (eventType === "PHYSICS.OFF") {
       const options = { physics: { enabled: false } };
       this.graphRenderer.setOptions(options);
-    } else if (state.event.type === "PHYSICS.ON") {
+    } else if (eventType === "PHYSICS.ON") {
       const options = { physics: { enabled: true } };
       this.graphRenderer.setOptions(options);
-    } else if (state.event.type === "PERSIST.OFF") {
+    } else if (eventType === "PERSIST.OFF") {
       console.log(`persistence off`);
-    } else if (state.event.type === "PERSIST.ON") {
+    } else if (eventType === "PERSIST.ON") {
       console.log(`persistence on`);
-    } else if (state.event.type === "DECK.READONLY") {
+    } else if (eventType === "DECK.READONLY") {
       console.log(`deck has switched to Read Only mode`);
-    } else if (state.event.type === "DECK.MODIFIABLE") {
+    } else if (eventType === "DECK.MODIFIABLE") {
       console.log(`deck has switched to Modify mode`);
-    } else if (state.event.type === "DECK.DISABLE") {
+    } else if (eventType === "DECK.DISABLE") {
       console.log(`deck has switched to Disabled mode`);
     }
 
-    if (state.event.type === "xstate.update") {
-      console.log('xstate.update', state.event.state)
-      if (state.event.state.matches('active')) {
-        /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
-        So evaluating the event type is necessary, because we only want to renderState when there's a change. 
-        state.changed doesn't seem to help because you can't do "state.value.changed" and active is a compound state. */
-        if (state.event.state.event.type === "SWITCH.EDIT" || state.event.state.event.type === "SWITCH.READ") {
-          const card = this.nodecards.find(
-            (card) => card.id === state.event.state.context.id
-            );
-            card.renderState(state.event.state)
-        }
-      }
+  }
 
-      if (state.event.state.event.type === "TYPING") {
-        const card = this.nodecards.find(card => card.id === state.event.state.context.id)
-        card.domElement.firstElementChild.value = state.event.state.event.text;
-      }
-    }
-          
+  render(state) {
+    // child state updates enabled by {sync: true} arg to spawn()
+    if (state.event.type === "xstate.update") this.renderNodecard(state)
+    else this.renderDeck(state)
   }
 }
 

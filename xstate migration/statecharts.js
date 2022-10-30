@@ -26,7 +26,6 @@ const cardMachine = ({id,text,label}) => createMachine({
             "SWITCH.READ": { target: 'read' }, // this transition can occur if deckMachine is in 'readOnly' or 'modifiable'.
             TYPING: { 
               actions: [
-                (context, event) => console.log('TYPING event fuck yeah!!'),
                 assign({ text: (context, event) => event.text }),
                 sendParent((context, event) => ({ type: "CARD.PERSIST", load: context }))
               ]
