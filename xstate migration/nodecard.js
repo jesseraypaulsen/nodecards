@@ -1,26 +1,22 @@
 import attachButtonBar from "./button-bar";
 
 export default class Nodecard {
-  constructor(id, label, text, deck) {
+  constructor(id, deck) {
     this.id = id;
-    this.label = label;
-    this.text = text;
     this.domElement = null;
     this.deck = deck;
     this.container = deck.container;
     this.graphRenderer = deck.graphRenderer;
   }
 
-  open({ active }) {
-    console.log(`card ${this.id} opened for reading and writing!`);
+  open(state) {
     this.domElement = document.createElement("div");
     this.domElement.classList.add("nodecard");
     this.domElement.classList.add("expand");
-    this.domElement.append(this[active]());
+    this.renderState(state);
     this.container.append(this.domElement);
     const { domX, domY } = this.getNodeCenter();
     this.setPosition(domX, domY);
-    attachButtonBar(this);
   }
 
   setPosition(x, y) {
@@ -47,21 +43,36 @@ export default class Nodecard {
     this.setPosition(domX, domY);
   }
 
-  read() {
+  renderState(state) {
+    const view = this[state.value.active](state);
+    if (this.domElement.hasChildNodes()) {
+      let child = this.domElement.firstElementChild;
+      child.replaceWith(view);
+    } else {
+      this.domElement.append(view);
+    }
+    attachButtonBar(this, state.value.active);
+  }
+
+  read(state) {
     const reader = document.createElement("div");
     reader.classList.add("reader");
-    reader.innerHTML = this.htmlText();
+    reader.innerHTML = this.htmlText(state.context.text);
     return reader;
   }
 
-  edit() {
+  edit(state) {
     const editor = document.createElement("textarea");
     editor.classList.add("editor");
-    editor.value = this.text;
+    editor.value = state.context.text;
+    editor.addEventListener('input', (e) => {
+      //this.deck.send({ type: "TYPING", value: e.target.value }) FAIL!!
+      this.deck.send({ type: "CARD.EDIT.TYPING", text: e.target.value, id: this.id })
+    })
     return editor;
   }
 
-  inertify() {
+  inertify(state) {
     if (this.domElement) {
       this.domElement.classList.add("contract");
       // delay the removal of the DOM element, otherwise the contract animation doesn't occur
@@ -69,12 +80,12 @@ export default class Nodecard {
         this.domElement.remove();
         this.domElement.classList.remove("contract");
         this.domElement.classList.add("expand");
-      }, 300);
+      }, 800);
     }
 
     this.graphRenderer.body.data.nodes.update({
       id: this.id,
-      label: this.label,
+      label: state.context.label,
       shape: "box",
       //font: this.canvasFont,
       shadow: true,
@@ -99,9 +110,9 @@ export default class Nodecard {
     });
   }
 
-  htmlText() {
-    if (this.text) {
-      return this.text
+  htmlText(text) {
+    if (text) {
+      return text
         .replace(/\n/g, "<br>")
         .replace(/\t/g, "&nbsp; &nbsp; &nbsp; &nbsp;");
     }

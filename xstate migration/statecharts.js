@@ -26,7 +26,8 @@ const cardMachine = ({id,text,label}) => createMachine({
             "SWITCH.READ": { target: 'read' }, // this transition can occur if deckMachine is in 'readOnly' or 'modifiable'.
             TYPING: { 
               actions: [
-                assign({ text: (_, event) => event.value }),
+                (context, event) => console.log('TYPING event fuck yeah!!'),
+                assign({ text: (context, event) => event.text }),
                 sendParent((context, event) => ({ type: "CARD.PERSIST", load: context }))
               ]
             }
@@ -135,9 +136,14 @@ export const deckMachine = createMachine({
                 }, 
                 "CARD.EDIT": {
                   actions: (context,event) => {
-                    console.log('active.modifiable -> CARD.EDIT')
                     const card = context.cards.find(card => event.id === card.id)
                     card.ref.send({ type: "SWITCH.EDIT" })
+                  }
+                },
+                "CARD.EDIT.TYPING": {
+                  actions: (context, event) => {
+                    const card = context.cards.find(card => event.id === card.id)
+                    card.ref.send({ type: "TYPING", text: event.text })
                   }
                 }
               }

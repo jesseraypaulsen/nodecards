@@ -1,4 +1,4 @@
-import Nodecard from "./nodecard"
+import Nodecard from "./nodecard";
 import { deckMachine } from "./statecharts";
 
 export default class Deck {
@@ -9,36 +9,35 @@ export default class Deck {
     this.nodecards = [];
     this.links = [];
   }
-  
+
   init(data) {
-    data.cards.map(({id,label,text}) => {
-      this.send({type:"CREATECARD", id, label, text })
-    })
-    data.links.map(({id,label,from,to}) => {
-      this.send({type:"CREATELINK", id, label, from, to })
-    })
+    data.cards.map(({ id, label, text }) => {
+      this.send({ type: "CREATECARD", id, label, text });
+    });
+    data.links.map(({ id, label, from, to }) => {
+      this.send({ type: "CREATELINK", id, label, from, to });
+    });
     setTimeout(() => {
-      this.send({type:"INIT.COMPLETE"})
-    },1000) // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
-           
+      this.send({ type: "INIT.COMPLETE" });
+    }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
   }
 
-  createCard({id,label,text}) {
+  createCard({ id, label }) {
     this.graphRenderer.body.data.nodes.add({ id, label });
-    const card = new Nodecard(id,label,text,this)
-    this.nodecards.push(card)
+    const card = new Nodecard(id, this);
+    this.nodecards.push(card);
   }
 
-  createLink({id,label,to,from}) {
-    this.graphRenderer.body.data.edges.add({id,label,from,to})
-    this.links.push({id,label,from,to})
+  createLink({ id, label, to, from }) {
+    this.graphRenderer.body.data.edges.add({ id, label, from, to });
+    this.links.push({ id, label, from, to });
   }
 
   synchronizeSwitchPanelWithState(state) {
-
-    //these should probably be "controlled components", so that their internal state is in sync with app state.
-    const selectElement = this.container.querySelector(".deck-modes")
-    const toggleElement = this.container.querySelector(".physics").firstElementChild;
+    //like "controlled components", their internal state is in sync with app state
+    const selectElement = this.container.querySelector(".deck-modes");
+    const toggleElement =
+      this.container.querySelector(".physics").firstElementChild;
 
     if (state.event.type === "PHYSICS.OFF" && !state.event.sentByUser) {
       //not sent by user! change toggler to reflect the state!
@@ -49,57 +48,78 @@ export default class Deck {
       selectElement.value = "DECK.DISABLE";
     }
   }
-  
-  render(state) {
-    this.synchronizeSwitchPanelWithState(state)
 
-    if (state.event.type === "xstate.update" && state.event.state.event.type === "xstate.init") {
+  render(state) {
+
+    console.log(state.changed)
+    this.synchronizeSwitchPanelWithState(state);
+    
+    if (
       // child state, enabled by {sync: true} arg to spawn()
-      this.createCard(state.event.state.context)
+      state.event.type === "xstate.update" &&
+      state.event.state.event.type === "xstate.init"
+      ) {
+        this.createCard(state.event.state.context);
+      } else if (
+      state.event.type === "xstate.update" &&
+      state.event.state.event.type === "OPEN"
+      ) {
+        const card = this.nodecards.find(
+          (card) => card.id === state.event.state.context.id
+          );
+          card.open(state.event.state);
+        } else if (
+          state.event.type === "xstate.update" &&
+          state.event.state.value === "inert"
+          ) {
+            const card = this.nodecards.find(
+        (card) => card.id === state.event.state.context.id
+      );
+      card.inertify(state.event.state);
     } 
-    else if (state.event.type === "xstate.update" && state.event.state.event.type === "OPEN") {
-      const card = this.nodecards.find(card => card.id === state.event.state.context.id)
-      card.open(state.event.state.value)
-    }
-    else if (state.event.type === "xstate.update" && state.event.state.value === "inert") {
-      const card = this.nodecards.find(card => card.id === state.event.state.context.id)
-      card.inertify()
-    }
-    else if (state.event.type === "xstate.update" && state.event.state.value.active === "edit") {
-      const card = this.nodecards.find(card => card.id === state.event.state.context.id)
-      //card.edit()
-      console.log('card switched to edit mode')
-    }
+    
+    
     else if (state.event.type === "CREATELINK") {
-      const {id,label,from,to} = state.event;
-      this.createLink({id,label,to,from});
-    }
-    else if (state.event.type === "PHYSICS.OFF") {
-      const options = { physics: { enabled: false }}
+      const { id, label, from, to } = state.event;
+      this.createLink({ id, label, to, from });
+    } else if (state.event.type === "PHYSICS.OFF") {
+      const options = { physics: { enabled: false } };
       this.graphRenderer.setOptions(options);
-    }
-    else if (state.event.type === "PHYSICS.ON") {
-      const options = { physics: { enabled: true }}
+    } else if (state.event.type === "PHYSICS.ON") {
+      const options = { physics: { enabled: true } };
       this.graphRenderer.setOptions(options);
+    } else if (state.event.type === "PERSIST.OFF") {
+      console.log(`persistence off`);
+    } else if (state.event.type === "PERSIST.ON") {
+      console.log(`persistence on`);
+    } else if (state.event.type === "DECK.READONLY") {
+      console.log(`deck has switched to Read Only mode`);
+    } else if (state.event.type === "DECK.MODIFIABLE") {
+      console.log(`deck has switched to Modify mode`);
+    } else if (state.event.type === "DECK.DISABLE") {
+      console.log(`deck has switched to Disabled mode`);
     }
-    else if (state.event.type === "PERSIST.OFF") {
-      console.log(`persistence off`)
+
+    if (state.event.type === "xstate.update") {
+      console.log('xstate.update', state.event.state)
+      if (state.event.state.matches('active')) {
+        /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
+        So evaluating the event type is necessary, because we only want to renderState when there's a change. 
+        state.changed doesn't seem to help because you can't do "state.value.changed" and active is a compound state. */
+        if (state.event.state.event.type === "SWITCH.EDIT" || state.event.state.event.type === "SWITCH.READ") {
+          const card = this.nodecards.find(
+            (card) => card.id === state.event.state.context.id
+            );
+            card.renderState(state.event.state)
+        }
+      }
+
+      if (state.event.state.event.type === "TYPING") {
+        const card = this.nodecards.find(card => card.id === state.event.state.context.id)
+        card.domElement.firstElementChild.value = state.event.state.event.text;
+      }
     }
-    else if (state.event.type === "PERSIST.ON") {
-      console.log(`persistence on`)
-    }
-    else if (state.event.type === "DECK.READONLY") {
-      // "DECK.READONLY": { target: 'mode.active.readOnly' }
-      console.log(`deck has switched to Read Only mode`)
-    }
-    else if (state.event.type === "DECK.MODIFIABLE") {
-      console.log(`deck has switched to Modify mode`)
-      // "DECK.MODIFIABLE": { target: 'mode.active.modifiable' }
-    }
-    else if (state.event.type === "DECK.DISABLE") {
-      console.log(`deck has switched to Disabled mode`)
-      // "DECK.DISABLE": { target: 'mode.disabled' }
-    }
+          
   }
 }
 
@@ -111,4 +131,8 @@ export default class Deck {
  - when the deck mode is active.readOnly the button should be disabled
  
  - https://xstate.js.org/docs/guides/states.html#state-changed     -> render function
+
+ - remove card from state machine context in discard()
+
+ - prevent second click on node causing duplicate nodecard elements
  */

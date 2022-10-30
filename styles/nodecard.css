@@ -75,11 +75,11 @@
 /* Animations for expanding and contracting cards */
 
 .nodecard.expand {
-    animation: expandCard .5s;
+    animation: expandCard .8s;
 }
 
 .nodecard.contract {
-    animation: contractCard .5s;
+    animation: contractCard .8s;
 }
 
 

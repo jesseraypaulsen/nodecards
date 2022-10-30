@@ -5,7 +5,7 @@ import editOffIcon from "../icons/edit_off.png";
 import linkIcon from "../icons/link.png";
 import inertifyIcon from "../icons/swipe_down_alt.png";
 
-function attachButtonBar(card) {
+function attachButtonBar(card, state) {
     
   const buttonData = [
     {
@@ -50,14 +50,13 @@ function attachButtonBar(card) {
   buttonBar.classList.add("button-bar");
 
   let buttons;
-  //if (card.mode == "read") 
-  buttons = [0, 1, 3, 4, 5].map((i) => createButton(buttonData[i]));
-  //else if (card.mode == "write") buttons = [0, 2, 3, 4, 5].map((i) => createButton(buttonData[i]));
+  if (state == "read") buttons = [0, 1, 3, 4, 5].map((i) => createButton(buttonData[i]));
+  else if (state == "edit") buttons = [0, 2, 3, 4, 5].map((i) => createButton(buttonData[i]));
   buttonBar.append(...buttons);
   
-  // if (card.domElement.lastElementChild.classList.contains("button-bar")) {
-  //     card.domElement.lastElementChild.remove();
-  // }
+  if (card.domElement.lastElementChild.classList.contains("button-bar")) {
+    card.domElement.lastElementChild.remove();
+  }
   card.domElement.append(buttonBar);
 }
 
