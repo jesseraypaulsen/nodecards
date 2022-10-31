@@ -63,7 +63,6 @@ export default class Nodecard {
     editor.classList.add("editor");
     editor.value = state.context.text;
     editor.addEventListener('input', (e) => {
-      //this.deck.send({ type: "TYPING", value: e.target.value }) FAIL!!
       this.deck.send({ type: "CARD.EDIT.TYPING", text: e.target.value, id: this.id })
     })
     return editor;
@@ -75,16 +74,13 @@ export default class Nodecard {
 
   inertify(state) {
     if (this.domElement) {
-      //this.domElement.classList.remove("expand");
-      //this.domElement.classList.add("contract");
       this.domElement.classList.replace("expand", "contract")
+
       // delay the removal of the DOM element, otherwise the contract animation doesn't occur
       setTimeout(() => {
         this.domElement.remove();
         this.domElement = null;
-        //this.domElement.classList.remove("contract");
-        //this.domElement.classList.add("expand");
-      }, 800);
+      }, 600);
     }
 
     this.deck.graphRenderer.body.data.nodes.update({

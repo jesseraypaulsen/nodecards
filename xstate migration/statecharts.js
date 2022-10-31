@@ -135,24 +135,28 @@ export const deckMachine = createMachine({
                   // popup button for deleting the edge
                 }, 
                 "CARD.EDIT": {
-                  actions: (context,event) => {
-                    const card = context.cards.find(card => event.id === card.id)
-                    card.ref.send({ type: "SWITCH.EDIT" })
-                  }
+                  actions: send({ type: "SWITCH.EDIT"}, { to: (_,e) => e.id })
                 },
                 "CARD.EDIT.TYPING": {
                   actions: (context, event) => {
                     const card = context.cards.find(card => event.id === card.id)
                     card.ref.send({ type: "TYPING", text: event.text })
                   }
+                  // None of these work for using the "to" option when passing data thru the event. The docs have no explanation.
+                  //send({ type: "TYPING", text: (_,e) => e.text }, { to: (context,event) => event.id})
+                  //send((_,e) => ({ type: "TYPING", text: e.text }, { to: e.id }))
+                  //send((_,e) => ({ type: "TYPING", text: e.text }), { to: (_,e) => e.id })
                 },
                 "CARD.DELETE": {
                   actions: [
                     (context, event) => {
                       const card = context.cards.find(card => event.id === card.id)
                       card.ref.send({ type: "DELETE" })
-                    }, 
-                  assign({ cards: (context,event) => context.cards.filter(card => event.id !== card.id)})]
+                      card.ref.stop()
+                    },
+                    assign({ cards: (context,event) => context.cards.filter(card => event.id !== card.id)})]
+                    //How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
+                    // The question remains unanswered: https://stackoverflow.com/q/61013927
                 }
               }
             }
@@ -230,9 +234,9 @@ export const deckMachine = createMachine({
         const { id, label, text } = event;
         return context.cards.concat({
           id,
-          ref: spawn(cardMachine({id,label,text}), { sync: true })
+          ref: spawn(cardMachine({id,label,text}), { name: id, sync: true })
           .onTransition((state) => { 
-            //console.log('child machine ->', 'state.value:', state.value, 'state.context:', state.context)
+            console.log('child actor machine ->', 'state.value:', state.value, 'state.context:', state.context)
           })
         })
       }

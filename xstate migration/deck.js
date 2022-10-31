@@ -71,7 +71,7 @@ export default class Deck {
         So evaluating the event type is necessary, because we only want to renderState when there's a change. 
         state.changed doesn't seem to help because you can't do "state.value.changed" and active is a compound state. */
 
-      if (childEvent.type === "TYPING") card.updateEditor(childEvent);
+      if (childEvent.type === "TYPING") card.updateEditor(childEvent); // controlled element
 
       if (childEvent.type === "DELETE") card.discard();
     }
@@ -114,18 +114,19 @@ export default class Deck {
  
  - Physics should be turned on during initialization, and then turned off when it's complete. (DONE)
  
+ - remove card from state machine context on DELETE event (DONE, but partially unresolved)
+   (How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
+    The question remains unanswered: https://stackoverflow.com/q/61013927 )
+
+ - delete button (DONE)
+
  - when the deck mode is "active.readOnly" the button should be disabled
  
- - remove card from state machine context on DELETE event -> study TodoMVC to understand how it deletes child machines
- https://codesandbox.io/s/xstate-todomvc-33wr94qv1
-
- - prevent second click on node causing duplicate nodecard elements
+ - fix: prevent second click on node causing duplicate nodecard elements
 
  - fix: when deck is in mode.modify, and card is in active.edit, if deck is switched to mode.read then card is still in active.edit
 
  - drag button
-
- - delete button
 
  - webSource button
 
