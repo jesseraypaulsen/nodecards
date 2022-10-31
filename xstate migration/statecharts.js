@@ -39,10 +39,11 @@ const cardMachine = ({id,text,label}) => createMachine({
         },
         INERTIFY: {
           target: 'inert'
-        }
+        },
+        DELETE: {}
       }
     },
-    inert: { // a nodecard can be inert when the deck is any of the modes. if the deck is disabled, then all nodecard's become inert.
+    inert: { // a nodecard can be inert when the deck is in any of the modes. if the deck is disabled, then all nodecard's become inert.
       on: {
         OPEN: { target: 'active' }
       }
@@ -144,6 +145,14 @@ export const deckMachine = createMachine({
                     const card = context.cards.find(card => event.id === card.id)
                     card.ref.send({ type: "TYPING", text: event.text })
                   }
+                },
+                "CARD.DELETE": {
+                  actions: [
+                    (context, event) => {
+                      const card = context.cards.find(card => event.id === card.id)
+                      card.ref.send({ type: "DELETE" })
+                    }, 
+                  assign({ cards: (context,event) => context.cards.filter(card => event.id !== card.id)})]
                 }
               }
             }

@@ -1,5 +1,4 @@
 import Nodecard from "./nodecard";
-import { deckMachine } from "./statecharts";
 
 export default class Deck {
   constructor(graphRenderer, container, send) {
@@ -52,30 +51,29 @@ export default class Deck {
   renderNodecard(state) {
     const childState = state.event.state;
     const childEvent = state.event.state.event;
-  
-    if (childEvent.type === "xstate.init")  this.createCard(childState.context);
-  
-    if (childEvent.type === "OPEN") {
-      const card = this.nodecards.find((card) => card.id === childState.context.id);
-      card.open(childState);
-    }
-  
-    if (childState.value === "inert") {
-      const card = this.nodecards.find((card) => card.id === childState.context.id);
-      card.inertify(childState);
-    }
-  
-    if (childEvent.type === "SWITCH.EDIT" || childEvent.type === "SWITCH.READ") {
-      const card = this.nodecards.find((card) => card.id === childState.context.id);
-      card.renderState(childState)
+
+    if (childEvent.type === "xstate.init") this.createCard(childState.context);
+    else {
+      const card = this.nodecards.find(
+        (card) => card.id === childState.context.id
+      );
+
+      if (childEvent.type === "OPEN") card.open(childState);
+
+      if (childState.value === "inert") card.inertify(childState);
+
+      if (
+        childEvent.type === "SWITCH.EDIT" ||
+        childEvent.type === "SWITCH.READ"
+      )
+        card.renderState(childState);
       /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
-      So evaluating the event type is necessary, because we only want to renderState when there's a change. 
-      state.changed doesn't seem to help because you can't do "state.value.changed" and active is a compound state. */
-    }
-  
-    if (childEvent.type === "TYPING") {
-      const card = this.nodecards.find(card => card.id === childState.context.id)
-      card.domElement.firstElementChild.value = childEvent.text;
+        So evaluating the event type is necessary, because we only want to renderState when there's a change. 
+        state.changed doesn't seem to help because you can't do "state.value.changed" and active is a compound state. */
+
+      if (childEvent.type === "TYPING") card.updateEditor(childEvent);
+
+      if (childEvent.type === "DELETE") card.discard();
     }
   }
 
@@ -102,13 +100,12 @@ export default class Deck {
     } else if (eventType === "DECK.DISABLE") {
       console.log(`deck has switched to Disabled mode`);
     }
-
   }
 
   render(state) {
     // child state updates enabled by {sync: true} arg to spawn()
-    if (state.event.type === "xstate.update") this.renderNodecard(state)
-    else this.renderDeck(state)
+    if (state.event.type === "xstate.update") this.renderNodecard(state);
+    else this.renderDeck(state);
   }
 }
 
@@ -117,11 +114,20 @@ export default class Deck {
  
  - Physics should be turned on during initialization, and then turned off when it's complete. (DONE)
  
- - when the deck mode is active.readOnly the button should be disabled
+ - when the deck mode is "active.readOnly" the button should be disabled
  
- - https://xstate.js.org/docs/guides/states.html#state-changed     -> render function
-
- - remove card from state machine context in discard()
+ - remove card from state machine context on DELETE event -> study TodoMVC to understand how it deletes child machines
+ https://codesandbox.io/s/xstate-todomvc-33wr94qv1
 
  - prevent second click on node causing duplicate nodecard elements
+
+ - fix: when deck is in mode.modify, and card is in active.edit, if deck is switched to mode.read then card is still in active.edit
+
+ - drag button
+
+ - delete button
+
+ - webSource button
+
+ - user creation of new cards and links
  */

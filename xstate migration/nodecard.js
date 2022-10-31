@@ -5,16 +5,13 @@ export default class Nodecard {
     this.id = id;
     this.domElement = null;
     this.deck = deck;
-    this.container = deck.container;
-    this.graphRenderer = deck.graphRenderer;
   }
 
   open(state) {
     this.domElement = document.createElement("div");
-    this.domElement.classList.add("nodecard");
-    this.domElement.classList.add("expand");
+    this.domElement.classList.add("nodecard", "expand");
     this.renderState(state);
-    this.container.append(this.domElement);
+    this.deck.container.append(this.domElement);
     const { domX, domY } = this.getNodeCenter();
     this.setPosition(domX, domY);
   }
@@ -33,13 +30,13 @@ export default class Nodecard {
   }
 
   getNodeCenter() {
-    let canvas = this.graphRenderer.getPosition(this.id);
-    let dom = this.graphRenderer.canvasToDOM({ x: canvas.x, y: canvas.y });
+    let canvas = this.deck.graphRenderer.getPosition(this.id);
+    let dom = this.deck.graphRenderer.canvasToDOM({ x: canvas.x, y: canvas.y });
     return { canX: canvas.x, canY: canvas.y, domX: dom.x, domY: dom.y };
   }
 
   move({ domX, domY, canX, canY }) {
-    this.graphRenderer.moveNode(this.id, canX, canY);
+    this.deck.graphRenderer.moveNode(this.id, canX, canY);
     this.setPosition(domX, domY);
   }
 
@@ -72,18 +69,25 @@ export default class Nodecard {
     return editor;
   }
 
+  updateEditor(event) {
+    this.domElement.firstElementChild.value = event.text;
+  }
+
   inertify(state) {
     if (this.domElement) {
-      this.domElement.classList.add("contract");
+      //this.domElement.classList.remove("expand");
+      //this.domElement.classList.add("contract");
+      this.domElement.classList.replace("expand", "contract")
       // delay the removal of the DOM element, otherwise the contract animation doesn't occur
       setTimeout(() => {
         this.domElement.remove();
-        this.domElement.classList.remove("contract");
-        this.domElement.classList.add("expand");
+        this.domElement = null;
+        //this.domElement.classList.remove("contract");
+        //this.domElement.classList.add("expand");
       }, 800);
     }
 
-    this.graphRenderer.body.data.nodes.update({
+    this.deck.graphRenderer.body.data.nodes.update({
       id: this.id,
       label: state.context.label,
       shape: "box",
@@ -100,7 +104,7 @@ export default class Nodecard {
     this.domElement.remove();
 
     //remove node from renderer
-    this.graphRenderer.body.data.nodes.remove(this.id);
+    this.deck.graphRenderer.body.data.nodes.remove(this.id);
 
     //remove card from deck
     this.deck.nodecards.forEach((n, i) => {

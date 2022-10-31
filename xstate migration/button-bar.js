@@ -29,7 +29,7 @@ function attachButtonBar(card, state) {
     {
         name: "Delete",
         icon: deleteIcon,
-        handler: () => card.deck.send({ type: "CARD.DISCARD", id: card.id }),
+        handler: () => card.deck.send({ type: "CARD.DELETE", id: card.id }),
         active: true
     },
     {
