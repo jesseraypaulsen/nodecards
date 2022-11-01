@@ -116,21 +116,30 @@ export const deckMachine = createMachine({
                     }
                   }
                 },
+                cardcreation: {
+                  entry: send((_,{data}) => ({ type: "openPrompt", data })),
+                  on: {
+                    "CLICK.BACKGROUND": {
+                      target: "regular",
+                      actions: send({ type: "closePrompt" })
+                    },
+                    "CLOSE.PROMPT": {
+                      target: "regular",
+                      actions: send({ type: "closePrompt" })
+                    },
+                    "CREATECARD": {
+                      actions: 'createNewCard'
+                    }
+                  }
+                },
                 regular: {
                   on: {
-                    "BRANCHBUTTON.CLICK": { target: "linkcreation" }
+                    "BRANCHBUTTON.CLICK": { target: "linkcreation" },
+                    "CLICK.BACKGROUND": { target: "cardcreation" },
                   }
                 }
               },
               on: {
-                "CLICK.BACKGROUND": {
-                  actions: {
-                    // popup button for creating card
-                  }
-                },
-                "BUTTON.CREATECARD": {
-                  actions: 'createNewCard'
-                },
                 "CLICK.EDGE": {
                   // popup button for deleting the edge
                 }, 

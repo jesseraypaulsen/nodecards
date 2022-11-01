@@ -10,6 +10,7 @@ import "../styles/switch-panel.css";
 import "../styles/nodecard.css";
 import "../styles/icon-button.scss";
 import "../styles/tooltip.scss";
+import "../styles/prompt.css"
 
 
 const container = document.querySelector("#container");
@@ -19,8 +20,9 @@ const service = interpret(deckMachine);
 
 const handler = (e) => {
   const eventType = typeofSelection(e)
-  console.log(`handler: ${e.nodes[0]}`)
+  console.log(`handler: ${eventType}`)
   if (eventType === "NC") service.send({ type: "CARD.CLICK", id: e.nodes[0] })
+  if (eventType === "BG") service.send({ type: "CLICK.BACKGROUND", data: e })
 }
 
 network.on("click", handler)
@@ -43,6 +45,7 @@ setupSwitchPanel(deck)
 
 service.onTransition((state) => {
   console.log(state)
+  console.log(state.changed)
   if (state.event.type === "xstate.init") deck.init(data)
   else deck.render(state)
 });

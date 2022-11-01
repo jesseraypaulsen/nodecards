@@ -13,20 +13,7 @@ export default class Nodecard {
     this.renderState(state);
     this.deck.container.append(this.domElement);
     const { domX, domY } = this.getNodeCenter();
-    this.setPosition(domX, domY);
-  }
-
-  setPosition(x, y) {
-    let width = parseInt(
-      getComputedStyle(this.domElement).width.substring(0, 3)
-    );
-    let height = parseInt(
-      getComputedStyle(this.domElement).height.substring(0, 3)
-    );
-
-    this.domElement.style.left = x - width / 2 + "px";
-    this.domElement.style.top = y - height / 2 + "px";
-    this.domElement.style.display = "flex";
+    this.deck.setPosition(this.domElement, domX, domY);
   }
 
   getNodeCenter() {
@@ -37,7 +24,7 @@ export default class Nodecard {
 
   move({ domX, domY, canX, canY }) {
     this.deck.graphRenderer.moveNode(this.id, canX, canY);
-    this.setPosition(domX, domY);
+    this.deck.setPosition(this.domElement, domX, domY);
   }
 
   renderState(state) {
@@ -118,18 +105,4 @@ export default class Nodecard {
     }
   }
 
-  /* Finds the center point of an element relative to its offsetParent property. 
-     Useful for corroborating setPosition values.
-     DO NOT DELETE, even if it's not currently being used!! */
-  centerpoint() {
-    let centerX = this.domElement.offsetLeft + this.domElement.offsetWidth / 2;
-    let centerY = this.domElement.offsetTop + this.domElement.offsetHeight / 2;
-    console.log(`centerX: ${centerX} / centerY: ${centerY}`);
-    // output should be equal to click event coordinates
-  }
-
-  /*
-  TODO: try to make method names correspond to state values to obviate the jungle of conditionals in deck.render, 
-  eg read,edit,inert => card[state.value] 
-  */
 }

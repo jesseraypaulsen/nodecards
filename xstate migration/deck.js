@@ -32,6 +32,32 @@ export default class Deck {
     this.links.push({ id, label, from, to });
   }
 
+  promptToCreate(event) {
+    const { x, y } = event.data.pointer.DOM;
+    const prompt = document.createElement("div");
+    prompt.innerHTML = `<span>x</span><span>Create Card</span>`
+    prompt.classList.add("creation-prompt");
+    this.container.append(prompt); //append must occur before setPosition
+    this.setPosition(prompt, x, y)
+    prompt.firstElementChild.addEventListener('click', () => this.send('CLOSE.PROMPT'))
+  }
+
+  closePrompt() {
+    const prompt = document.querySelector(".creation-prompt");
+    if (prompt) prompt.remove();
+  }
+
+  setPosition(element, x, y) {
+    let width = parseInt(
+      getComputedStyle(element).width.substring(0, 3)
+    );
+    let height = parseInt(
+      getComputedStyle(element).height.substring(0, 3)
+    );
+    element.style.left = x - width / 2 + "px";
+    element.style.top = y - height / 2 + "px";
+  }
+
   synchronizeSwitchPanelWithState(state) {
     //like "controlled components", their internal state should be in sync with app state
     const selectElement = this.container.querySelector(".deck-modes");
@@ -69,7 +95,7 @@ export default class Deck {
         card.renderState(childState);
       /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
         So evaluating the event type is necessary, because we only want to renderState when there's a change. 
-        state.changed doesn't seem to help because you can't do "state.value.changed" and active is a compound state. */
+        state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
 
       if (childEvent.type === "TYPING") card.updateEditor(childEvent); // controlled element
 
@@ -100,12 +126,30 @@ export default class Deck {
     } else if (eventType === "DECK.DISABLE") {
       console.log(`deck has switched to Disabled mode`);
     }
+
+    if (eventType === "openPrompt") {
+      this.promptToCreate(state.event)
+    }
+    if (eventType === "closePrompt") {
+      this.closePrompt()
+    }
   }
+  
 
   render(state) {
     // child state updates enabled by {sync: true} arg to spawn()
     if (state.event.type === "xstate.update") this.renderNodecard(state);
     else this.renderDeck(state);
+  }
+
+  /* Finds the center point of an element relative to its offsetParent property. 
+    Useful for corroborating setPosition values.
+    DO NOT DELETE, even if it's not currently being used!! */
+    centerpoint(element) {
+    let centerX = element.offsetLeft + element.offsetWidth / 2;
+    let centerY = element.offsetTop + element.offsetHeight / 2;
+    console.log(`centerX: ${centerX} / centerY: ${centerY}`);
+    // output should be equal to click event coordinates
   }
 }
 
@@ -131,4 +175,10 @@ export default class Deck {
  - webSource button
 
  - user creation of new cards and links
- */
+
+ - popup prompt for creating cards, along with a corresponding state
+
+ - (maybe) try to make method names correspond to state values to obviate the jungle of conditionals in deck.render, 
+  eg read,edit,inert => card[state.value] 
+  
+*/
