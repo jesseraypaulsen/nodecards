@@ -1,16 +1,16 @@
-import { options } from "../options";
+import { options } from "./options";
 import * as vis from "vis-network";
-import { typeofSelection } from "../utils";
+import { typeofSelection } from "./utils";
 import { interpret } from 'xstate';
 import { deckMachine } from "./statecharts"
 import Deck from './deck'
 import { setupSwitchPanel } from "./switch-panel";
-import "../styles/main.css";
-import "../styles/switch-panel.css";
-import "../styles/nodecard.css";
-import "../styles/icon-button.scss";
-import "../styles/tooltip.scss";
-import "../styles/prompt.css"
+import "../assets/styles/main.css";
+import "../assets/styles/switch-panel.css";
+import "../assets/styles/nodecard.css";
+import "../assets/styles/icon-button.scss";
+import "../assets/styles/tooltip.scss";
+import "../assets/styles/prompt.css"
 
 
 const container = document.querySelector("#container");

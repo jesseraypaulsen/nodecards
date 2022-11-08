@@ -1,9 +1,9 @@
-import dragIcon from "../icons/drag_indicator.png";
-import deleteIcon from "../icons/delete_forever.png";
-import editIcon from "../icons/edit.png";
-import editOffIcon from "../icons/edit_off.png";
-import linkIcon from "../icons/link.png";
-import inertifyIcon from "../icons/swipe_down_alt.png";
+import dragIcon from "../assets/icons/drag_indicator.png";
+import deleteIcon from "../assets/icons/delete_forever.png";
+import editIcon from "../assets/icons/edit.png";
+import editOffIcon from "../assets/icons/edit_off.png";
+import linkIcon from "../assets/icons/link.png";
+import inertifyIcon from "../assets/icons/swipe_down_alt.png";
 
 function attachButtonBar(card, state) {
     

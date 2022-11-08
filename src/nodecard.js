@@ -1,4 +1,4 @@
-import attachButtonBar from "./button-bar";
+import attachButtonBar from "./button-bar.js";
 
 export default class Nodecard {
   constructor(id, deck) {

@@ -58,6 +58,16 @@ export default class Deck {
     element.style.top = y - height / 2 + "px";
   }
 
+  /* Finds the center point of an element relative to its offsetParent property. 
+    Useful for corroborating setPosition values.
+    DO NOT DELETE, even if it's not currently being used!! */
+  centerpoint(element) {
+    let centerX = element.offsetLeft + element.offsetWidth / 2;
+    let centerY = element.offsetTop + element.offsetHeight / 2;
+    console.log(`centerX: ${centerX} / centerY: ${centerY}`);
+    // output should be equal to click event coordinates
+  }
+
   synchronizeSwitchPanelWithState(state) {
     //like "controlled components", their internal state should be in sync with app state
     const selectElement = this.container.querySelector(".deck-modes");
@@ -142,15 +152,6 @@ export default class Deck {
     else this.renderDeck(state);
   }
 
-  /* Finds the center point of an element relative to its offsetParent property. 
-    Useful for corroborating setPosition values.
-    DO NOT DELETE, even if it's not currently being used!! */
-    centerpoint(element) {
-    let centerX = element.offsetLeft + element.offsetWidth / 2;
-    let centerY = element.offsetTop + element.offsetHeight / 2;
-    console.log(`centerX: ${centerX} / centerY: ${centerY}`);
-    // output should be equal to click event coordinates
-  }
 }
 
 /*TODO: 
