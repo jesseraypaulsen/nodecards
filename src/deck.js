@@ -32,7 +32,7 @@ export default class Deck {
     this.links.push({ id, label, from, to });
   }
 
-  promptToCreate(event) {
+  openPrompt(event) {
     const { x, y } = event.data.pointer.DOM;
     const prompt = document.createElement("div");
     prompt.innerHTML = `<span>x</span><span>Create Card</span>`
@@ -68,25 +68,29 @@ export default class Deck {
     // output should be equal to click event coordinates
   }
 
-  synchronizeSwitchPanelWithState(state) {
+  setPhysics(value) {
+    const options = { physics: { enabled: value } };
+    this.graphRenderer.setOptions(options);
+  }
+
+  synchronizeSwitchPanelWithState(event) {
     //like "controlled components", their internal state should be in sync with app state
     const selectElement = this.container.querySelector(".deck-modes");
     const toggleElement =
       this.container.querySelector(".physics").firstElementChild;
 
-    if (state.event.type === "PHYSICS.OFF" && !state.event.sentByUser) {
+    if (event.type === "turnPhysicsOff" && !event.sentByUser) {
       //not sent by user! change toggler to reflect the state!
       toggleElement.checked = false;
     }
-    if (state.event.type === "DECK.DISABLE" && !state.event.sentByUser) {
+    if (event.type === "DECK.DISABLE" && !event.sentByUser) {
       //not sent by user! change value of select element to reflect the state!
       selectElement.value = "DECK.DISABLE";
     }
   }
 
-  renderNodecard(state) {
-    const childState = state.event.state;
-    const childEvent = state.event.state.event;
+  renderNodecard(childState) {
+    const childEvent = childState.event;
 
     if (childEvent.type === "xstate.init") this.createCard(childState.context);
     else {
@@ -113,43 +117,37 @@ export default class Deck {
     }
   }
 
-  renderDeck(state) {
-    const eventType = state.event.type;
-    this.synchronizeSwitchPanelWithState(state);
-    if (eventType === "CREATELINK") {
-      const { id, label, from, to } = state.event;
-      this.createLink({ id, label, to, from });
-    } else if (eventType === "PHYSICS.OFF") {
-      const options = { physics: { enabled: false } };
-      this.graphRenderer.setOptions(options);
-    } else if (eventType === "PHYSICS.ON") {
-      const options = { physics: { enabled: true } };
-      this.graphRenderer.setOptions(options);
-    } else if (eventType === "PERSIST.OFF") {
-      console.log(`persistence off`);
-    } else if (eventType === "PERSIST.ON") {
-      console.log(`persistence on`);
-    } else if (eventType === "DECK.READONLY") {
-      console.log(`deck has switched to Read Only mode`);
-    } else if (eventType === "DECK.MODIFIABLE") {
-      console.log(`deck has switched to Modify mode`);
-    } else if (eventType === "DECK.DISABLE") {
-      console.log(`deck has switched to Disabled mode`);
-    }
-
-    if (eventType === "openPrompt") {
-      this.promptToCreate(state.event)
-    }
-    if (eventType === "closePrompt") {
-      this.closePrompt()
-    }
-  }
-  
-
   render(state) {
+
+    const event = state.event;
+
+    this.synchronizeSwitchPanelWithState(event);
+
     // child state updates enabled by {sync: true} arg to spawn()
-    if (state.event.type === "xstate.update") this.renderNodecard(state);
-    else this.renderDeck(state);
+    if (event.type === "xstate.update") this.renderNodecard(event.state);
+
+    else if (event.type === "CREATELINK") {
+
+      const { id, label, from, to } = event;
+      this.createLink({ id, label, to, from });
+
+    } else if (event.type === "turnPhysicsOff") {
+
+      this.setPhysics(false)
+
+    } else if (event.type === "turnPhysicsOn") {
+
+      this.setPhysics(true)
+
+    } else if (event.type === "openPrompt") {
+
+      this.openPrompt(event)
+
+    } else if (event.type === "closePrompt") {
+
+      this.closePrompt()
+
+    }
   }
 
 }
@@ -181,5 +179,15 @@ export default class Deck {
 
  - (maybe) try to make method names correspond to state values to obviate the jungle of conditionals in deck.render, 
   eg read,edit,inert => card[state.value] 
+
+ - separate business logic from DOM manipulation
+
+ - bug: when prompt is opened, if we switch deck mode to read only or disabled, prompt gets stuck. if you switch back to modify,
+   two prompts are open at once.
+
+ - bug: turning physics on when a nodecard is active generates console error. Caused by a redundant "turnPhysicsOn" transition on mode.active. 
+ Removing it fixes the problem. (DONE)
+
+
   
 */

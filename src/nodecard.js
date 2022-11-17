@@ -81,8 +81,6 @@ export default class Nodecard {
   }
 
   discard() {
-    //TODO: remove card from state machine context
-
     //remove element from dom
     this.domElement.remove();
 

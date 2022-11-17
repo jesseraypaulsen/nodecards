@@ -66,7 +66,7 @@ export const deckMachine = createMachine({
       states: {
         active: {
           on: {
-            "PHYSICS.ON": { target: "disabled" }, // switch deck to disabled mode if physics gets turned on
+            //"turnPhysicsOn": { target: "disabled" }, // switch deck to disabled mode if physics gets turned on
             "CARD.CLICK": {
               actions: (context, event) => {
                 const card = context.cards.find(card => event.id === card.id)
@@ -86,7 +86,7 @@ export const deckMachine = createMachine({
               }
             },
           },
-          entry: send({ type: "PHYSICS.OFF", sentByUser: false }),  // switch physics off when deck is active
+          entry: send({ type: "turnPhysicsOff", sentByUser: false }),  // switch physics off when deck is active
           states: {
             readOnly: {
               // popup buttons do not appear, each card's branch and edit buttons are disabled. 'edit' is not possible on cards.
@@ -219,18 +219,18 @@ export const deckMachine = createMachine({
       states: {
         initializing: {
           on: {
-            "PHYSICS.OFF": { target: 'disabled' }
+            "turnPhysicsOff": { target: 'disabled' }
           }
         },
         enabled: {
           on: {
-            "PHYSICS.OFF": { target: 'disabled' }
+            "turnPhysicsOff": { target: 'disabled' }
           },
           entry: send({ type: "DECK.DISABLE", sentByUser: false })
         },
         disabled: {
           on: {
-            "PHYSICS.ON": { target: 'enabled' }
+            "turnPhysicsOn": { target: 'enabled' }
           }
         }
       }
@@ -245,7 +245,7 @@ export const deckMachine = createMachine({
           id,
           ref: spawn(cardMachine({id,label,text}), { name: id, sync: true })
           .onTransition((state) => { 
-            console.log('child actor machine ->', 'state.value:', state.value, 'state.context:', state.context)
+            //console.log('child actor machine ->', 'state.value:', state.value, 'state.context:', state.context)
           })
         })
       }

@@ -5,4 +5,5 @@ module.exports = {
     ),
     "\\.(css|less)$": require.resolve("./test/style-mock.js"),
   },
+  testEnvironment: "jsdom"
 }

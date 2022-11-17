@@ -20,7 +20,6 @@ const service = interpret(deckMachine);
 
 const handler = (e) => {
   const eventType = typeofSelection(e)
-  console.log(`handler: ${eventType}`)
   if (eventType === "NC") service.send({ type: "CARD.CLICK", id: e.nodes[0] })
   if (eventType === "BG") service.send({ type: "CLICK.BACKGROUND", data: e })
 }
@@ -44,8 +43,7 @@ const deck = new Deck(network, container, service.send)
 setupSwitchPanel(deck)
 
 service.onTransition((state) => {
-  console.log(state)
-  console.log(state.changed)
+  //console.log(state.changed)
   if (state.event.type === "xstate.init") deck.init(data)
   else deck.render(state)
 });

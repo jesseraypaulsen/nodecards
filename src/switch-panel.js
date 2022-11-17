@@ -49,7 +49,7 @@ export function setupSwitchPanel(deck) {
 
   const physicsHandler = (e) => {
     const chkValue = e.target.checked;
-    chkValue ? deck.send(userEvent('PHYSICS.ON')) : deck.send(userEvent('PHYSICS.OFF'));
+    chkValue ? deck.send(userEvent('turnPhysicsOn')) : deck.send(userEvent('turnPhysicsOff'));
   }
 
   const persistHandler = (e) => {
