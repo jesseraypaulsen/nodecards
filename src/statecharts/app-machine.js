@@ -1,59 +1,9 @@
-import { createMachine, assign, spawn, send, sendParent } from 'xstate';
+import { createMachine, assign, spawn, send } from 'xstate';
+import { cardMachine } from './card-machine'
 
-
-const cardMachine = ({id,text,label}) => createMachine({
+export const appMachine = createMachine({
   predictableActionArguments: true,
-  id: 'nodecard',
-  initial: 'inert',
-  context: {
-    id,
-    label,
-    text
-  },
-  states: {
-    active: {
-      initial: 'read',
-      states: {
-        read: {
-          on: {
-            "SWITCH.EDIT": {
-              target: "edit"
-            }
-          }
-        },
-        edit: {
-          on: {
-            "SWITCH.READ": { target: 'read' }, // this transition can occur if deckMachine is in 'readOnly' or 'modifiable'.
-            TYPING: { 
-              actions: [
-                assign({ text: (context, event) => event.text }),
-                sendParent((context, event) => ({ type: "CARD.PERSIST", load: context }))
-              ]
-            }
-          }
-        }
-      },
-      on: {
-        BRANCH: {
-          actions: sendParent((context, event) => ({ type: "BRANCHBUTTON.CLICK", load: context }))
-        },
-        INERTIFY: {
-          target: 'inert'
-        },
-        DELETE: {}
-      }
-    },
-    inert: { // a nodecard can be inert when the deck is in any of the modes. if the deck is disabled, then all nodecard's become inert.
-      on: {
-        OPEN: { target: 'active' }
-      }
-    }
-  }
-})
-
-export const deckMachine = createMachine({
-  predictableActionArguments: true,
-  id: 'deck',
+  id: 'app',
   type: 'parallel',
   context: {
     cards: [],
@@ -66,7 +16,6 @@ export const deckMachine = createMachine({
       states: {
         active: {
           on: {
-            //"turnPhysicsOn": { target: "disabled" }, // switch deck to disabled mode if physics gets turned on
             "CARD.CLICK": {
               actions: (context, event) => {
                 const card = context.cards.find(card => event.id === card.id)
@@ -86,7 +35,7 @@ export const deckMachine = createMachine({
               }
             },
           },
-          entry: send({ type: "turnPhysicsOff", sentByUser: false }),  // switch physics off when deck is active
+          entry: send({ type: "turnPhysicsOff", sentByUser: false }),  // switch physics off when app is active
           states: {
             readOnly: {
               // popup buttons do not appear, each card's branch and edit buttons are disabled. 'edit' is not possible on cards.
@@ -180,7 +129,7 @@ export const deckMachine = createMachine({
               actions: 'createNewLink'
             },
             "INIT.COMPLETE": {
-              actions: send("DECK.READONLY")
+              actions: send("APP.READONLY")
             }
           }
         },
@@ -194,9 +143,9 @@ export const deckMachine = createMachine({
         } 
       },
       on: {
-        "DECK.READONLY": { target: 'mode.active.readOnly' },
-        "DECK.MODIFIABLE": { target: 'mode.active.modifiable' },
-        "DECK.DISABLE": { target: 'mode.disabled' }
+        "APP.READONLY": { target: 'mode.active.readOnly' },
+        "APP.MODIFIABLE": { target: 'mode.active.modifiable' },
+        "APP.DISABLE": { target: 'mode.disabled' }
       } //transitions are placed on the 'mode' state instead of its child states, since any state can transition to any other.
       //otherwise you have to duplicate transitions for each state.
     },
@@ -226,7 +175,7 @@ export const deckMachine = createMachine({
           on: {
             "turnPhysicsOff": { target: 'disabled' }
           },
-          entry: send({ type: "DECK.DISABLE", sentByUser: false })
+          entry: send({ type: "APP.DISABLE", sentByUser: false })
         },
         disabled: {
           on: {

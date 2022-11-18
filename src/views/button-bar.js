@@ -1,9 +1,9 @@
-import dragIcon from "../assets/icons/drag_indicator.png";
-import deleteIcon from "../assets/icons/delete_forever.png";
-import editIcon from "../assets/icons/edit.png";
-import editOffIcon from "../assets/icons/edit_off.png";
-import linkIcon from "../assets/icons/link.png";
-import inertifyIcon from "../assets/icons/swipe_down_alt.png";
+import dragIcon from "../../assets/icons/drag_indicator.png";
+import deleteIcon from "../../assets/icons/delete_forever.png";
+import editIcon from "../../assets/icons/edit.png";
+import editOffIcon from "../../assets/icons/edit_off.png";
+import linkIcon from "../../assets/icons/link.png";
+import inertifyIcon from "../../assets/icons/swipe_down_alt.png";
 
 function attachButtonBar(card, state) {
     
@@ -17,19 +17,22 @@ function attachButtonBar(card, state) {
     {
         name: "Edit",
         icon: editIcon,
-        handler: () => card.deck.send({ type: "CARD.EDIT", id: card.id }),
+        handler: () => {
+          console.log(card.id)
+          card.app.controllers.buttons.edit(card.id)
+        },
         active: true
     },
     {
         name: "Read Only",
         icon: editOffIcon,
-        handler: () => card.deck.send({ type: "CARD.READ", id: card.id }),
+        handler: () => card.app.controllers.buttons.read(card.id),
         active: true
     },
     {
         name: "Delete",
         icon: deleteIcon,
-        handler: () => card.deck.send({ type: "CARD.DELETE", id: card.id }),
+        handler: () => card.app.controllers.buttons.delete(card.id),
         active: true
     },
     {
@@ -41,7 +44,7 @@ function attachButtonBar(card, state) {
     {
         name: "Inertify",
         icon: inertifyIcon,
-        handler: () => card.deck.send({ type: "CARD.INERTIFY", id: card.id }),
+        handler: () => card.app.controllers.buttons.inertify(card.id),
         active: true
     }
   ]
@@ -84,7 +87,7 @@ function drag(e, card) {
   turnPhysicsOff(); // physics must be turned off for dragging to work.
   let move = true;
 
-  const container = card.deck.container;
+  const container = card.app.container;
   container.addEventListener("mouseup", (e) => {
       move = false;
   }, { once: true }); // the last arg removes event listener after it runs once
@@ -96,7 +99,7 @@ function drag(e, card) {
     if (move) {
       const pos = card.getNodeCenter()
 
-      card.deck.graphRenderer.moveNode(card.id, pos.canX + dx, pos.canY + dy);
+      card.app.graphRenderer.moveNode(card.id, pos.canX + dx, pos.canY + dy);
       card.setPosition(pos.domX + dx, pos.domY + dy);
       // using Nodecard.prototype.move() causes internal error in vis-network/BarnesHutSolver.js,"too much recursion"
     } else {

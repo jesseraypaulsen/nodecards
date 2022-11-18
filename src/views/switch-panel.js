@@ -1,7 +1,7 @@
-export function setupSwitchPanel(deck) {
+export function setupSwitchPanel(app) {
   const cp = document.createElement("div");
   cp.classList.add("control-panel");
-  deck.container.append(cp);
+  app.container.append(cp);
 
   cp.innerHTML = `
     <div class="cp-dropdown-btn">&#9881;</div>
@@ -19,10 +19,10 @@ export function setupSwitchPanel(deck) {
         <span class="toggler-switch">Physics</span>
       </label>
 
-      <select class="deck-modes">
-        <option value="DECK.READONLY">Read Only</option>
-        <option value="DECK.MODIFIABLE">Modify</option>
-        <option value="DECK.DISABLE">Disable</option>
+      <select class="app-modes">
+        <option value="APP.READONLY">Read Only</option>
+        <option value="APP.MODIFIABLE">Modify</option>
+        <option value="APP.DISABLE">Disable</option>
       </select>
 
     </div>
@@ -33,7 +33,7 @@ export function setupSwitchPanel(deck) {
   const dropDownButton = document.querySelector(".cp-dropdown-btn");
   const physicsSwitch = document.querySelector(".physics").firstElementChild;
   const persistSwitch = document.querySelector(".persist").firstElementChild;
-  const selectMode = document.querySelector(".deck-modes");
+  const selectMode = document.querySelector(".app-modes");
  
   const closeHandler = (e) => {
     dropDownButton.style.display = "block";
@@ -45,20 +45,16 @@ export function setupSwitchPanel(deck) {
     e.target.style.display = "none";
   }
 
-  const userEvent = (type) => ({ type, sentByUser: true })
-
   const physicsHandler = (e) => {
-    const chkValue = e.target.checked;
-    chkValue ? deck.send(userEvent('turnPhysicsOn')) : deck.send(userEvent('turnPhysicsOff'));
+    app.controllers.panel.physics(e)
   }
 
   const persistHandler = (e) => {
-    const chkValue = e.target.checked;
-    chkValue ? deck.send('PERSIST.ON') : deck.send('PERSIST.OFF');
+    app.controllers.panel.persist(e)
   };
 
   const selectHandler = (e) => {
-    deck.send(userEvent(e.target.value))
+    app.controllers.panel.select(e)
   }
 
   closeButton.addEventListener('click', closeHandler);
