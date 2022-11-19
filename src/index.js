@@ -20,8 +20,8 @@ const network = new vis.Network(container, {}, options);
 
 const service = interpret(appMachine);
 
-const controller = graphController(service.send)
-network.on("click", controller)
+const gc = graphController(service.send)
+network.on("click", gc)
 
 const data = { 
   cards: [
@@ -36,8 +36,8 @@ const data = {
   ]
 };
 
-const controllers = domControllers(service.send)
-const app = new App(network, container, service.send, controllers)
+const dc = domControllers(service.send)
+const app = new App(network, container, service.send, dc)
 setupSwitchPanel(app)
 
 service.onTransition((state) => {

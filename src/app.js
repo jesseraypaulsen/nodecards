@@ -104,19 +104,26 @@ export default class App {
       const card = this.nodecards.find(
         (card) => card.id === childState.context.id
       );
-
-      if (childEvent.type === "OPEN") card.open(childState);
+      if (childEvent.type === "cardActivated") {
+        const { x, y } = childEvent;
+        const nestedState = childState.value.active;
+        const text = childState.context.text;
+        card.open({ x, y, nestedState, text })
+      }
 
       if (childState.value === "inert") card.inertify(childState);
 
       if (
         childEvent.type === "SWITCH.EDIT" ||
         childEvent.type === "SWITCH.READ"
-      )
-        card.renderState(childState);
-      /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
-        So evaluating the event type is necessary, because we only want to renderState when there's a change. 
-        state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
+      ) {
+        const nestedState = childState.value.active;
+        const text = childState.context.text;
+        card.renderState(nestedState, text);
+        /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
+          So evaluating the event type is necessary, because we only want to renderState when there's a change. 
+          state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
+      }
 
       if (childEvent.type === "TYPING") card.updateEditor(childEvent); // controlled element
 
@@ -195,6 +202,6 @@ export default class App {
  - bug: turning physics on when a nodecard is active generates console error. Caused by a redundant "turnPhysicsOn" transition on mode.active. 
  Removing it fixes the problem. (DONE)
 
-
+ - extract getNodeCenter call (a method from the vis-network api) from out of the nodecard's view (ie, the open method)
   
 */

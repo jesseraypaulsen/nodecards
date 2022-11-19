@@ -1,4 +1,5 @@
 import { createMachine, assign, sendParent } from 'xstate';
+import { send } from 'xstate/lib/actions';
 
 export const cardMachine = ({id,text,label}) => createMachine({
   predictableActionArguments: true,
@@ -12,6 +13,7 @@ export const cardMachine = ({id,text,label}) => createMachine({
   states: {
     active: {
       initial: 'read',
+      entry: [(_,e) => console.log(e), send((_, { x, y }) => ({ type: "cardActivated", x, y }))],
       states: {
         read: {
           on: {

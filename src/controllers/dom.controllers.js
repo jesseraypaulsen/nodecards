@@ -27,10 +27,7 @@ export function domControllers(send) {
   }
 
   const buttons = {
-    edit: (id) => { 
-      console.log(id)
-      send({ type: "CARD.EDIT", id }) 
-    },
+    edit: (id) => send({ type: "CARD.EDIT", id }),
     read: (id) => send({ type: "CARD.READ", id }),
     delete: (id) => send({ type: "CARD.DELETE", id }),
     inertify: (id) => send({ type: "CARD.INERTIFY", id }),

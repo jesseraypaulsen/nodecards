@@ -165,18 +165,15 @@ const centerpoint = (element) => {
 const synchronizeSwitchPanelWithState = (event) => {
 
   //like "controlled components", their internal state should be in sync with app state
-
-  const selectElement = qs(".app-modes");
-  const toggleElement = qs(".physics").firstElementChild;
   
   if (event.type === "turnPhysicsOff" && !event.sentByUser) {
     //not sent by user! change toggler to reflect the state!
-    toggleElement.checked = false;
+    qs('.physics').checked = false;
   }
 
   if (event.type === "APP.DISABLE" && !event.sentByUser) {
     //not sent by user! change value of select element to reflect the state!
-    selectElement.value = "APP.DISABLE";
+    qs('.app-modes').value = "APP.DISABLE";
   }
 
 }

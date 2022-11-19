@@ -1,5 +1,5 @@
 //import { removeElement, collapse } from './dom'
-//import { createNode, createEdge, removeNode, moveNode } from './graph'
+//import { createNode, createEdge, removeNode, moveNode, updateNode } from './graph'
 
 function nodecard() {
 

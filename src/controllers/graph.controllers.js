@@ -8,7 +8,12 @@ export const graphController = (send) => {
       send({ type: "CLICK.BACKGROUND", data: e })
     },
     NC: (e) => {
-      send({ type: "CARD.CLICK", id: e.nodes[0] })      
+      send({ 
+        type: "CARD.CLICK", 
+        id: e.nodes[0],
+        x: e.pointer.DOM.x,
+        y: e.pointer.DOM.y
+      })      
     }
   }
 

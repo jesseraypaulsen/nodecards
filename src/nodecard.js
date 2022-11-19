@@ -11,20 +11,19 @@ export default class Nodecard {
 
   // methods that operate on the DOM exclusively
 
-  open(state) {
+  open({ x, y, nestedState, text }) {
     this.domElement = document.createElement("div");
     this.domElement.classList.add("nodecard", "expand");
-    this.renderState(state);
+
+    this.renderState(nestedState, text);
     this.app.container.append(this.domElement);
-    const { domX, domY } = this.getNodeCenter();
-    this.app.setPosition(this.domElement, domX, domY);
+    //const { domX, domY } = this.getNodeCenter();
+    this.app.setPosition(this.domElement, x, y);
   }
   
-  renderState(state) {
-    const active = state.value.active;
-    const text = state.context.text;
-
-    const view = this[active](text);
+  renderState(state, text) {
+ 
+    const view = this[state](text);
 
     if (this.domElement.hasChildNodes()) {
       let child = this.domElement.firstElementChild;
@@ -33,7 +32,7 @@ export default class Nodecard {
       this.domElement.append(view);
     }
 
-    attachButtonBar(this, active);
+    attachButtonBar(this, state);
   }
   
   read(text) {

@@ -17,9 +17,9 @@ export const appMachine = createMachine({
         active: {
           on: {
             "CARD.CLICK": {
-              actions: (context, event) => {
-                const card = context.cards.find(card => event.id === card.id)
-                card.ref.send({ type: "OPEN" })
+              actions: (context, { id, x, y }) => {
+                const card = context.cards.find(card => id === card.id)
+                card.ref.send({ type: "OPEN", x, y })
               }
             },
             "CARD.INERTIFY": {
