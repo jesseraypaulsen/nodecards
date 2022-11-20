@@ -1,4 +1,7 @@
 import Nodecard from "./nodecard";
+import { qs, render, setPosition, openPrompt, closePrompt, synchPanel } from './views/dom';
+import { graphController } from './controllers/graph.controllers';
+import { domControllers } from "./controllers/dom.controllers";
 
 export default class App {
   constructor(graphRenderer, container, send, controllers) {
@@ -32,7 +35,7 @@ export default class App {
 
   createCard({ id, label }) {
     this.graphRenderer.body.data.nodes.add({ id, label });
-    const card = new Nodecard(id, this);
+    const card = new Nodecard(this);
     this.nodecards.push(card);
   }
   
@@ -42,92 +45,40 @@ export default class App {
   }
 
   // DOM methods
-
-  openPrompt(event) {
-    const { x, y } = event.data.pointer.DOM;
-    const prompt = document.createElement("div");
-    prompt.innerHTML = `<span>x</span><span>Create Card</span>`
-    prompt.classList.add("creation-prompt");
-    this.container.append(prompt); //append must occur before setPosition
-    this.setPosition(prompt, x, y)
-    prompt.firstElementChild.addEventListener('click', () => this.send('CLOSE.PROMPT'))
-  }
-
-  closePrompt() {
-    const prompt = document.querySelector(".creation-prompt");
-    if (prompt) prompt.remove();
-  }
-
-  setPosition(element, x, y) {
-    let width = parseInt(
-      getComputedStyle(element).width.substring(0, 3)
-    );
-    let height = parseInt(
-      getComputedStyle(element).height.substring(0, 3)
-    );
-    element.style.left = x - width / 2 + "px";
-    element.style.top = y - height / 2 + "px";
-  }
-
-  /* Finds the center point of an element relative to its offsetParent property. 
-    Useful for corroborating setPosition values.
-    DO NOT DELETE, even if it's not currently being used!! */
-  centerpoint(element) {
-    let centerX = element.offsetLeft + element.offsetWidth / 2;
-    let centerY = element.offsetTop + element.offsetHeight / 2;
-    console.log(`centerX: ${centerX} / centerY: ${centerY}`);
-    // output should be equal to click event coordinates
-  }
-
-  
-  synchronizeSwitchPanelWithState(event) {
-    //like "controlled components", their internal state should be in sync with app state
-    const selectElement = this.container.querySelector(".app-modes");
-    const toggleElement =
-    this.container.querySelector(".physics").firstElementChild;
-    
-    if (event.type === "turnPhysicsOff" && !event.sentByUser) {
-      //not sent by user! change toggler to reflect the state!
-      toggleElement.checked = false;
-    }
-    if (event.type === "APP.DISABLE" && !event.sentByUser) {
-      //not sent by user! change value of select element to reflect the state!
-      selectElement.value = "APP.DISABLE";
-    }
-  }
   
   renderNodecard(childState) {
     const childEvent = childState.event;
+    const { id, label, text } = childState.context;
 
     if (childEvent.type === "xstate.init") this.createCard(childState.context);
     else {
-      const card = this.nodecards.find(
-        (card) => card.id === childState.context.id
-      );
+      // const card = this.nodecards.find(
+      //   (card) => card.id === id
+      // );
+      const card = this.nodecards[0];
       if (childEvent.type === "cardActivated") {
         const { x, y } = childEvent;
         const nestedState = childState.value.active;
-        const text = childState.context.text;
-        card.open({ x, y, nestedState, text })
+        card.open({ id, x, y, nestedState, text })
       }
 
-      if (childState.value === "inert") card.inertify(childState);
+      if (childState.value === "inert") card.inertify(label, id);
 
       if (
         childEvent.type === "SWITCH.EDIT" ||
         childEvent.type === "SWITCH.READ"
       ) {
         const nestedState = childState.value.active;
-        const text = childState.context.text;
-        card.renderState(nestedState, text);
+        //const text = childState.context.text;
+        card.renderState(nestedState, text, id);
         /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
           So evaluating the event type is necessary, because we only want to renderState when there's a change. 
           state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
       }
 
-      if (childEvent.type === "TYPING") card.updateEditor(childEvent); // controlled element
+      if (childEvent.type === "TYPING") card.updateEditor(childEvent.text, id); // controlled element
 
-      if (childEvent.type === "DELETE") card.discard();
+      if (childEvent.type === "DELETE") card.discard(id);
     }
   }
 
@@ -135,7 +86,7 @@ export default class App {
 
     const event = state.event;
 
-    this.synchronizeSwitchPanelWithState(event);
+    synchPanel(event);
 
     // child state updates enabled by {sync: true} arg to spawn()
     if (event.type === "xstate.update") this.renderNodecard(event.state);
@@ -155,11 +106,11 @@ export default class App {
 
     } else if (event.type === "openPrompt") {
 
-      this.openPrompt(event)
+      openPrompt(event, this.controllers.prompt.close)
 
     } else if (event.type === "closePrompt") {
 
-      this.closePrompt()
+      closePrompt()
 
     }
   }
@@ -177,6 +128,13 @@ export default class App {
 
  - delete button (DONE)
 
+ - bug: turning physics on when a nodecard is active generates console error. Caused by a redundant "turnPhysicsOn" transition on mode.active. 
+ Removing it fixes the problem. (DONE)
+
+ - extract getNodeCenter call (a method that wraps vis-network api calls) from out of the dom view (DONE)
+
+ - popup prompt for creating cards, along with a corresponding state (DONE)
+
  - when the app mode is "active.readOnly" the button should be disabled
  
  - fix: prevent second click on node causing duplicate nodecard elements
@@ -189,7 +147,6 @@ export default class App {
 
  - user creation of new cards and links
 
- - popup prompt for creating cards, along with a corresponding state
 
  - (maybe) try to make method names correspond to state values to obviate the jungle of conditionals in app.render, 
   eg read,edit,inert => card[state.value] 
@@ -199,9 +156,7 @@ export default class App {
  - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify,
    two prompts are open at once.
 
- - bug: turning physics on when a nodecard is active generates console error. Caused by a redundant "turnPhysicsOn" transition on mode.active. 
- Removing it fixes the problem. (DONE)
-
- - extract getNodeCenter call (a method from the vis-network api) from out of the nodecard's view (ie, the open method)
+ - bug: clicking edges generates error
   
+ - create function that processes state data for render function
 */

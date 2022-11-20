@@ -13,7 +13,7 @@ export const cardMachine = ({id,text,label}) => createMachine({
   states: {
     active: {
       initial: 'read',
-      entry: [(_,e) => console.log(e), send((_, { x, y }) => ({ type: "cardActivated", x, y }))],
+      entry: send((_, { x, y }) => ({ type: "cardActivated", x, y })),
       states: {
         read: {
           on: {

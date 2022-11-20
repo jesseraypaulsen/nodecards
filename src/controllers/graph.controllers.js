@@ -5,7 +5,11 @@ export const graphController = (send) => {
 
   const handlers = { 
     BG: (e) => {
-      send({ type: "CLICK.BACKGROUND", data: e })
+      send({ 
+        type: "CLICK.BACKGROUND", 
+        x: e.pointer.DOM.x,
+        y: e.pointer.DOM.y
+      })
     },
     NC: (e) => {
       send({ 

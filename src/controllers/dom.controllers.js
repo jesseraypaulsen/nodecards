@@ -33,6 +33,11 @@ export function domControllers(send) {
     inertify: (id) => send({ type: "CARD.INERTIFY", id }),
   }
 
-  return { editor, panel, buttons }
+  const prompt = {
+    close: () => send({ type: "CLOSE.PROMPT" })
+    // "open" is triggered by the graph controller
+  }
+
+  return { editor, panel, buttons, prompt }
 }
 

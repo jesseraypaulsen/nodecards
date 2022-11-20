@@ -66,7 +66,7 @@ export const appMachine = createMachine({
                   }
                 },
                 cardcreation: {
-                  entry: send((_,{data}) => ({ type: "openPrompt", data })),
+                  entry: send((_, { x, y }) => ({ type: "openPrompt", x, y })),
                   on: {
                     "CLICK.BACKGROUND": {
                       target: "regular",

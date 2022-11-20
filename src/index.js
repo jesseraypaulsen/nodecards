@@ -1,6 +1,5 @@
 import { options } from "./options";
 import * as vis from "vis-network";
-import { typeofSelection } from "./utils";
 import { interpret } from 'xstate';
 import { appMachine } from "./statecharts/app-machine"
 import App from './app'
@@ -21,7 +20,13 @@ const network = new vis.Network(container, {}, options);
 const service = interpret(appMachine);
 
 const gc = graphController(service.send)
+const dc = domControllers(service.send)
+
 network.on("click", gc)
+
+const app = new App(network, container, service.send, dc)
+
+setupSwitchPanel(dc)
 
 const data = { 
   cards: [
@@ -36,9 +41,6 @@ const data = {
   ]
 };
 
-const dc = domControllers(service.send)
-const app = new App(network, container, service.send, dc)
-setupSwitchPanel(app)
 
 service.onTransition((state) => {
   //console.log(state.changed)

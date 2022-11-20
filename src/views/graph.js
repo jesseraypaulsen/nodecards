@@ -65,7 +65,7 @@ const updateNode = (id) => {
 
 }
 
-const setPhysics = (value) => {
+export const setPhysics = (value) => {
   const options = { physics: { enabled: value } };
   network.setOptions(options);
 }

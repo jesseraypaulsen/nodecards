@@ -1,52 +1,57 @@
-const qs = (id) => document.querySelector(id)
-const render = (el) => qs('#container').append(el)
+export const qs = (sel) => document.querySelector(sel)
+
+export const render = (el, container) => { 
+  if (!container) container = qs('#container');
+  container.append(el)
+}
+
+export const div = (...args) => {
+  const el = document.createElement("div");
+  el.classList.add(...args)
+  return el;
+}
 
 // for combo functions
 
 // for discard and inertify>collapse
 
-const removeElement = (id) => {
+export const removeElement = (id) => {
   qs(id).remove();
 }
 
 // for cards
 
-const open = (state) => {
+export const expand = (state) => {
 
-  // expand
   const el = document.createElement("div");
   el.classList.add("nodecard", "expand");
-
-  // crossing into graph territory
-  const { domX, domY } = getNodeCenter(id);
+  el.id = state.context.id;
   
   setPosition(el, domX, domY);
 
-  this.fillElement(el, state);
+  fillElement(el, state);
 
   render(el);
 }
 
-const fillElement = (el, state) => {
+export const fillElement = (el, state) => {
 
-  const active = state.value.active;
-  const text = state.context.text;
+  const choice = chooseView(state, text);
 
-  const choice = chooseView(active, text);
-
+  insertView(el, choice);
   
-  if (el.hasChildNodes())
+  attachButtonBar(this, state);
   
-    el.firstElementChild.replaceWith(choice);
-    
-    else 
+}
 
-    el.append(choice);
+const insertView = (parent, view) => {
+  if (parent.hasChildNodes())
+  
+    parent.firstElementChild.replaceWith(view);
     
-    
-    
-  attachButtonBar(this, active);
-    
+  else 
+  
+  render(parent, view);
 }
 
 const chooseView = (state, text) => {
@@ -63,7 +68,7 @@ const chooseView = (state, text) => {
       editor.classList.add("editor");
       editor.value = text;
       editor.addEventListener('input', (e) => {
-        this.app.send({ type: "CARD.EDIT.TYPING", text: e.target.value, id: this.id })
+        this.app.controllers.editor(e, this.id)
       })
       return editor;
     }
@@ -73,7 +78,7 @@ const chooseView = (state, text) => {
 
 }
 
-const updateEditor = (event) => {
+export const updateEditor = (event) => {
 
   //TODO: get id from XState event
 
@@ -93,7 +98,7 @@ const htmlText = (text) => {
 }
 
 // for inertify
-const collapse = (id) => {
+export const collapse = (id) => {
   qs(id).replace("expand", "contract")
       
   // delay the removal of the DOM element, otherwise the contract animation doesn't occur
@@ -104,10 +109,7 @@ const collapse = (id) => {
 
 // peripherals
 
-const openPrompt = (event) => {
-  
-  // TODO: mediate graph event thru controller
-  const { x, y } = event.data.pointer.DOM;
+export const openPrompt = ({ x, y }, controller) => {
 
   const prompt = document.createElement("div");
   prompt.classList.add("creation-prompt");
@@ -118,11 +120,11 @@ const openPrompt = (event) => {
 
   setPosition(prompt, x, y)
 
-  prompt.firstElementChild.addEventListener('click', () => this.send('CLOSE.PROMPT'))
+  prompt.firstElementChild.addEventListener('click', () => controller())
 
 }
 
-const closePrompt = () => {
+export const closePrompt = () => {
 
   const prompt = qs(".creation-prompt");
 
@@ -130,7 +132,7 @@ const closePrompt = () => {
 
 }
 
-const setPosition = (element, x, y) => {
+export const setPosition = (element, x, y) => {
 
   let width = parseInt(
     getComputedStyle(element).width.substring(0, 3)
@@ -149,7 +151,7 @@ const setPosition = (element, x, y) => {
 /* Finds the center point of an element relative to its offsetParent property. 
   Useful for corroborating setPosition values.
   DO NOT DELETE, even if it's not currently being used!! */
-const centerpoint = (element) => {
+export const centerpoint = (element) => {
 
   let centerX = element.offsetLeft + element.offsetWidth / 2;
 
@@ -162,13 +164,13 @@ const centerpoint = (element) => {
 }
 
 
-const synchronizeSwitchPanelWithState = (event) => {
+export const synchPanel = (event) => {
 
   //like "controlled components", their internal state should be in sync with app state
   
   if (event.type === "turnPhysicsOff" && !event.sentByUser) {
     //not sent by user! change toggler to reflect the state!
-    qs('.physics').checked = false;
+    qs('.physics').firstElementChild.checked = false;
   }
 
   if (event.type === "APP.DISABLE" && !event.sentByUser) {

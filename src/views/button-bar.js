@@ -1,3 +1,4 @@
+import { qs, render, setPosition } from './dom'
 import dragIcon from "../../assets/icons/drag_indicator.png";
 import deleteIcon from "../../assets/icons/delete_forever.png";
 import editIcon from "../../assets/icons/edit.png";
@@ -5,78 +6,82 @@ import editOffIcon from "../../assets/icons/edit_off.png";
 import linkIcon from "../../assets/icons/link.png";
 import inertifyIcon from "../../assets/icons/swipe_down_alt.png";
 
-function attachButtonBar(card, state) {
+function createButtonBar(id, state, source, controllers) {
     
   const buttonData = [
     {
         name: "Drag",
         icon: dragIcon,
-        handler: (e) => drag(e, card),
+        handler: (e) => drag(e),
         active: true
     },
     {
         name: "Edit",
         icon: editIcon,
-        handler: () => {
-          console.log(card.id)
-          card.app.controllers.buttons.edit(card.id)
-        },
+        handler: () => controllers.buttons.edit(id),
         active: true
     },
     {
         name: "Read Only",
         icon: editOffIcon,
-        handler: () => card.app.controllers.buttons.read(card.id),
+        handler: () => controllers.buttons.read(id),
         active: true
     },
     {
         name: "Delete",
         icon: deleteIcon,
-        handler: () => card.app.controllers.buttons.delete(card.id),
+        handler: () => controllers.buttons.delete(id),
         active: true
     },
     {
         name: "Source",
         icon: linkIcon,
-        handler: (e) => source(card),
-        active: card.webSource ? true : false
-    },
-    {
+        handler: () => source ? open(source, "_blank") : null,
+        active: source ? true : false
+      },
+      {
         name: "Inertify",
         icon: inertifyIcon,
-        handler: () => card.app.controllers.buttons.inertify(card.id),
+        handler: () => controllers.buttons.inertify(id),
         active: true
-    }
-  ]
-  
+      }
+    ]
+    
+
   const buttonBar = document.createElement("div");
   buttonBar.classList.add("button-bar");
 
   let buttons;
+
   if (state == "read") buttons = [0, 1, 3, 4, 5].map((i) => createButton(buttonData[i]));
   else if (state == "edit") buttons = [0, 2, 3, 4, 5].map((i) => createButton(buttonData[i]));
+
   buttonBar.append(...buttons);
+
+  return buttonBar;
   
-  if (card.domElement.lastElementChild.classList.contains("button-bar")) {
-    card.domElement.lastElementChild.remove();
-  }
-  card.domElement.append(buttonBar);
 }
 
 function createButton(obj) {
+
   const button = document.createElement("span");
   button.classList.add("button");
+
   let img = document.createElement('img');
   img.src = obj.icon;
   button.appendChild(img);
 
   if (!obj.active) button.classList.add("inactive")
+
   let eventType = "click";
+
   if (obj.name == "Drag") {
       eventType = "mousedown";
       button.style.cursor = "grab";
   }
+
   //const eventType = obj.name == "Drag" ? "mousedown" : "click";
+
   button.addEventListener(eventType, obj.handler);
 
   return button;
@@ -108,9 +113,6 @@ function drag(e, card) {
   }
 }
 
-function source(card) {
-    if (card.webSource) open(card.webSource, "_blank");
-}
 
 
-export default attachButtonBar;
+export default createButtonBar;

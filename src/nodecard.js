@@ -1,38 +1,48 @@
-import attachButtonBar from "./views/button-bar.js";
+import createButtonBar from "./views/button-bar.js";
+import { qs, render, setPosition } from './views/dom'
 
 export default class Nodecard {
-  constructor(id, app) {
-    this.id = id;
-    this.domElement = null;
+  constructor(app) {
     this.app = app;
-    this.type = null; // block-card, page-card, table-card
-    this.roles = []; // one for each context (ie app)
   }
 
   // methods that operate on the DOM exclusively
 
-  open({ x, y, nestedState, text }) {
-    this.domElement = document.createElement("div");
-    this.domElement.classList.add("nodecard", "expand");
+  open({ id, x, y, nestedState, text }) {
+    const el = document.createElement("div");
+    el.classList.add("nodecard", "expand");
+    el.id = id;
 
-    this.renderState(nestedState, text);
-    this.app.container.append(this.domElement);
-    //const { domX, domY } = this.getNodeCenter();
-    this.app.setPosition(this.domElement, x, y);
+    render(el)
+    this.renderState(nestedState, text, id);
+
+    setPosition(el, x, y);
   }
   
-  renderState(state, text) {
+  renderState(state, text, id) {
  
-    const view = this[state](text);
+    const view = this[state](text, id);
+    console.log(state)
 
-    if (this.domElement.hasChildNodes()) {
-      let child = this.domElement.firstElementChild;
+    const parent = qs('#' + id);
+    
+    if (parent.hasChildNodes()) {
+      let child = parent.firstElementChild;
       child.replaceWith(view);
     } else {
-      this.domElement.append(view);
+      parent.append(view);
+    }
+    
+    //TODO: add source argument
+    const source = null;
+    const bar = createButtonBar(id, state, source, this.app.controllers)
+
+    if (parent.lastElementChild.classList.contains("button-bar")) {
+      parent.lastElementChild.remove();
     }
 
-    attachButtonBar(this, state);
+    render(bar, parent)
+
   }
   
   read(text) {
@@ -42,18 +52,18 @@ export default class Nodecard {
     return reader;
   }
   
-  edit(text) {
+  edit(text, id) {
     const editor = document.createElement("textarea");
     editor.classList.add("editor");
     editor.value = text;
     editor.addEventListener('input', (e) => {
-      this.app.controllers.editor(e, this.id)
+      this.app.controllers.editor(e, id)
     })
     return editor;
   }
   
-  updateEditor(event) {
-    this.domElement.firstElementChild.value = event.text;
+  updateEditor(text, id) {
+    qs('#' + id).firstElementChild.value = text;
   }
   
   htmlText(text) {
@@ -66,33 +76,33 @@ export default class Nodecard {
   
   // methods that bridge the DOM and graph renderer
 
-  getNodeCenter() {
-    let canvas = this.app.graphRenderer.getPosition(this.id);
+  getNodeCenter(id) {
+    let canvas = this.app.graphRenderer.getPosition(id);
     let dom = this.app.graphRenderer.canvasToDOM({ x: canvas.x, y: canvas.y });
     return { canX: canvas.x, canY: canvas.y, domX: dom.x, domY: dom.y };
   }
   
-  move({ domX, domY, canX, canY }) {
-    this.app.graphRenderer.moveNode(this.id, canX, canY);
-    this.app.setPosition(this.domElement, domX, domY);
+  move(id, { domX, domY, canX, canY }) {
+    this.app.graphRenderer.moveNode(id, canX, canY);
+    setPosition(this.domElement, domX, domY);
   }
 
-  inertify(state) {
-    if (this.domElement) {
+  inertify(label, id) {
+    const el = qs('#' + id);
+    if (el) {
       
-      this.domElement.classList.replace("expand", "contract")
+      el.classList.replace("expand", "contract")
       
       // delay the removal of the DOM element, otherwise the contract animation doesn't occur
       setTimeout(() => {
-        this.domElement.remove();
-        this.domElement = null;
+        el.remove();
       }, 600);
     }
 
     // TODO: find out if this necessary or not
     this.app.graphRenderer.body.data.nodes.update({
-      id: this.id,
-      label: state.context.label,
+      id,
+      label,
       shape: "box",
       //font: this.canvasFont,
       shadow: true,
@@ -100,18 +110,19 @@ export default class Nodecard {
     });
   }
 
-  discard() {
+  discard(id) {
     // Note: The CARD.DELETE transition deletes the card's data from the state machine's context before this method is called.
 
     //remove element from dom
-    this.domElement.remove();
+    //this.domElement.remove();
+    qs('#' + id).remove();
 
     //remove node from renderer
-    this.app.graphRenderer.body.data.nodes.remove(this.id);
+    this.app.graphRenderer.body.data.nodes.remove(id);
 
     //remove card from app
     this.app.nodecards.forEach((n, i) => {
-      if (n.id === this.id) {
+      if (n.id === id) {
         this.app.nodecards.splice(i, 1);
       }
     });
