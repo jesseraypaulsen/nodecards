@@ -1,39 +1,66 @@
-//import { removeElement, collapse } from './dom'
-//import { createNode, createEdge, removeNode, moveNode, updateNode } from './graph'
+import graphViews from './graph';
+import domViews from './dom';
 
-function nodecard() {
+export default function nodecardViews(graphAPI, domControllers) {
 
-  const createCard = ({id, label}) => {
+  const { collapse, expand, removeElement, setPosition, fillElement, synchPanel, openPrompt, closePrompt, updateEditor } = domViews(domControllers);
+  const { createNode, createEdge, moveNode, removeNode, setPhysics } = graphViews(graphAPI);
+
+  const createCard = (id, label) => {
+
     createNode(id, label)
+
   }
 
-  const createLink = ({id, label, to, from}) => {
-    createEdge(id,label,to,from)
+  const createLink = ({ id, label, from, to }) => {
+
+    createEdge( id, label, from, to)
+
   }
 
-
-
-  // bridging functions
-
-  // for drag?
   const move = (id) => {
+
     moveNode(id)
-    setPosition(id)
+
+    setPosition(qs('#' + id))
+
   }
 
   
   const discard = (id) => {
+
     removeNode(id)
-    removeElement(id)
+
+    removeElement('#' + id)
+
   }
 
   const inertify = (id) => {
+
     collapse(id)
+
     //updateNode(id)
+
+  }
+
+  
+  const expandCard = ({ id, x, y, nestedState, text }) => {
+
+    expand({ id, x, y, nestedState, text })
+
   }
   
-  return (state) => {
-    // get id from state context.
-    // render by state.
+  return { 
+    createCard, 
+    createLink,
+    discard, 
+    inertify, 
+    expandCard, 
+    fillElement,
+    synchPanel,
+    openPrompt,
+    closePrompt,
+    updateEditor,
+    setPhysics
   }
 }

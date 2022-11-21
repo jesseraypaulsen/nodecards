@@ -6,8 +6,14 @@ import editOffIcon from "../../assets/icons/edit_off.png";
 import linkIcon from "../../assets/icons/link.png";
 import inertifyIcon from "../../assets/icons/swipe_down_alt.png";
 
-function createButtonBar(id, state, source, controllers) {
+function createButtonBar(state, source, controllers) {
     
+  const wrapController = (e, controller) => {
+    const parent = e.target.parentElement.parentElement.parentElement;
+    console.log(parent.id)
+    controller(parent.id)
+  }
+
   const buttonData = [
     {
         name: "Drag",
@@ -18,31 +24,31 @@ function createButtonBar(id, state, source, controllers) {
     {
         name: "Edit",
         icon: editIcon,
-        handler: () => controllers.buttons.edit(id),
+        handler: (e) => wrapController(e, controllers.buttons.edit),
         active: true
     },
     {
         name: "Read Only",
         icon: editOffIcon,
-        handler: () => controllers.buttons.read(id),
+        handler: (e) => wrapController(e, controllers.buttons.read),
         active: true
     },
     {
         name: "Delete",
         icon: deleteIcon,
-        handler: () => controllers.buttons.delete(id),
+        handler: (e) => wrapController(e, controllers.buttons.delete),
         active: true
     },
     {
         name: "Source",
         icon: linkIcon,
-        handler: () => source ? open(source, "_blank") : null,
+        handler: (e) => source ? open(source, "_blank") : null,
         active: source ? true : false
       },
       {
         name: "Inertify",
         icon: inertifyIcon,
-        handler: () => controllers.buttons.inertify(id),
+        handler: (e) => wrapController(e, controllers.buttons.inertify),
         active: true
       }
     ]

@@ -1,8 +1,8 @@
-import { qs, render } from "./dom";
+import { qs, render, div } from "./dom-helpers";
 
 export function setupSwitchPanel(controllers) {
-  const cp = document.createElement("div");
-  cp.classList.add("control-panel");
+
+  const cp = div("control-panel");
   
   const obj = {
     "cp-dropdown-btn": [
@@ -22,21 +22,21 @@ export function setupSwitchPanel(controllers) {
     "persist": [
       'change', 
       (e) => {
-        controllers.panel.persist(e)
+        controllers.persist(e)
       }, 
       true
     ],
     "physics": [
       'change', 
       (e) => {
-        controllers.panel.physics(e)
+        controllers.physics(e)
       }, 
       true
     ],
     "app-modes": [
       'change', 
       (e) => {
-        controllers.panel.select(e)
+        controllers.select(e)
       }
     ]
   }

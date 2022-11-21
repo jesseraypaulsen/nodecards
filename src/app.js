@@ -1,68 +1,47 @@
-import Nodecard from "./nodecard";
-import { qs, render, setPosition, openPrompt, closePrompt, synchPanel } from './views/dom';
-import { graphController } from './controllers/graph.controllers';
-import { domControllers } from "./controllers/dom.controllers";
 
-export default class App {
-  constructor(graphRenderer, container, send, controllers) {
-    this.graphRenderer = graphRenderer;
-    this.container = container;
-    this.send = send;
-    this.nodecards = [];
-    this.links = [];
-    this.decks = [];
-    this.controllers = controllers;
-  }
+export default function App(nodecardViews, send) {
+  const { 
+    createCard, 
+    createLink,
+    discard, 
+    inertify, 
+    expandCard, 
+    fillElement, 
+    synchPanel,
+    setPhysics,
+    openPrompt,
+    closePrompt,
+    updateEditor
+  } = nodecardViews;
 
-  // TODO: 'invoke' in XState
-  init(data) {
+  // TODO: 'invoke' data calls from XState?
+
+  const init = (data) => {
     data.cards.map(({ id, label, text }) => {
-      this.send({ type: "CREATECARD", id, label, text });
+      send({ type: "CREATECARD", id, label, text });
     });
     data.links.map(({ id, label, from, to }) => {
-      this.send({ type: "CREATELINK", id, label, from, to });
+      send({ type: "CREATELINK", id, label, from, to });
     });
     setTimeout(() => {
-      this.send({ type: "INIT.COMPLETE" });
+      send({ type: "INIT.COMPLETE" });
     }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
   }
-
-  // the only method exclusive to the graph renderer
-  setPhysics(value) {
-    const options = { physics: { enabled: value } };
-    this.graphRenderer.setOptions(options);
-  }
-
-  createCard({ id, label }) {
-    this.graphRenderer.body.data.nodes.add({ id, label });
-    const card = new Nodecard(this);
-    this.nodecards.push(card);
-  }
   
-  createLink({ id, label, to, from }) {
-    this.graphRenderer.body.data.edges.add({ id, label, from, to });
-    this.links.push({ id, label, from, to });
-  }
-
-  // DOM methods
-  
-  renderNodecard(childState) {
+  const renderNodecard = (childState) => {
     const childEvent = childState.event;
-    const { id, label, text } = childState.context;
+    let { id, label, text } = childState.context;
 
-    if (childEvent.type === "xstate.init") this.createCard(childState.context);
+    if (childEvent.type === "xstate.init") createCard(id, label);
     else {
-      // const card = this.nodecards.find(
-      //   (card) => card.id === id
-      // );
-      const card = this.nodecards[0];
+      
       if (childEvent.type === "cardActivated") {
         const { x, y } = childEvent;
         const nestedState = childState.value.active;
-        card.open({ id, x, y, nestedState, text })
+        expandCard({ id, x, y, nestedState, text })
       }
 
-      if (childState.value === "inert") card.inertify(label, id);
+      if (childState.value === "inert") inertify(id);
 
       if (
         childEvent.type === "SWITCH.EDIT" ||
@@ -70,43 +49,43 @@ export default class App {
       ) {
         const nestedState = childState.value.active;
         //const text = childState.context.text;
-        card.renderState(nestedState, text, id);
+        fillElement(id, nestedState, text);
         /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
           So evaluating the event type is necessary, because we only want to renderState when there's a change. 
           state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
       }
 
-      if (childEvent.type === "TYPING") card.updateEditor(childEvent.text, id); // controlled element
+      if (childEvent.type === "TYPING") updateEditor(childEvent); // controlled element
 
-      if (childEvent.type === "DELETE") card.discard(id);
+      if (childEvent.type === "DELETE") discard(id);
     }
   }
 
-  render(state) {
+  const render = (state) => {
 
     const event = state.event;
-
+ 
     synchPanel(event);
 
     // child state updates enabled by {sync: true} arg to spawn()
-    if (event.type === "xstate.update") this.renderNodecard(event.state);
+    if (event.type === "xstate.update") renderNodecard(event.state);
 
     else if (event.type === "CREATELINK") {
 
-      const { id, label, from, to } = event;
-      this.createLink({ id, label, to, from });
+      const data = { id, label, from, to } = event;
+      createLink(data);
 
     } else if (event.type === "turnPhysicsOff") {
 
-      this.setPhysics(false)
+      setPhysics(false)
 
     } else if (event.type === "turnPhysicsOn") {
 
-      this.setPhysics(true)
+      setPhysics(true)
 
     } else if (event.type === "openPrompt") {
 
-      openPrompt(event, this.controllers.prompt.close)
+      openPrompt(event)
 
     } else if (event.type === "closePrompt") {
 
@@ -114,6 +93,8 @@ export default class App {
 
     }
   }
+
+  return { init, render }
 
 }
 
@@ -151,7 +132,7 @@ export default class App {
  - (maybe) try to make method names correspond to state values to obviate the jungle of conditionals in app.render, 
   eg read,edit,inert => card[state.value] 
 
- - separate business logic from DOM manipulation
+ - separate business logic from DOM manipulation (DONE)
 
  - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify,
    two prompts are open at once.
@@ -159,4 +140,6 @@ export default class App {
  - bug: clicking edges generates error
   
  - create function that processes state data for render function
+
+ - TODO: when physics is turned on, intertify should only be called on active nodecards
 */

@@ -3,9 +3,10 @@ import * as vis from "vis-network";
 import { interpret } from 'xstate';
 import { appMachine } from "./statecharts/app-machine"
 import App from './app'
+import nodecardViews from './views/nodecard'
 import { setupSwitchPanel } from "./views/switch-panel";
-import { domControllers } from "./controllers/dom.controllers"
-import { graphController } from "./controllers/graph.controllers"
+import { domControllers } from "./controllers/dom.controllers";
+import { graphController } from "./controllers/graph.controllers";
 import "../assets/styles/main.css";
 import "../assets/styles/switch-panel.css";
 import "../assets/styles/nodecard.css";
@@ -22,11 +23,13 @@ const service = interpret(appMachine);
 const gc = graphController(service.send)
 const dc = domControllers(service.send)
 
+setupSwitchPanel(dc.panel)
 network.on("click", gc)
 
-const app = new App(network, container, service.send, dc)
+const nv = nodecardViews(network, dc);
 
-setupSwitchPanel(dc)
+const app = App(nv, service.send)
+
 
 const data = { 
   cards: [
@@ -42,6 +45,7 @@ const data = {
 };
 
 
+// subscribe views
 service.onTransition((state) => {
   //console.log(state.changed)
   if (state.event.type === "xstate.init") app.init(data)

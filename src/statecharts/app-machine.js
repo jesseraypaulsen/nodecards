@@ -96,9 +96,9 @@ export const appMachine = createMachine({
                   actions: send({ type: "SWITCH.EDIT"}, { to: (_,e) => e.id })
                 },
                 "CARD.EDIT.TYPING": {
-                  actions: (context, event) => {
-                    const card = context.cards.find(card => event.id === card.id)
-                    card.ref.send({ type: "TYPING", text: event.text })
+                  actions: (context, { text, id }) => {
+                    const card = context.cards.find(card => id === card.id)
+                    card.ref.send({ type: "TYPING", text, id })
                   }
                   // None of these work for using the "to" option when passing data thru the event. The docs have no explanation.
                   //send({ type: "TYPING", text: (_,e) => e.text }, { to: (context,event) => event.id})
