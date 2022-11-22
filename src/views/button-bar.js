@@ -1,4 +1,4 @@
-import { qs, render, setPosition } from './dom'
+import { qs, render, setPosition } from './nodecard.dom'
 import dragIcon from "../../assets/icons/drag_indicator.png";
 import deleteIcon from "../../assets/icons/delete_forever.png";
 import editIcon from "../../assets/icons/edit.png";

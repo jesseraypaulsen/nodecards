@@ -1,10 +1,10 @@
 import graphViews from './graph';
-import domViews from './dom';
+import domViews from './nodecard.dom';
 
 export default function nodecardViews(graphAPI, domControllers) {
 
-  const { collapse, expand, removeElement, setPosition, fillElement, synchPanel, openPrompt, closePrompt, updateEditor } = domViews(domControllers);
-  const { createNode, createEdge, moveNode, removeNode, setPhysics } = graphViews(graphAPI);
+  const { collapse, expand, removeElement, setPosition, fillElement, updateEditor } = domViews(domControllers);
+  const { createNode, createEdge, moveNode, removeNode } = graphViews(graphAPI);
 
   const createCard = (id, label) => {
 
@@ -57,10 +57,6 @@ export default function nodecardViews(graphAPI, domControllers) {
     inertify, 
     expandCard, 
     fillElement,
-    synchPanel,
-    openPrompt,
-    closePrompt,
-    updateEditor,
-    setPhysics
+    updateEditor
   }
 }

@@ -1,31 +1,33 @@
 
-export default function App(nodecardViews, send) {
+export default function App(nodecardViews, switchPanelView, { openPrompt, closePrompt }, synchPanel, setPhysics, send) {
   const { 
     createCard, 
     createLink,
     discard, 
     inertify, 
     expandCard, 
-    fillElement, 
-    synchPanel,
-    setPhysics,
-    openPrompt,
-    closePrompt,
+    fillElement,
     updateEditor
   } = nodecardViews;
 
   // TODO: 'invoke' data calls from XState?
 
   const init = (data) => {
+
+    switchPanelView();
+
     data.cards.map(({ id, label, text }) => {
       send({ type: "CREATECARD", id, label, text });
     });
+
     data.links.map(({ id, label, from, to }) => {
       send({ type: "CREATELINK", id, label, from, to });
     });
+    
     setTimeout(() => {
       send({ type: "INIT.COMPLETE" });
     }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
+
   }
   
   const renderNodecard = (childState) => {
@@ -141,5 +143,22 @@ export default function App(nodecardViews, send) {
   
  - create function that processes state data for render function
 
- - TODO: when physics is turned on, intertify should only be called on active nodecards
+ - when physics is turned on, intertify should only be called on active nodecards
+
+ - add 'source' argument to createButtonBar
+
+ - investigate vis-network methods for various uses, including startSimulation, stopSimulation, unselectAll, setSelection, releaseNode, moveTo, etc 
+ (eg, startSimulation might be easier than the current way I'm turning physics on). https://visjs.github.io/vis-network/docs/network/index.html
+
+ - investigate getBoundingBox among the methods above, but also investigate the vis-network source code to see  how the bounding box works and interacts 
+ with edges.
+
+ - create alternative positions for nodecard elements -- currently the only position is to map an element's center onto the node's center. but this
+ means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
+ i deal with this by restricting the size of the canvas. note that different positioning types require different css animations.
+
+ - we need several different ways of dealing with card collisions. each way should have a corresponding state. eg, when opening a card collides with a 
+ previously opened card -- in one state the previously opened card might shrink somewhat, while in another state the newly opened card might overlap
+ the previously opened one.
+
 */

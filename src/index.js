@@ -4,7 +4,9 @@ import { interpret } from 'xstate';
 import { appMachine } from "./statecharts/app-machine"
 import App from './app'
 import nodecardViews from './views/nodecard'
-import { setupSwitchPanel } from "./views/switch-panel";
+import { switchPanel, synchPanel } from "./views/switch-panel";
+import promptView from './views/prompt';
+import graphViews from './views/graph';
 import { domControllers } from "./controllers/dom.controllers";
 import { graphController } from "./controllers/graph.controllers";
 import "../assets/styles/main.css";
@@ -23,12 +25,15 @@ const service = interpret(appMachine);
 const gc = graphController(service.send)
 const dc = domControllers(service.send)
 
-setupSwitchPanel(dc.panel)
+
 network.on("click", gc)
 
 const nv = nodecardViews(network, dc);
+const sp = switchPanel(dc.panel)
+const pv = promptView(dc.prompt)
+const { setPhysics } = graphViews(network)
 
-const app = App(nv, service.send)
+const app = App(nv, sp, pv, synchPanel, setPhysics, service.send)
 
 
 const data = { 
