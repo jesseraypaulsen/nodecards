@@ -4,7 +4,7 @@
     "clean": "rm -rf dist && rm -rf .parcel-cache",
     "start": "npx parcel src/index.html",
     "build": "parcel build",
-    "test": "jest"
+    "test": "jest --watchAll --coverage"
   },
   "dependencies": {
     "@material/icon-button": "^13.0.0",

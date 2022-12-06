@@ -1,19 +1,27 @@
-
-export default function App(nodecardViews, switchPanelView, { openPrompt, closePrompt }, synchPanel, setPhysics, send) {
-  const { 
-    createCard, 
+export default function App(
+  nodecardViews,
+  switchPanelView,
+  { openPrompt, closePrompt },
+  synchPanel,
+  setPhysics,
+  send
+) {
+  const {
+    createCard,
     createLink,
-    discard, 
-    inertify, 
-    expandCard, 
+    discard,
+    inertify,
+    expandCard,
     fillElement,
-    updateEditor
+    updateEditor,
   } = nodecardViews;
+
+  // more like a deck of nodecard views
+  let deck = [];
 
   // TODO: 'invoke' data calls from XState?
 
   const init = (data) => {
-
     switchPanelView();
 
     data.cards.map(({ id, label, text }) => {
@@ -23,35 +31,67 @@ export default function App(nodecardViews, switchPanelView, { openPrompt, closeP
     data.links.map(({ id, label, from, to }) => {
       send({ type: "CREATELINK", id, label, from, to });
     });
-    
+
     setTimeout(() => {
       send({ type: "INIT.COMPLETE" });
     }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
+  };
 
-  }
-  
+  /*const createCardView = (id,label,text) => {
+      const card = NodecardView(id,label,text)
+      //deck.nodecards.push(card);
+      deck.nodecards = [...deck.nodecards, card];
+      deck.links = [...deck.links, link];
+  }*/
+
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
     let { id, label, text } = childState.context;
 
     if (childEvent.type === "xstate.init") createCard(id, label);
     else {
-      
+      //const card = deck.nodecards.find(id)
+
       if (childEvent.type === "cardActivated") {
         const { x, y } = childEvent;
         const nestedState = childState.value.active;
-        expandCard({ id, x, y, nestedState, text })
+        expandCard({ id, x, y, nestedState, text });
+        //expandCardInReadState();
+        // or
+        // card.expand() // card instance
       }
 
       if (childState.value === "inert") inertify(id);
 
+      /*TODO:
+      
+      if (
+        childEvent.type === "SWITCH.EDIT"
+      ) {
+        const cardTemplate = generateView(controller, editorTemplate);
+        const barTemplate = createBar(editorBarTemplate)
+        insertView(cardTemplate)
+        insertBar(barTemplate)
+      }
+      
+      if (
+        childEvent.type === "SWITCH.READ"
+      ) {
+        const cardTemplate = generateView(controller, readTemplate);
+        const barTemplate = createBar(readBarTemplate)
+        insertView(cardTemplate)
+        insertBar(barTemplate)
+      }
+      
+      */
       if (
         childEvent.type === "SWITCH.EDIT" ||
         childEvent.type === "SWITCH.READ"
       ) {
         const nestedState = childState.value.active;
-        //const text = childState.context.text;
+
         fillElement(id, nestedState, text);
+
         /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
           So evaluating the event type is necessary, because we only want to renderState when there's a change. 
           state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
@@ -61,43 +101,34 @@ export default function App(nodecardViews, switchPanelView, { openPrompt, closeP
 
       if (childEvent.type === "DELETE") discard(id);
     }
-  }
+  };
 
   const render = (state) => {
-
     const event = state.event;
- 
+
     synchPanel(event);
 
     // child state updates enabled by {sync: true} arg to spawn()
     if (event.type === "xstate.update") renderNodecard(event.state);
-
     else if (event.type === "CREATELINK") {
-
-      const data = { id, label, from, to } = event;
+      const data = ({ id, label, from, to } = event);
       createLink(data);
-
+      /*TODO 
+      const linkId = createLink(data)
+      deck.links.push(linkId)
+      */
     } else if (event.type === "turnPhysicsOff") {
-
-      setPhysics(false)
-
+      setPhysics(false);
     } else if (event.type === "turnPhysicsOn") {
-
-      setPhysics(true)
-
+      setPhysics(true);
     } else if (event.type === "openPrompt") {
-
-      openPrompt(event)
-
+      openPrompt(event);
     } else if (event.type === "closePrompt") {
-
-      closePrompt()
-
+      closePrompt();
     }
-  }
+  };
 
-  return { init, render }
-
+  return { init, render };
 }
 
 /*TODO: 
@@ -151,7 +182,10 @@ export default function App(nodecardViews, switchPanelView, { openPrompt, closeP
  (eg, startSimulation might be easier than the current way I'm turning physics on). https://visjs.github.io/vis-network/docs/network/index.html
 
  - investigate getBoundingBox among the methods above, but also investigate the vis-network source code to see  how the bounding box works and interacts 
- with edges.
+ with edges. These files look promising for further investigation:
+ /network/modules/components/nodes/NodeBase.js
+ /network/modules/components/Node.js
+ /network/NetworkUtil.js
 
  - create alternative positions for nodecard elements -- currently the only position is to map an element's center onto the node's center. but this
  means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
@@ -160,5 +194,7 @@ export default function App(nodecardViews, switchPanelView, { openPrompt, closeP
  - we need several different ways of dealing with card collisions. each way should have a corresponding state. eg, when opening a card collides with a 
  previously opened card -- in one state the previously opened card might shrink somewhat, while in another state the newly opened card might overlap
  the previously opened one.
+
+ - watch video: "the pipeline style of refactoring JS by Bill Sourour" https://www.youtube.com/watch?v=38q7aSu52NY
 
 */

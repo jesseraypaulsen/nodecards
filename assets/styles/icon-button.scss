@@ -1,11 +1,15 @@
 .button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .button.inactive {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 .button.inactive > img {
-    opacity: 0.2;
+  opacity: 0.2;
+}
+
+.button.drag {
+  cursor: grab;
 }
