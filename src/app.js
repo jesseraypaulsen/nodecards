@@ -1,23 +1,17 @@
 export default function App(
-  nodecardViews,
+  nodecardViewFactory,
   switchPanelView,
   { openPrompt, closePrompt },
   synchPanel,
   setPhysics,
+  createEdge,
   send
 ) {
-  const {
-    createCard,
-    createLink,
-    discard,
-    inertify,
-    expandCard,
-    fillElement,
-    updateEditor,
-  } = nodecardViews;
-
-  // more like a deck of nodecard views
-  let deck = [];
+  // deck of nodecard VIEWS
+  let deck = {
+    nodecards: [],
+    links: [],
+  };
 
   // TODO: 'invoke' data calls from XState?
 
@@ -37,31 +31,35 @@ export default function App(
     }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
   };
 
-  /*const createCardView = (id,label,text) => {
-      const card = NodecardView(id,label,text)
-      //deck.nodecards.push(card);
-      deck.nodecards = [...deck.nodecards, card];
-      deck.links = [...deck.links, link];
-  }*/
+  const createCardView = (id, label, text) => {
+    const card = nodecardViewFactory({ id, label, text });
+    deck.nodecards.push(card);
+    //deck.nodecards = [...deck.nodecards, card];
+  };
+
+  /*TODO:
+    const createLink = (id,label,from,to) {
+      const linkId = createEdge(id,label,from,to)
+      deck.linkIds = [...deck.links, linkId];    
+    }
+  */
 
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
     let { id, label, text } = childState.context;
 
-    if (childEvent.type === "xstate.init") createCard(id, label);
-    else {
-      //const card = deck.nodecards.find(id)
+    if (childEvent.type === "xstate.init") {
+      createCardView(id, label, text);
+    } else {
+      const card = deck.nodecards.find((card) => card.id === id);
 
       if (childEvent.type === "cardActivated") {
         const { x, y } = childEvent;
         const nestedState = childState.value.active;
-        expandCard({ id, x, y, nestedState, text });
-        //expandCardInReadState();
-        // or
-        // card.expand() // card instance
+        card.inertFace.activate({ id, x, y, nestedState, text });
       }
 
-      if (childState.value === "inert") inertify(id);
+      if (childState.value === "inert") card.activeFace.inertify(id);
 
       /*TODO:
       
@@ -90,20 +88,23 @@ export default function App(
       ) {
         const nestedState = childState.value.active;
 
-        fillElement(id, nestedState, text);
+        //TODO: inject views
+        card.activeFace.fillElement(id, nestedState, text);
 
         /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
           So evaluating the event type is necessary, because we only want to renderState when there's a change. 
           state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
       }
 
-      if (childEvent.type === "TYPING") updateEditor(childEvent); // controlled element
+      if (childEvent.type === "TYPING")
+        card.activeFace.updateEditor(childEvent); // controlled element
 
-      if (childEvent.type === "DELETE") discard(id);
+      if (childEvent.type === "DELETE") card.activeFace.discard(id);
     }
   };
 
   const render = (state) => {
+    console.log("state", state);
     const event = state.event;
 
     synchPanel(event);
@@ -111,12 +112,9 @@ export default function App(
     // child state updates enabled by {sync: true} arg to spawn()
     if (event.type === "xstate.update") renderNodecard(event.state);
     else if (event.type === "CREATELINK") {
-      const data = ({ id, label, from, to } = event);
-      createLink(data);
-      /*TODO 
-      const linkId = createLink(data)
-      deck.links.push(linkId)
-      */
+      const { id, label, from, to } = event;
+
+      createEdge(id, label, from, to); //TODO: createLink
     } else if (event.type === "turnPhysicsOff") {
       setPhysics(false);
     } else if (event.type === "turnPhysicsOn") {
@@ -174,7 +172,7 @@ export default function App(
   
  - create function that processes state data for render function
 
- - when physics is turned on, intertify should only be called on active nodecards
+ - when physics is turned on, an error related to the nodecard dom element occurs
 
  - add 'source' argument to createButtonBar
 
@@ -194,7 +192,5 @@ export default function App(
  - we need several different ways of dealing with card collisions. each way should have a corresponding state. eg, when opening a card collides with a 
  previously opened card -- in one state the previously opened card might shrink somewhat, while in another state the newly opened card might overlap
  the previously opened one.
-
- - watch video: "the pipeline style of refactoring JS by Bill Sourour" https://www.youtube.com/watch?v=38q7aSu52NY
 
 */

@@ -4,35 +4,22 @@ import createButtonBar from "./button-bar";
 export default function domViews(controllers) {
   let _element;
 
-  const removeElement = (sel) => {
-    try {
-      qs(sel).remove();
-    } catch (e) {
-      return e;
-    }
-
-    /*
-    if (qs(sel)) {
-      qs(sel).remove();
-    }
-    else {
-      throw new Error('element not found!')
-    }
-    */
+  const removeElement = () => {
+    _element.remove();
+    _element = undefined;
   };
 
   const expand = ({ id, x, y, nestedState, text }) => {
-    //const el = div("nodecard", "expand");
     _element = div("nodecard", "expand");
-    let el = _element;
-    el.id = id;
-    render(el); // MUST RENDER BEFORE setPosition and fillElement are called!!!
-    setPosition(el, x, y);
+    console.log("element", _element);
+    _element.id = id;
+    render(_element); // MUST RENDER BEFORE setPosition and fillElement are called!!!
+    setPosition(_element, x, y);
     fillElement(id, nestedState, text);
   };
 
   const fillElement = (id, state, text) => {
-    const el = qs("#" + id);
+    //const el = qs("#" + id);
     // TODO: inject controller and one of the templates; the choice about which template is made higher up.
     const choice = chooseView(id, state, text);
 
@@ -42,20 +29,20 @@ export default function domViews(controllers) {
     //TODO: inject button data
     const bar = createButtonBar(state, source, controllers);
 
-    insertView(el, choice);
-    insertBar(el, bar);
+    insertView(choice);
+    insertBar(bar);
   };
 
-  const insertView = (parent, view) => {
+  const insertView = (view) => {
     // TODO: lift business logic up into higher levels
-    if (parent.hasChildNodes()) parent.firstElementChild.replaceWith(view);
-    else render(view, parent);
+    if (_element.hasChildNodes()) _element.firstElementChild.replaceWith(view);
+    else render(view, _element);
   };
 
-  const insertBar = (parent, bar) => {
-    if (parent.lastElementChild.classList.contains("button-bar")) {
-      parent.lastElementChild.replaceWith(bar);
-    } else render(bar, parent);
+  const insertBar = (bar) => {
+    if (_element.lastElementChild.classList.contains("button-bar")) {
+      _element.lastElementChild.replaceWith(bar);
+    } else render(bar, _element);
   };
 
   const chooseView = (id, state, text) => {
@@ -84,7 +71,8 @@ export default function domViews(controllers) {
 
   // is this function even necessary??
   const updateEditor = ({ text, id }) => {
-    qs("#" + id).firstElementChild.value = text;
+    //qs("#" + id).firstElementChild.value = text;
+    _element.firstElementChild.value = text;
   };
 
   const htmlText = (text) => {
@@ -96,24 +84,25 @@ export default function domViews(controllers) {
   };
 
   const collapse = (id) => {
-    id = "#" + id;
-    if (qs(id)) {
-      qs(id).classList.replace("expand", "collapse");
+    console.log("collapse, element", _element);
+    //id = "#" + id;
+    //if (qs(id)) {
+    if (_element) {
+      _element.classList.replace("expand", "collapse");
 
       // delay the removal of the DOM element, otherwise the collapse animation doesn't occur
       setTimeout(() => {
-        removeElement(id);
+        removeElement();
+        console.log("element", _element);
       }, 600);
     }
   };
 
   return {
     removeElement,
-    setPosition,
     expand,
     fillElement,
     updateEditor,
     collapse,
-    setPosition,
   };
 }
