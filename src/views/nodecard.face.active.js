@@ -1,4 +1,5 @@
-export default function activeFaceFactory(domFace, graphFace) {
+//activeFaceFactory
+export default (domFace, graphFace) => {
   return {
     // creating a branch from this node to a different node
     createLink({ id, label, from, to }) {
@@ -6,12 +7,15 @@ export default function activeFaceFactory(domFace, graphFace) {
     },
     discard(id) {
       graphFace.removeNode(id);
-      domFace.removeElement("#" + id);
+      domFace.removeElement();
       //should delete entire Nodecard instance
     },
     inertify(id) {
       domFace.collapse(id); // TODO: should delete domView instance
       //updateNode(id)
+    },
+    choose(template) {
+      domFace.fillElement(); // inject templates
     },
     fillElement: domFace.fillElement,
     updateEditor: domFace.updateEditor,
@@ -23,4 +27,4 @@ export default function activeFaceFactory(domFace, graphFace) {
       setPosition(qs("#" + id));
     };
   */
-}
+};

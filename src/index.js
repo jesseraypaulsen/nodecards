@@ -5,6 +5,8 @@ import { appMachine } from "./statecharts/app-machine";
 import App from "./app";
 import nodecardView from "./views/nodecard";
 import domViews from "./views/nodecard.dom";
+import activeTemplates from "./views/active-templates";
+import createButtonBar from "./views/button-bar";
 import { switchPanel, synchPanel } from "./views/switch-panel";
 import promptView from "./views/prompt";
 import graphViews from "./views/graph";
@@ -27,14 +29,26 @@ const dc = domControllers(service.send);
 
 network.on("click", gc);
 
-const domFace = domViews(dc);
+const domFace = domViews();
 const graphFace = graphViews(network);
 const { setPhysics, createEdge } = graphFace;
+const activeTemplatesWithController = activeTemplates(dc.editor);
+const buttonTemplatesWithController = createButtonBar(dc.buttons);
 const nv = nodecardView(graphFace, domFace);
 const sp = switchPanel(dc.panel);
 const pv = promptView(dc.prompt);
 
-const app = App(nv, sp, pv, synchPanel, setPhysics, createEdge, service.send);
+const app = App(
+  nv,
+  activeTemplatesWithController,
+  buttonTemplatesWithController,
+  sp,
+  pv,
+  synchPanel,
+  setPhysics,
+  createEdge,
+  service.send
+);
 
 const data = {
   cards: [

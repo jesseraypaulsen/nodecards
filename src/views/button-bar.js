@@ -6,11 +6,13 @@ import editOffIcon from "../../assets/icons/edit_off.png";
 import linkIcon from "../../assets/icons/link.png";
 import inertifyIcon from "../../assets/icons/swipe_down_alt.png";
 
-function createButtonBar(state, source, controllers) {
+//createButtonBar
+export default (controllers) => (id, source) => {
   // pass id into controller
   const wrapController = (e, controller) => {
-    const parent = e.target.parentElement.parentElement.parentElement;
-    controller(parent.id);
+    //const parent = e.target.parentElement.parentElement.parentElement;
+    //controller(parent.id);
+    controller(id);
   };
 
   const eventType = "click";
@@ -27,7 +29,7 @@ function createButtonBar(state, source, controllers) {
     {
       name: "Edit",
       icon: editIcon,
-      handler: (e) => wrapController(e, controllers.buttons.edit),
+      handler: (e) => wrapController(e, controllers.edit),
       eventType,
       classNames,
       active: true,
@@ -35,7 +37,7 @@ function createButtonBar(state, source, controllers) {
     {
       name: "Read Only",
       icon: editOffIcon,
-      handler: (e) => wrapController(e, controllers.buttons.read),
+      handler: (e) => wrapController(e, controllers.read),
       eventType,
       classNames,
       active: true,
@@ -43,7 +45,7 @@ function createButtonBar(state, source, controllers) {
     {
       name: "Delete",
       icon: deleteIcon,
-      handler: (e) => wrapController(e, controllers.buttons.delete),
+      handler: (e) => wrapController(e, controllers.delete),
       eventType,
       classNames,
       active: true,
@@ -59,26 +61,37 @@ function createButtonBar(state, source, controllers) {
     {
       name: "Inertify",
       icon: inertifyIcon,
-      handler: (e) => wrapController(e, controllers.buttons.inertify),
+      handler: (e) => wrapController(e, controllers.inertify),
       eventType,
       classNames,
       active: true,
     },
   ];
 
-  const buttonBar = div("button-bar");
-
+  /*
   let buttons;
-
   if (state == "read")
     buttons = [0, 1, 3, 4, 5].map((i) => createButton(buttonData[i]));
   else if (state == "edit")
     buttons = [0, 2, 3, 4, 5].map((i) => createButton(buttonData[i]));
+    
+    buttonBar.append(...buttons);
+    */
 
-  buttonBar.append(...buttons);
+  const readerButtons = [0, 1, 3, 4, 5].map((i) => createButton(buttonData[i]));
+  const editorButtons = [0, 2, 3, 4, 5].map((i) => createButton(buttonData[i]));
 
-  return buttonBar;
-}
+  const readerBar = div("button-bar");
+  readerBar.append(...readerButtons);
+
+  const editorBar = div("button-bar");
+  editorBar.append(...editorButtons);
+
+  return {
+    readerBar,
+    editorBar,
+  };
+};
 
 function createButton({ name, icon, handler, eventType, classNames, active }) {
   const button = span(...classNames);
@@ -126,4 +139,4 @@ function drag(e, card) {
   }
 }
 
-export default createButtonBar;
+//export default createButtonBar;

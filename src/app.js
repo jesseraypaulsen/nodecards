@@ -1,5 +1,7 @@
 export default function App(
   nodecardViewFactory,
+  activeTemplates,
+  buttonTemplates,
   switchPanelView,
   { openPrompt, closePrompt },
   synchPanel,
@@ -14,7 +16,6 @@ export default function App(
   };
 
   // TODO: 'invoke' data calls from XState?
-
   const init = (data) => {
     switchPanelView();
 
@@ -56,44 +57,39 @@ export default function App(
       if (childEvent.type === "cardActivated") {
         const { x, y } = childEvent;
         const nestedState = childState.value.active;
-        card.inertFace.activate({ id, x, y, nestedState, text });
+        const template = activeTemplates(id, text).reader();
+        const buttonBar = buttonTemplates(id, null).readerBar;
+        card.inertFace.activate({
+          id,
+          x,
+          y,
+          nestedState,
+          text,
+          template,
+          buttonBar,
+        });
       }
 
       if (childState.value === "inert") card.activeFace.inertify(id);
 
-      /*TODO:
-      
-      if (
-        childEvent.type === "SWITCH.EDIT"
-      ) {
-        const cardTemplate = generateView(controller, editorTemplate);
-        const barTemplate = createBar(editorBarTemplate)
-        insertView(cardTemplate)
-        insertBar(barTemplate)
-      }
-      
-      if (
-        childEvent.type === "SWITCH.READ"
-      ) {
-        const cardTemplate = generateView(controller, readTemplate);
-        const barTemplate = createBar(readBarTemplate)
-        insertView(cardTemplate)
-        insertBar(barTemplate)
-      }
-      
-      */
-      if (
-        childEvent.type === "SWITCH.EDIT" ||
-        childEvent.type === "SWITCH.READ"
-      ) {
+      if (childEvent.type === "SWITCH.READ") {
         const nestedState = childState.value.active;
 
-        //TODO: inject views
-        card.activeFace.fillElement(id, nestedState, text);
+        const template = activeTemplates(id, text).reader();
+        const buttonBar = buttonTemplates(id, null).readerBar;
+        card.activeFace.fillElement(id, nestedState, text, template, buttonBar);
+        //card.activeFace.chooseReader(id, text);
 
         /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
           So evaluating the event type is necessary, because we only want to renderState when there's a change. 
           state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
+      }
+      if (childEvent.type === "SWITCH.EDIT") {
+        const nestedState = childState.value.active;
+
+        const template = activeTemplates(id, text).editor();
+        const buttonBar = buttonTemplates(id, null).editorBar;
+        card.activeFace.fillElement(id, nestedState, text, template, buttonBar);
       }
 
       if (childEvent.type === "TYPING")
@@ -172,7 +168,7 @@ export default function App(
   
  - create function that processes state data for render function
 
- - when physics is turned on, an error related to the nodecard dom element occurs
+ - when physics is turned on while a nodecard is active, an error related to the nodecard dom element occurs
 
  - add 'source' argument to createButtonBar
 
