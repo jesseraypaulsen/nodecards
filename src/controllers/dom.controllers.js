@@ -1,43 +1,47 @@
-
 export function domControllers(send) {
-
   // for edit
-  const editor = (e, id) => {
-    send({ type: "CARD.EDIT.TYPING", text: e.target.value, id })
-  }
+  const editorController = (e, id) => {
+    send({ type: "CARD.EDIT.TYPING", text: e.target.value, id });
+  };
 
   // TODO: put switch panel controllers into separate file?
 
-  const panel = {
+  const panelControllers = {
     userEvent: (type) => ({ type, sentByUser: true }),
-  
+
     physics: (e) => {
       const chkValue = e.target.checked;
-      chkValue ? send(panel.userEvent('turnPhysicsOn')) : send(panel.userEvent('turnPhysicsOff'));
+      chkValue
+        ? send(panelControllers.userEvent("turnPhysicsOn"))
+        : send(panelControllers.userEvent("turnPhysicsOff"));
     },
-  
+
     persist: (e) => {
       const chkValue = e.target.checked;
-      chkValue ? send('PERSIST.ON') : send('PERSIST.OFF');
+      chkValue ? send("PERSIST.ON") : send("PERSIST.OFF");
     },
-  
-    select: (e) => {
-      send(panel.userEvent(e.target.value))
-    }
-  }
 
-  const buttons = {
+    select: (e) => {
+      send(panelControllers.userEvent(e.target.value));
+    },
+  };
+
+  const buttonsControllers = {
     edit: (id) => send({ type: "CARD.EDIT", id }),
     read: (id) => send({ type: "CARD.READ", id }),
     delete: (id) => send({ type: "CARD.DELETE", id }),
     inertify: (id) => send({ type: "CARD.INERTIFY", id }),
-  }
+  };
 
-  const prompt = {
-    close: () => send({ type: "CLOSE.PROMPT" })
+  const promptController = {
+    close: () => send({ type: "CLOSE.PROMPT" }),
     // "open" is triggered by the graph controller
-  }
+  };
 
-  return { editor, panel, buttons, prompt }
+  return {
+    editorController,
+    panelControllers,
+    buttonsControllers,
+    promptController,
+  };
 }
-

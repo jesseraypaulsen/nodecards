@@ -8,19 +8,24 @@ export default function domViews() {
     _element = undefined;
   };
 
-  const expand = ({ id, x, y, nestedState, text, template, buttonBar }) => {
+  const expand = ({ x, y, view }) => {
     _element = div("nodecard", "expand");
     render(_element); // MUST RENDER BEFORE setPosition and fillElement are called!!!
     setPosition(_element, x, y);
-    fillElement(id, nestedState, text, template, buttonBar);
+    fillElement(view);
   };
 
-  const fillElement = (id, state, text, template, buttonBar) => {
-    // replace these with one function that recursively removes elements and then appends new ones
-    insertView(template);
-    insertBar(buttonBar);
+  const fillElement = ({ main, bar }) => {
+    while (_element.hasChildNodes()) {
+      _element.lastElementChild.remove();
+    }
+
+    _element.append(main, bar);
+    //insertView(main);
+    //insertBar(bar);
   };
 
+  /*
   const insertView = (view) => {
     // TODO: lift business logic up into higher levels
     if (_element.hasChildNodes()) _element.firstElementChild.replaceWith(view);
@@ -32,13 +37,14 @@ export default function domViews() {
       _element.lastElementChild.replaceWith(bar);
     } else render(bar, _element);
   };
+  */
 
   // is this function even necessary??
   const updateEditor = ({ text, id }) => {
     _element.firstElementChild.value = text;
   };
 
-  const collapse = (id) => {
+  const collapse = () => {
     console.log("collapse, element", _element);
     if (_element) {
       _element.classList.replace("expand", "collapse");

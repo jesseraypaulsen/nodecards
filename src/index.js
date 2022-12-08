@@ -24,26 +24,32 @@ const network = new vis.Network(container, {}, options);
 
 const service = interpret(appMachine);
 
-const gc = graphController(service.send);
-const dc = domControllers(service.send);
-
-network.on("click", gc);
+network.on("click", graphController(service.send));
 
 const domFace = domViews();
 const graphFace = graphViews(network);
+const cardFace = nodecardView(graphFace, domFace);
+
+const {
+  editorController,
+  buttonsControllers,
+  panelControllers,
+  promptController,
+} = domControllers(service.send);
+
+const activeTemplatesWithController = activeTemplates(editorController);
+const buttonTemplatesWithControllers = createButtonBar(buttonsControllers);
+const switchPanelWithControllers = switchPanel(panelControllers);
+const promptWithController = promptView(promptController);
+
 const { setPhysics, createEdge } = graphFace;
-const activeTemplatesWithController = activeTemplates(dc.editor);
-const buttonTemplatesWithController = createButtonBar(dc.buttons);
-const nv = nodecardView(graphFace, domFace);
-const sp = switchPanel(dc.panel);
-const pv = promptView(dc.prompt);
 
 const app = App(
-  nv,
+  cardFace,
   activeTemplatesWithController,
-  buttonTemplatesWithController,
-  sp,
-  pv,
+  buttonTemplatesWithControllers,
+  switchPanelWithControllers,
+  promptWithController,
   synchPanel,
   setPhysics,
   createEdge,

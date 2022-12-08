@@ -14,10 +14,9 @@ export default (domFace, graphFace) => {
       domFace.collapse(id); // TODO: should delete domView instance
       //updateNode(id)
     },
-    choose(template) {
-      domFace.fillElement(); // inject templates
+    choose(view) {
+      domFace.fillElement(view); // inject templates
     },
-    fillElement: domFace.fillElement,
     updateEditor: domFace.updateEditor,
   };
 

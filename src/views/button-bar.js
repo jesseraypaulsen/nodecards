@@ -17,56 +17,51 @@ export default (controllers) => (id, source) => {
 
   const eventType = "click";
   const classNames = ["button"];
-  const buttonData = [
-    {
-      name: "Drag",
+
+  const buttonData = {
+    drag: {
       icon: dragIcon,
       handler: (e) => drag(e),
       eventType: "mousedown",
       classNames: [...classNames, "drag"],
       active: true,
     },
-    {
-      name: "Edit",
+    edit: {
       icon: editIcon,
       handler: (e) => wrapController(e, controllers.edit),
       eventType,
       classNames,
       active: true,
     },
-    {
-      name: "Read Only",
+    read: {
       icon: editOffIcon,
       handler: (e) => wrapController(e, controllers.read),
       eventType,
       classNames,
       active: true,
     },
-    {
-      name: "Delete",
+    discard: {
       icon: deleteIcon,
       handler: (e) => wrapController(e, controllers.delete),
       eventType,
       classNames,
       active: true,
     },
-    {
-      name: "Source",
+    source: {
       icon: linkIcon,
       handler: (e) => (source ? open(source, "_blank") : null),
       eventType,
       classNames,
       active: source ? true : false,
     },
-    {
-      name: "Inertify",
+    inertify: {
       icon: inertifyIcon,
       handler: (e) => wrapController(e, controllers.inertify),
       eventType,
       classNames,
       active: true,
     },
-  ];
+  };
 
   /*
   let buttons;
@@ -78,22 +73,27 @@ export default (controllers) => (id, source) => {
     buttonBar.append(...buttons);
     */
 
-  const readerButtons = [0, 1, 3, 4, 5].map((i) => createButton(buttonData[i]));
-  const editorButtons = [0, 2, 3, 4, 5].map((i) => createButton(buttonData[i]));
-
-  const readerBar = div("button-bar");
-  readerBar.append(...readerButtons);
-
-  const editorBar = div("button-bar");
-  editorBar.append(...editorButtons);
-
-  return {
-    readerBar,
-    editorBar,
-  };
+  let buttons = {};
+  for (let key in buttonData) {
+    buttons[key] = createButton(buttonData[key]);
+  }
+  return diverge(buttons);
 };
 
-function createButton({ name, icon, handler, eventType, classNames, active }) {
+function diverge({ drag, edit, read, discard, source, inertify }) {
+  return {
+    readerBar: () => createBar([drag, edit, discard, source, inertify]),
+    editorBar: () => createBar([drag, read, discard, source, inertify]),
+  };
+}
+
+function createBar(buttons) {
+  const bar = div("button-bar");
+  bar.append(...buttons);
+  return bar;
+}
+
+function createButton({ icon, handler, eventType, classNames, active }) {
   const button = span(...classNames);
 
   let img = document.createElement("img");
@@ -138,5 +138,3 @@ function drag(e, card) {
     }
   }
 }
-
-//export default createButtonBar;

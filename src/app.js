@@ -45,6 +45,16 @@ export default function App(
     }
   */
 
+  const reader = (id, text) => ({
+    main: activeTemplates(id, text).reader(),
+    bar: buttonTemplates(id, null).readerBar(),
+  });
+
+  const editor = (id, text) => ({
+    main: activeTemplates(id, text).editor(),
+    bar: buttonTemplates(id, null).editorBar(),
+  });
+
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
     let { id, label, text } = childState.context;
@@ -56,40 +66,31 @@ export default function App(
 
       if (childEvent.type === "cardActivated") {
         const { x, y } = childEvent;
-        const nestedState = childState.value.active;
-        const template = activeTemplates(id, text).reader();
-        const buttonBar = buttonTemplates(id, null).readerBar;
+        const view = reader(id, text);
         card.inertFace.activate({
-          id,
           x,
           y,
-          nestedState,
-          text,
-          template,
-          buttonBar,
+          view,
         });
       }
 
       if (childState.value === "inert") card.activeFace.inertify(id);
 
       if (childEvent.type === "SWITCH.READ") {
-        const nestedState = childState.value.active;
+        //const nestedState = childState.value.active;
 
-        const template = activeTemplates(id, text).reader();
-        const buttonBar = buttonTemplates(id, null).readerBar;
-        card.activeFace.fillElement(id, nestedState, text, template, buttonBar);
-        //card.activeFace.chooseReader(id, text);
+        const view = reader(id, text);
+        card.activeFace.choose(view);
 
         /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
           So evaluating the event type is necessary, because we only want to renderState when there's a change. 
           state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
       }
       if (childEvent.type === "SWITCH.EDIT") {
-        const nestedState = childState.value.active;
+        //const nestedState = childState.value.active;
 
-        const template = activeTemplates(id, text).editor();
-        const buttonBar = buttonTemplates(id, null).editorBar;
-        card.activeFace.fillElement(id, nestedState, text, template, buttonBar);
+        const view = editor(id, text);
+        card.activeFace.choose(view);
       }
 
       if (childEvent.type === "TYPING")
@@ -169,6 +170,8 @@ export default function App(
  - create function that processes state data for render function
 
  - when physics is turned on while a nodecard is active, an error related to the nodecard dom element occurs
+
+ - selecting "Disabled" from the panel while a nodecard is active, results in error: "_element not undefined"
 
  - add 'source' argument to createButtonBar
 

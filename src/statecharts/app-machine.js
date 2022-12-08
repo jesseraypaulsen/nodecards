@@ -25,7 +25,6 @@ export const appMachine = createMachine(
               },
               "CARD.INERTIFY": {
                 actions: (context, event) => {
-                  console.log("CARD.INERTIFY: ", event.id);
                   const card = context.cards.find(
                     (card) => event.id === card.id
                   );
