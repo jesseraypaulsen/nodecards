@@ -18,14 +18,15 @@ export default function graphViews(network) {
   };
 
   const moveNode = (canX, canY) => {
-    network.moveNode(this.id, canX, canY);
+    network.moveNode("insertIdHere", canX, canY);
   };
 
   // TODO: find out if this is necessary or not
   const updateNode = (id) => {
+    const label = "";
     const options = {
       id,
-      label: state.context.label,
+      label,
       shape: "box",
       shadow: true,
       opacity: 1,

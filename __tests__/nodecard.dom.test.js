@@ -1,4 +1,4 @@
-import nodecardDOM from "../src/views/nodecard.dom";
+/*import domFaceFactory from "../src/views/nodecard.dom";
 import * as helpers from "../src/views/dom-helpers"; // named exports
 
 //https://jestjs.io/docs/jest-object
@@ -7,14 +7,11 @@ import * as helpers from "../src/views/dom-helpers"; // named exports
 //https://jestjs.io/docs/asynchronous
 // https://jestjs.io/docs/timer-mocks
 
-describe("nodecard.dom.js", () => {
-  //jest.mock('../src/views/dom-helpers', () => jest.fn())
-  //jest.mock('../src/views/button-bar')
+describe("domFace", () => {
 
-  const controllers = () => ({});
-  const views = nodecardDOM(controllers);
-  const collapseSpy = jest.spyOn(views, "collapse");
-  const removeElementSpy = jest.spyOn(views, "removeElement");
+  const domFace = domFaceFactory();
+  const collapseSpy = jest.spyOn(domFace, "collapse");
+  const removeElementSpy = jest.spyOn(domFace, "removeElement");
 
   beforeEach(() => {
     collapseSpy.mockClear();
@@ -120,6 +117,10 @@ test("reduced test case for the collapse method", () => {
   jest.runAllTimers();
   expect(func).toHaveBeenCalledTimes(1);
   jest.useRealTimers();
+});*/
+
+test("Sanity check", () => {
+  expect(true).toBe(true);
 });
 
 /*
@@ -136,14 +137,11 @@ test("second reduced test case for the collapse method", () => {
   jest.useRealTimers();
 })
 */
-test("Sanity check", () => {
-  expect(true).toBe(true);
-});
 
 test("click", () => {
   document.body.innerHTML = `<div>
-      <button id="btn" />
-    </div>`;
+  <button id="btn" />
+  </div>`;
   let status = false;
   const btn = document.querySelector("#btn");
   btn.addEventListener("click", () => {

@@ -8,16 +8,18 @@ export default (domFace, graphFace) => {
     discard(id) {
       graphFace.removeNode(id);
       domFace.removeElement();
-      //should delete entire Nodecard instance
+      //TODO: should delete entire Nodecard instance
     },
-    inertify(id) {
-      domFace.collapse(id); // TODO: should delete domView instance
+    inertify() {
+      domFace.collapse(); // TODO: should delete domView instance
       //updateNode(id)
     },
     choose(view) {
-      domFace.fillElement(view); // inject templates
+      domFace.fillElement(view);
     },
-    updateEditor: domFace.updateEditor,
+    updateEditor({ text }) {
+      domFace.updateEditor(text);
+    },
   };
 
   /*TODO

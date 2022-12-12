@@ -35,13 +35,12 @@ export default function App(
   const createCardView = (id, label, text) => {
     const card = nodecardViewFactory({ id, label, text });
     deck.nodecards.push(card);
-    //deck.nodecards = [...deck.nodecards, card];
   };
 
   /*TODO:
     const createLink = (id,label,from,to) {
       const linkId = createEdge(id,label,from,to)
-      deck.linkIds = [...deck.links, linkId];    
+      deck.links.push(linkId)   
     }
   */
 
@@ -101,7 +100,6 @@ export default function App(
   };
 
   const render = (state) => {
-    console.log("state", state);
     const event = state.event;
 
     synchPanel(event);
@@ -174,6 +172,9 @@ export default function App(
  - selecting "Disabled" from the panel while a nodecard is active, results in error: "_element not undefined"
 
  - add 'source' argument to createButtonBar
+
+ - bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
+ but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch.
 
  - investigate vis-network methods for various uses, including startSimulation, stopSimulation, unselectAll, setSelection, releaseNode, moveTo, etc 
  (eg, startSimulation might be easier than the current way I'm turning physics on). https://visjs.github.io/vis-network/docs/network/index.html

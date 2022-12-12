@@ -1,5 +1,5 @@
-import activeFaceFactory from "./nodecard.face.active"; //TODO: inject
-import inertFaceFactory from "./nodecard.face.inert";
+import activeFaceFactory from "./nodecard.active";
+import inertFaceFactory from "./nodecard.inert";
 
 /*
   Bridges together two different rendering environments, to produce a single indivisible UI entity called a Nodecard.
@@ -21,8 +21,5 @@ export default (graphFace, domFace) =>
       id,
       activeFace,
       inertFace,
-      //setFace(newFace) {
-      //cardFace = newFace;
-      //}
     };
   };
