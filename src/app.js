@@ -1,13 +1,14 @@
 export default function App(
-  nodecardViewFactory,
+  cardFace,
   activeTemplates,
   buttonTemplates,
-  switchPanelView,
+  settingsPanelView,
   { openPrompt, closePrompt },
-  synchPanel,
+  synchSettingsPanel,
   setPhysics,
   createEdge,
-  send
+  send,
+  network
 ) {
   // deck of nodecard VIEWS
   let deck = {
@@ -17,10 +18,9 @@ export default function App(
 
   // TODO: 'invoke' data calls from XState?
   const init = (data) => {
-    switchPanelView();
-
-    data.cards.map(({ id, label, text }) => {
-      send({ type: "CREATECARD", id, label, text });
+    settingsPanelView();
+    data.cards.map(({ id, label, text, position }) => {
+      send({ type: "CREATECARD", id, label, text, position });
     });
 
     data.links.map(({ id, label, from, to }) => {
@@ -28,14 +28,41 @@ export default function App(
     });
 
     setTimeout(() => {
+      deck.nodecards.map((card) => {
+        let canvas = network.getPosition(card.id);
+        let dom = network.canvasToDOM({ x: canvas.x, y: canvas.y });
+        const position = {
+          canvasX: canvas.x,
+          canvasY: canvas.y,
+          domX: dom.x,
+          domY: dom.y,
+        };
+        console.log("init -> ", card.id, position);
+        send({ type: "storeCardPosition", position, id: card.id });
+      });
       send({ type: "INIT.COMPLETE" });
     }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
   };
 
-  const createCardView = (id, label, text) => {
-    const card = nodecardViewFactory({ id, label, text });
+  const createCard = ({ id, label, text, position }) => {
+    /*if (!position.canX && position.domX) {
+      console.log("createCard: ", position);
+    }*/
+    console.log("createCard", position);
+    const card = cardFace({ id, label, text, position });
     deck.nodecards.push(card);
   };
+
+  /*
+  const createCardWithUnknownPosition = ({ id, label, text }) => {
+    setPosition = (position) => {
+      send({ type: "storeCardPosition", position, id });
+    };
+    const card = cardFace({ id, label, text, setPosition });
+    deck.nodecards.push(card);
+  };
+  //This function fails because network.getPosition does not work when its called from within cardFace
+  */
 
   /*TODO:
     const createLink = (id,label,from,to) {
@@ -56,24 +83,27 @@ export default function App(
 
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
-    let { id, label, text } = childState.context;
+    let { id, label, text, position } = childState.context;
+    console.log("renderNodecard -> position: ", position);
 
     if (childEvent.type === "xstate.init") {
-      createCardView(id, label, text);
+      createCard({ id, label, text, position });
     } else {
       const card = deck.nodecards.find((card) => card.id === id);
 
       if (childEvent.type === "cardActivated") {
-        const { x, y } = childEvent;
+        const { domX, domY } = position;
+        console.log("renderNodecard -> ", position);
         const view = reader(id, text);
         card.inertFace.activate({
-          x,
-          y,
+          x: domX,
+          y: domY,
           view,
         });
       }
 
-      if (childState.value === "inert") card.activeFace.inertify(id);
+      //if (childState.value === "inert") card.activeFace.inertify(id);
+      if (childEvent.type === "cardDeactivated") card.activeFace.inertify(id);
 
       if (childEvent.type === "SWITCH.READ") {
         //const nestedState = childState.value.active;
@@ -101,8 +131,8 @@ export default function App(
 
   const render = (state) => {
     const event = state.event;
-
-    synchPanel(event);
+    console.log(state);
+    synchSettingsPanel(event);
 
     // child state updates enabled by {sync: true} arg to spawn()
     if (event.type === "xstate.update") renderNodecard(event.state);
@@ -142,6 +172,8 @@ export default function App(
 
  - popup prompt for creating cards, along with a corresponding state (DONE)
 
+ - separate business logic from DOM manipulation (DONE)
+ 
  - when the app mode is "active.readOnly" the button should be disabled
  
  - fix: prevent second click on node causing duplicate nodecard elements
@@ -158,7 +190,6 @@ export default function App(
  - (maybe) try to make method names correspond to state values to obviate the jungle of conditionals in app.render, 
   eg read,edit,inert => card[state.value] 
 
- - separate business logic from DOM manipulation (DONE)
 
  - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify,
    two prompts are open at once.

@@ -25,12 +25,9 @@ export const setPosition = (element, x, y) => {
   element.style.top = y - height / 2 + "px";
 };
 
-/* Finds the center point of an element relative to its offsetParent property. 
-  Useful for corroborating setPosition values.
-  DO NOT DELETE, even if it's not currently being used!! */
-export const centerpoint = (element) => {
+/* Finds the center point of an element relative to its offsetParent property. */
+export const centerPoint = (element) => {
   let centerX = element.offsetLeft + element.offsetWidth / 2;
   let centerY = element.offsetTop + element.offsetHeight / 2;
-  console.log(`centerX: ${centerX} / centerY: ${centerY}`);
-  // output should be equal to click event coordinates
+  return { domX: centerX, domY: centerY };
 };

@@ -1,6 +1,8 @@
 import { render, div, setPosition } from "./dom-helpers";
 
-export default function domFaceFactory() {
+export const domFaceFactory = () => {
+  //the closured variable must be a property of an object,
+  //or its mutations will be inaccessible to the methods.
   let _private = { el: {} };
 
   return {
@@ -10,9 +12,15 @@ export default function domFaceFactory() {
     ...editorUpdater(_private),
     ...collapser(_private),
   };
-}
+};
+/* 
+  The factory wrappers allow us inject the private variable so we can export the methods individually for unit testing.
+  But that purpose is defeated when methods call other methods -- as they must do so via 'this'. So the entire instance has to be mocked. 
 
-const elementRemover = (_) => ({
+  To make 'this' point to the domFace instance, the "method definition" syntax is used for each method.
+*/
+
+export const elementRemover = (_) => ({
   removeElement() {
     _.el.remove();
     _.el = undefined;
@@ -23,7 +31,7 @@ const expander = (_) => ({
   expand({ x, y, view }) {
     _.el = div("nodecard", "expand");
     this.fillElement(view);
-    render(_.el); // MUST RENDER BEFORE setPosition and fillElement are called!!!
+    render(_.el); // MUST RENDER BEFORE setPosition is called!!!
     setPosition(_.el, x, y);
   },
 });
@@ -44,13 +52,12 @@ const editorUpdater = (_) => ({
   },
 });
 
-const collapser = (_) => ({
-  // method definition so 'this' will be the factory's resulting object
+export const collapser = (_) => ({
   collapse() {
     if (_.el) {
       _.el.classList.replace("expand", "collapse");
 
-      // delay the removal of the DOM element, otherwise the collapse animation doesn't occur
+      // collapse animation requires delaying removal
       setTimeout(() => {
         this.removeElement();
       }, 600);

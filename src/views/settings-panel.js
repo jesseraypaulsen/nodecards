@@ -1,50 +1,48 @@
 import { qs, render, div } from "./dom-helpers";
 
-export function switchPanel(controllers) {
-
+export function settingsPanel(controllers) {
   return () => {
-
     const cp = div("control-panel");
-    
+
     const obj = {
       "cp-dropdown-btn": [
-        'click', 
+        "click",
         (e) => {
           e.target.nextElementSibling.style.display = "flex";
           e.target.style.display = "none";
-        }
+        },
       ],
       "close-button": [
-        'click', 
+        "click",
         (e) => {
           qs(".cp-dropdown-btn").style.display = "block";
           e.target.parentNode.style.display = "none";
-        }
+        },
       ],
-      "persist": [
-        'change', 
+      persist: [
+        "change",
         (e) => {
-          controllers.persist(e)
-        }, 
-        true
+          controllers.persist(e);
+        },
+        true,
       ],
-      "physics": [
-        'change', 
+      physics: [
+        "change",
         (e) => {
-          controllers.physics(e)
-        }, 
-        true
+          controllers.physics(e);
+        },
+        true,
       ],
       "app-modes": [
-        'change', 
+        "change",
         (e) => {
-          controllers.select(e)
-        }
-      ]
-    }
-    
+          controllers.select(e);
+        },
+      ],
+    };
+
     const classes = Object.keys(obj);
-  
+
     let template = `
       <div class="${classes[0]}">&#9881;</div>
       <div class="cp-dropdown">
@@ -69,36 +67,32 @@ export function switchPanel(controllers) {
   
       </div>
     `;
-  
+
     cp.innerHTML = template;
-  
+
     render(cp);
-  
+
     for (let key in obj) {
       const items = obj[key];
-      const className = '.' + key;
+      const className = "." + key;
       let el;
       if (items[2]) el = qs(className).firstElementChild;
-      else el = qs(className)
-      el.addEventListener(items[0], items[1])
+      else el = qs(className);
+      el.addEventListener(items[0], items[1]);
     }
-
-  }
-  
+  };
 }
 
 export const synchPanel = (event) => {
-  
   //like "controlled components", their internal state should be in sync with app state
-  
+
   if (event.type === "turnPhysicsOff" && !event.sentByUser) {
     //not sent by user! change toggler to reflect the state!
-    qs('.physics').firstElementChild.checked = false;
+    qs(".physics").firstElementChild.checked = false;
   }
 
   if (event.type === "APP.DISABLE" && !event.sentByUser) {
     //not sent by user! change value of select element to reflect the state!
-    qs('.app-modes').value = "APP.DISABLE";
+    qs(".app-modes").value = "APP.DISABLE";
   }
-
-}
+};

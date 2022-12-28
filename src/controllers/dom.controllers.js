@@ -4,8 +4,6 @@ export function domControllers(send) {
     send({ type: "CARD.EDIT.TYPING", text: e.target.value, id });
   };
 
-  // TODO: put switch panel controllers into separate file?
-
   const panelControllers = {
     userEvent: (type) => ({ type, sentByUser: true }),
 
@@ -34,8 +32,16 @@ export function domControllers(send) {
   };
 
   const promptController = {
-    close: () => send({ type: "CLOSE.PROMPT" }),
     // "open" is triggered by the graph controller
+    close: () => send({ type: "CLOSE.PROMPT" }),
+    create: ({ id, label, text, position }) =>
+      send({
+        type: "CREATECARD",
+        id,
+        label,
+        text,
+        position,
+      }),
   };
 
   return {

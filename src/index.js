@@ -3,17 +3,17 @@ import * as vis from "vis-network";
 import { interpret } from "xstate";
 import { appMachine } from "./statecharts/app-machine";
 import App from "./app";
-import nodecardView from "./views/nodecard";
-import domViews from "./views/nodecard.dom";
+import nodecard from "./views/nodecard";
+import { domFaceFactory } from "./views/nodecard.dom";
 import activeTemplates from "./views/active-templates";
 import createButtonBar from "./views/button-bar";
-import { switchPanel, synchPanel } from "./views/switch-panel";
+import { settingsPanel, synchPanel } from "./views/settings-panel";
 import promptView from "./views/prompt";
-import graphViews from "./views/graph";
+import graphFaceFactory from "./views/graph";
 import { domControllers } from "./controllers/dom.controllers";
 import { graphController } from "./controllers/graph.controllers";
 import "../assets/styles/main.css";
-import "../assets/styles/switch-panel.css";
+import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
 import "../assets/styles/icon-button.scss";
 import "../assets/styles/tooltip.scss";
@@ -26,9 +26,9 @@ const service = interpret(appMachine);
 
 network.on("click", graphController(service.send));
 
-const domFace = domViews();
-const graphFace = graphViews(network);
-const cardFace = nodecardView(graphFace, domFace);
+const domFace = domFaceFactory();
+const graphFace = graphFaceFactory(network);
+const cardFace = nodecard(graphFace, domFace);
 
 const {
   editorController,
@@ -39,7 +39,7 @@ const {
 
 const activeTemplatesWithController = activeTemplates(editorController);
 const buttonTemplatesWithControllers = createButtonBar(buttonsControllers);
-const switchPanelWithControllers = switchPanel(panelControllers);
+const settingsPanelWithControllers = settingsPanel(panelControllers);
 const promptWithController = promptView(promptController);
 
 const { setPhysics, createEdge } = graphFace;
@@ -48,19 +48,25 @@ const app = App(
   cardFace,
   activeTemplatesWithController,
   buttonTemplatesWithControllers,
-  switchPanelWithControllers,
+  settingsPanelWithControllers,
   promptWithController,
   synchPanel,
   setPhysics,
   createEdge,
-  service.send
+  service.send,
+  network
 );
 
 const data = {
   cards: [
     { id: "one", label: "1", text: "the first card" },
     { id: "two", label: "2", text: "the second card" },
-    { id: "three", label: "3", text: "the third card" },
+    {
+      id: "three",
+      label: "3",
+      text: "the third card",
+      position: { x: -350, y: -300 },
+    },
   ],
   links: [
     { id: "a", label: "a", from: "one", to: "two" },

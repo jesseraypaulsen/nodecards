@@ -85,7 +85,18 @@ export const appMachine = createMachine(
                         actions: send({ type: "closePrompt" }),
                       },
                       CREATECARD: {
-                        actions: "createNewCard",
+                        actions: [
+                          "createNewCard",
+                          send({ type: "CLOSE.PROMPT" }),
+                          (context, e) => {
+                            const card = context.cards.find(
+                              (card) => e.id === card.id
+                            );
+                            card.ref.send({
+                              type: "OPEN",
+                            });
+                          },
+                        ],
                       },
                     },
                   },
@@ -148,6 +159,16 @@ export const appMachine = createMachine(
               "INIT.COMPLETE": {
                 actions: send("APP.READONLY"),
               },
+              storeCardPosition: {
+                actions: ({ cards }, { id, position }) => {
+                  console.log(
+                    "appMachine -> storeCardPosition -> position: ",
+                    position
+                  );
+                  const card = cards.find((card) => id === card.id);
+                  card.ref.send({ type: "setPosition", position });
+                },
+              },
             },
           },
           disabled: {
@@ -207,14 +228,21 @@ export const appMachine = createMachine(
     actions: {
       createNewCard: assign({
         cards: (context, event) => {
-          const { id, label, text } = event;
+          const { id, label, text, position } = event;
+          console.log("createNewCard -> ", position);
           return context.cards.concat({
             id,
-            ref: spawn(cardMachine({ id, label, text }), {
+            ref: spawn(cardMachine({ id, label, text, position }), {
               name: id,
               sync: true,
             }).onTransition((state) => {
-              //console.log('child actor machine ->', 'state.value:', state.value, 'state.context:', state.context)
+              console.log(
+                "child actor machine: ",
+                "value: ",
+                state.value,
+                "context: ",
+                state.context
+              );
             }),
           });
         },

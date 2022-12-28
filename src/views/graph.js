@@ -1,6 +1,11 @@
-export default function graphViews(network) {
-  const createNode = (id, label) => {
-    network.body.data.nodes.add({ id, label });
+export default function graphFaceFactory(network) {
+  const createNode = (id, label, position) => {
+    if (position) {
+      const { x, y } = network.DOMtoCanvas({ x: position.x, y: position.y });
+      network.body.data.nodes.add({ id, label, x, y });
+    } else {
+      network.body.data.nodes.add({ id, label });
+    }
   };
 
   const createEdge = (id, label, from, to) => {
@@ -11,14 +16,14 @@ export default function graphViews(network) {
     network.body.data.nodes.remove(id);
   };
 
-  const getNodeCenter = (id) => {
+  const getNodePosition = (id) => {
     let canvas = network.getPosition(id);
     let dom = network.canvasToDOM({ x: canvas.x, y: canvas.y });
-    return { canX: canvas.x, canY: canvas.y, domX: dom.x, domY: dom.y };
+    return { canvasX: canvas.x, canvasY: canvas.y, domX: dom.x, domY: dom.y };
   };
 
-  const moveNode = (canX, canY) => {
-    network.moveNode("insertIdHere", canX, canY);
+  const moveNode = (canvasX, canvasY) => {
+    network.moveNode(id, canvasX, canvasY);
   };
 
   // TODO: find out if this is necessary or not
@@ -44,7 +49,7 @@ export default function graphViews(network) {
     createNode,
     createEdge,
     removeNode,
-    getNodeCenter,
+    getNodePosition,
     moveNode,
     updateNode,
     setPhysics,
