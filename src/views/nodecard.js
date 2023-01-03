@@ -8,22 +8,19 @@ import inertFaceFactory from "./nodecard.inert";
   @returns {object}
 */
 export default (graphFace, domFace) =>
-  ({ id, label, text, position, setPosition }) => {
-    let activeFace, inertFace;
+  ({ id, label, text, domPosition, canvasPosition }) => {
+    //TODO: change destructured values to one named object, called 'initalState.'
+    //let {id, label, text, position} = initialState;
+    //create getters/setters for these variables, and pass them down into domFace and graphFace,
+    //and possibly activeFace and inertFace as well.
+    const { createNode, createNodeWithKnownPosition } = graphFace;
 
-    const { createNode, getNodePosition } = graphFace;
-    // when getNodePosition is call from within this function, it returns the same coordinates no matter what node id you pass it,
-    // but it works perfectly fine when called from App.js.
-
-    createNode(id, label, position);
-
-    activeFace = activeFaceFactory(domFace, graphFace);
-    inertFace = inertFaceFactory(domFace, graphFace);
+    if (canvasPosition) createNodeWithKnownPosition(id, label, canvasPosition);
+    else createNode(id, label);
 
     return {
       id,
-      //position,
-      activeFace,
-      inertFace,
+      activeFace: activeFaceFactory(domFace, graphFace),
+      inertFace: inertFaceFactory(domFace, graphFace),
     };
   };

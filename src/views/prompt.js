@@ -14,13 +14,8 @@ export default function promptView(controller) {
       controller.close()
     );
     prompt.lastElementChild.addEventListener("click", (e) => {
-      //const position = {}
-      const position = centerPoint(e.target.parentElement);
-      const id = Math.random().toString().substring(2, 9);
-      const label = "new node";
-      const text = "";
-      const data = { id, label, text, position };
-      controller.create(data);
+      const domPosition = centerPoint(e.target.parentElement);
+      controller.create(domPosition);
     });
   };
   const closePrompt = () => {

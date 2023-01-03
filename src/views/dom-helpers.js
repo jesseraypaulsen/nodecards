@@ -27,7 +27,7 @@ export const setPosition = (element, x, y) => {
 
 /* Finds the center point of an element relative to its offsetParent property. */
 export const centerPoint = (element) => {
-  let centerX = element.offsetLeft + element.offsetWidth / 2;
-  let centerY = element.offsetTop + element.offsetHeight / 2;
-  return { domX: centerX, domY: centerY };
+  let x = element.offsetLeft + element.offsetWidth / 2;
+  let y = element.offsetTop + element.offsetHeight / 2;
+  return { x, y };
 };

@@ -1,11 +1,10 @@
 export default function graphFaceFactory(network) {
-  const createNode = (id, label, position) => {
-    if (position) {
-      const { x, y } = network.DOMtoCanvas({ x: position.x, y: position.y });
-      network.body.data.nodes.add({ id, label, x, y });
-    } else {
-      network.body.data.nodes.add({ id, label });
-    }
+  const createNode = (id, label) => {
+    network.body.data.nodes.add({ id, label });
+  };
+
+  const createNodeWithKnownPosition = (id, label, { x, y }) => {
+    network.body.data.nodes.add({ id, label, x, y });
   };
 
   const createEdge = (id, label, from, to) => {
@@ -47,6 +46,7 @@ export default function graphFaceFactory(network) {
 
   return {
     createNode,
+    createNodeWithKnownPosition,
     createEdge,
     removeNode,
     getNodePosition,
