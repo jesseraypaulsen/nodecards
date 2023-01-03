@@ -1,7 +1,7 @@
 import { createMachine, assign, sendParent } from "xstate";
 import { send } from "xstate/lib/actions";
 
-export const cardMachine = ({ id, text, label, position }) =>
+export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
   createMachine({
     predictableActionArguments: true,
     id: "nodecard",
@@ -10,14 +10,21 @@ export const cardMachine = ({ id, text, label, position }) =>
       id,
       label,
       text,
-      position,
+      canvasPosition,
+      domPosition,
     },
     on: {
-      setPosition: {
+      setDOMPosition: {
         actions: assign({
-          position: (_, { position }) => {
-            console.log("cardMachine -> setPosition -> position: ", position);
-            return position;
+          domPosition: ({ id }, { domPosition }) => {
+            return domPosition;
+          },
+        }),
+      },
+      setCanvasPosition: {
+        actions: assign({
+          canvasPosition: ({ id }, { canvasPosition }) => {
+            return canvasPosition;
           },
         }),
       },
@@ -26,10 +33,10 @@ export const cardMachine = ({ id, text, label, position }) =>
       active: {
         initial: "read",
         //entry: send((_, { x, y }) => ({ type: "cardActivated", x, y })),
-        entry: send(({ position }) => ({
+        entry: send(({ domPosition }) => ({
           type: "cardActivated",
-          x: position.domX,
-          y: position.domY,
+          x: domPosition.x,
+          y: domPosition.y,
         })),
         states: {
           read: {

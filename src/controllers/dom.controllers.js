@@ -34,13 +34,10 @@ export function domControllers(send) {
   const promptController = {
     // "open" is triggered by the graph controller
     close: () => send({ type: "CLOSE.PROMPT" }),
-    create: ({ id, label, text, position }) =>
+    create: (domPosition) =>
       send({
-        type: "CREATECARD",
-        id,
-        label,
-        text,
-        position,
+        type: "convertDataBeforeCreation",
+        domPosition,
       }),
   };
 

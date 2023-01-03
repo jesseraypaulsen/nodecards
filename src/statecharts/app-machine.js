@@ -85,6 +85,7 @@ export const appMachine = createMachine(
                         actions: send({ type: "closePrompt" }),
                       },
                       CREATECARD: {
+                        //TODO: change name to createCardWithKnownPosition??
                         actions: [
                           "createNewCard",
                           send({ type: "CLOSE.PROMPT" }),
@@ -98,6 +99,7 @@ export const appMachine = createMachine(
                           },
                         ],
                       },
+                      convertDataBeforeCreation: {},
                     },
                   },
                   regular: {
@@ -159,14 +161,22 @@ export const appMachine = createMachine(
               "INIT.COMPLETE": {
                 actions: send("APP.READONLY"),
               },
-              storeCardPosition: {
-                actions: ({ cards }, { id, position }) => {
-                  console.log(
-                    "appMachine -> storeCardPosition -> position: ",
-                    position
-                  );
+              setCardDOMPosition: {
+                actions: ({ cards }, { id, domPosition }) => {
                   const card = cards.find((card) => id === card.id);
-                  card.ref.send({ type: "setPosition", position });
+                  card.ref.send({
+                    type: "setDOMPosition",
+                    domPosition,
+                  });
+                },
+              },
+              setCardCanvasPosition: {
+                actions: ({ cards }, { id, canvasPosition }) => {
+                  const card = cards.find((card) => id === card.id);
+                  card.ref.send({
+                    type: "setCardCanvasPosition",
+                    canvasPosition,
+                  });
                 },
               },
             },
@@ -227,15 +237,46 @@ export const appMachine = createMachine(
   {
     actions: {
       createNewCard: assign({
+        //TODO: remove position, change name to createCard
         cards: (context, event) => {
-          const { id, label, text, position } = event;
-          console.log("createNewCard -> ", position);
+          const { id, label, text, domPosition, canvasPosition } = event;
           return context.cards.concat({
             id,
-            ref: spawn(cardMachine({ id, label, text, position }), {
-              name: id,
-              sync: true,
-            }).onTransition((state) => {
+            ref: spawn(
+              cardMachine({ id, label, text, domPosition, canvasPosition }),
+              {
+                name: id,
+                sync: true,
+              }
+            ).onTransition((state) => {
+              //TODO: call renderNodecard from here
+              /*console.log(
+                "child actor machine: ",
+                "value: ",
+                state.value,
+                "context: ",
+                state.context
+              );*/
+            }),
+          });
+        },
+      }),
+      createCardWithKnownPosition: assign({
+        cards: (context, event) => {
+          const { id, label, text, domPosition, canvasPosition } = event;
+          console.log("createNewCard -> domPosition", domPosition);
+          console.log("createNewCard -> domPosition", domPosition);
+
+          return context.cards.concat({
+            id,
+            ref: spawn(
+              cardMachine({ id, label, text, domPosition, canvasPosition }),
+              {
+                name: id,
+                sync: true,
+              }
+            ).onTransition((state) => {
+              //TODO: call renderNodecard from here
               console.log(
                 "child actor machine: ",
                 "value: ",

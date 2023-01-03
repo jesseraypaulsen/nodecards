@@ -20,7 +20,9 @@ export default function App(
   const init = (data) => {
     settingsPanelView();
     data.cards.map(({ id, label, text, position }) => {
-      send({ type: "CREATECARD", id, label, text, position });
+      // do not pass in the position here, because the physics engine generates it later on.
+      // if the initial data for a node provides the position, it should be inserted into the card machine in a separate event somewhere.
+      send({ type: "CREATECARD", id, label, text });
     });
 
     data.links.map(({ id, label, from, to }) => {
@@ -29,40 +31,30 @@ export default function App(
 
     setTimeout(() => {
       deck.nodecards.map((card) => {
-        let canvas = network.getPosition(card.id);
-        let dom = network.canvasToDOM({ x: canvas.x, y: canvas.y });
-        const position = {
-          canvasX: canvas.x,
-          canvasY: canvas.y,
-          domX: dom.x,
-          domY: dom.y,
-        };
-        console.log("init -> ", card.id, position);
-        send({ type: "storeCardPosition", position, id: card.id });
+        let canvasPosition = network.getPosition(card.id);
+        let domPosition = network.canvasToDOM({
+          x: canvasPosition.x,
+          y: canvasPosition.y,
+        });
+        send({
+          type: "setCardDOMPosition",
+          id: card.id,
+          domPosition,
+        });
+        send({
+          type: "setCardCanvasPosition",
+          id: card.id,
+          canvasPosition,
+        });
       });
       send({ type: "INIT.COMPLETE" });
     }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
   };
 
-  const createCard = ({ id, label, text, position }) => {
-    /*if (!position.canX && position.domX) {
-      console.log("createCard: ", position);
-    }*/
-    console.log("createCard", position);
-    const card = cardFace({ id, label, text, position });
+  const createCard = ({ id, label, text, domPosition, canvasPosition }) => {
+    const card = cardFace({ id, label, text, domPosition, canvasPosition });
     deck.nodecards.push(card);
   };
-
-  /*
-  const createCardWithUnknownPosition = ({ id, label, text }) => {
-    setPosition = (position) => {
-      send({ type: "storeCardPosition", position, id });
-    };
-    const card = cardFace({ id, label, text, setPosition });
-    deck.nodecards.push(card);
-  };
-  //This function fails because network.getPosition does not work when its called from within cardFace
-  */
 
   /*TODO:
     const createLink = (id,label,from,to) {
@@ -81,23 +73,21 @@ export default function App(
     bar: buttonTemplates(id, null).editorBar(),
   });
 
+  //TODO: call this function from app-machine.js -> spawn card machine -> onTransition
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
-    let { id, label, text, position } = childState.context;
-    console.log("renderNodecard -> position: ", position);
+    let { id, label, text, domPosition, canvasPosition } = childState.context;
 
     if (childEvent.type === "xstate.init") {
-      createCard({ id, label, text, position });
+      createCard({ id, label, text, domPosition, canvasPosition });
     } else {
       const card = deck.nodecards.find((card) => card.id === id);
 
       if (childEvent.type === "cardActivated") {
-        const { domX, domY } = position;
-        console.log("renderNodecard -> ", position);
         const view = reader(id, text);
         card.inertFace.activate({
-          x: domX,
-          y: domY,
+          x: domPosition.x,
+          y: domPosition.y,
           view,
         });
       }
@@ -131,12 +121,29 @@ export default function App(
 
   const render = (state) => {
     const event = state.event;
-    console.log(state);
     synchSettingsPanel(event);
 
     // child state updates enabled by {sync: true} arg to spawn()
     if (event.type === "xstate.update") renderNodecard(event.state);
-    else if (event.type === "CREATELINK") {
+    else if (event.type === "convertDataBeforeCreation") {
+      const domPosition = event.domPosition;
+      const canvasPosition = network.DOMtoCanvas({
+        x: domPosition.x,
+        y: domPosition.y,
+      });
+      const id = Math.random().toString().substring(2, 9);
+      const label = "new node";
+      const text = "";
+      send({
+        //type: "createCardWithKnownPosition",
+        type: "CREATECARD",
+        domPosition,
+        canvasPosition,
+        id,
+        label,
+        text,
+      });
+    } else if (event.type === "CREATELINK") {
       const { id, label, from, to } = event;
 
       createEdge(id, label, from, to); //TODO: createLink
