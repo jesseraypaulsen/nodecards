@@ -38,6 +38,9 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
           x: domPosition.x,
           y: domPosition.y,
         })),
+        exit: send(() => ({
+          type: "cardDeactivated",
+        })),
         states: {
           read: {
             on: {

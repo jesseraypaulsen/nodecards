@@ -56,6 +56,8 @@ export default function App(
     deck.nodecards.push(card);
   };
 
+  const generateId = () => Math.random().toString().substring(2, 9);
+
   /*TODO:
     const createLink = (id,label,from,to) {
       const linkId = createEdge(id,label,from,to)
@@ -131,7 +133,7 @@ export default function App(
         x: domPosition.x,
         y: domPosition.y,
       });
-      const id = Math.random().toString().substring(2, 9);
+      const id = generateId();
       const label = "new node";
       const text = "";
       send({
