@@ -6,9 +6,7 @@ export default function App(
   { openPrompt, closePrompt },
   synchSettingsPanel,
   setPhysics,
-  createEdge,
-  send,
-  network
+  createEdge
 ) {
   // deck of nodecard VIEWS
   let deck = {
@@ -17,7 +15,7 @@ export default function App(
   };
 
   // TODO: 'invoke' data calls from XState?
-  const init = (data) => {
+  const init = (data, send, network) => {
     settingsPanelView();
     data.cards.map(({ id, label, text, position }) => {
       // do not pass in the position here, because the physics engine generates it later on.
@@ -54,6 +52,7 @@ export default function App(
   const createCard = ({ id, label, text, domPosition, canvasPosition }) => {
     const card = cardFace({ id, label, text, domPosition, canvasPosition });
     deck.nodecards.push(card);
+    console.log("createCard ->", id);
   };
 
   const generateId = () => Math.random().toString().substring(2, 9);
@@ -94,21 +93,21 @@ export default function App(
         });
       }
 
-      //if (childState.value === "inert") card.activeFace.inertify(id);
       if (childEvent.type === "cardDeactivated") card.activeFace.inertify(id);
 
+      //if (childState.changed && childState.value.active === "read") -> BREAKING! called before cardActivated, precluding the creation of the dom element!
       if (childEvent.type === "SWITCH.READ") {
         //const nestedState = childState.value.active;
+        console.log("read: ", childState);
 
         const view = reader(id, text);
         card.activeFace.choose(view);
-
-        /* If we test state.event.state.value for 'read'/'edit', that doesn't tell me if the state has changed from 'read' to 'edit' or vice versa.
-          So evaluating the event type is necessary, because we only want to renderState when there's a change. 
-          state.changed doesn't seem to help because "state.value.changed" is invalid, and active is a compound state. */
       }
-      if (childEvent.type === "SWITCH.EDIT") {
+      if (childState.changed && childState.value.active === "edit") {
+        //if (childEvent.type === "SWITCH.EDIT") {
         //const nestedState = childState.value.active;
+        //console.log("edit: ", childState);
+        //console.log("nestedState: ", nestedState);
 
         const view = editor(id, text);
         card.activeFace.choose(view);
@@ -121,7 +120,8 @@ export default function App(
     }
   };
 
-  const render = (state) => {
+  const render = (state, send, network) => {
+    console.log("render", state);
     const event = state.event;
     synchSettingsPanel(event);
 

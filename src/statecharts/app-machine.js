@@ -255,7 +255,9 @@ export const appMachine = createMachine(
                 "value: ",
                 state.value,
                 "context: ",
-                state.context
+                state.context,
+                "event: ",
+                state.event
               );*/
             }),
           });

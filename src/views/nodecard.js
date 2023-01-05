@@ -7,12 +7,12 @@ import inertFaceFactory from "./nodecard.inert";
   @param {object} domFace
   @returns {object}
 */
-export default (graphFace, domFace) =>
+export default (graphFaceFactory, domFaceFactory) =>
   ({ id, label, text, domPosition, canvasPosition }) => {
-    //TODO: change destructured values to one named object, called 'initalState.'
-    //let {id, label, text, position} = initialState;
-    //create getters/setters for these variables, and pass them down into domFace and graphFace,
-    //and possibly activeFace and inertFace as well.
+    //TODO: if (!id) id = generateId();
+    const getId = () => id;
+    const graphFace = graphFaceFactory(getId);
+    const domFace = domFaceFactory();
     const { createNode, createNodeWithKnownPosition } = graphFace;
 
     if (canvasPosition) createNodeWithKnownPosition(id, label, canvasPosition);

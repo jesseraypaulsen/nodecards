@@ -55,10 +55,10 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
               TYPING: {
                 actions: [
                   assign({ text: (context, event) => event.text }),
-                  sendParent((context, event) => ({
+                  /*sendParent((context, event) => ({
                     type: "CARD.PERSIST",
                     load: context,
-                  })),
+                  })),*/
                 ],
               },
             },

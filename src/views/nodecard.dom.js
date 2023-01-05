@@ -41,7 +41,6 @@ const elementFiller = (_) => ({
     while (_.el.hasChildNodes()) {
       _.el.lastElementChild.remove();
     }
-
     _.el.append(main, bar);
   },
 });
@@ -49,6 +48,7 @@ const elementFiller = (_) => ({
 const editorUpdater = (_) => ({
   updateEditor(text) {
     _.el.firstElementChild.value = text;
+    _.el.firstElementChild.focus();
   },
 });
 

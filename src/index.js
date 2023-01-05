@@ -9,7 +9,7 @@ import activeTemplates from "./views/active-templates";
 import createButtonBar from "./views/button-bar";
 import { settingsPanel, synchPanel } from "./views/settings-panel";
 import promptView from "./views/prompt";
-import graphFaceFactory from "./views/graph";
+import graphFaceFactoryFactory from "./views/graph";
 import { domControllers } from "./controllers/dom.controllers";
 import { graphController } from "./controllers/graph.controllers";
 import "../assets/styles/main.css";
@@ -26,9 +26,8 @@ const service = interpret(appMachine);
 
 network.on("click", graphController(service.send));
 
-const domFace = domFaceFactory();
-const graphFace = graphFaceFactory(network);
-const cardFace = nodecard(graphFace, domFace);
+const graphFaceFactory = graphFaceFactoryFactory(network);
+const cardFace = nodecard(graphFaceFactory, domFaceFactory);
 
 const {
   editorController,
@@ -42,7 +41,14 @@ const buttonTemplatesWithControllers = createButtonBar(buttonsControllers);
 const settingsPanelWithControllers = settingsPanel(panelControllers);
 const promptWithController = promptView(promptController);
 
-const { setPhysics, createEdge } = graphFace;
+//const { setPhysics, createEdge } = graphFace;
+const createEdge = (id, label, from, to) => {
+  network.body.data.edges.add({ id, label, from, to });
+};
+const setPhysics = (value) => {
+  const options = { physics: { enabled: value } };
+  network.setOptions(options);
+};
 
 const app = App(
   cardFace,
@@ -52,9 +58,7 @@ const app = App(
   promptWithController,
   synchPanel,
   setPhysics,
-  createEdge,
-  service.send,
-  network
+  createEdge
 );
 
 const data = {
@@ -77,9 +81,8 @@ const data = {
 
 // subscribe views
 service.onTransition((state) => {
-  //console.log(state.changed)
-  if (state.event.type === "xstate.init") app.init(data);
-  else app.render(state);
+  if (state.event.type === "xstate.init") app.init(data, service.send, network);
+  else app.render(state, service.send, network);
 });
 
 service.start();
