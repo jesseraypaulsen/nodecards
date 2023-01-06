@@ -13,15 +13,19 @@ export default (graphFaceFactory, domFaceFactory) =>
     const getId = () => id;
     const getLabel = () => label;
     const getCanvasPosition = () => canvasPosition;
+    const getDomPosition = () => domPosition;
+    const setDomPosition = (nextDomPosition) => {
+      domPosition = nextDomPosition;
+    };
     const graphFace = graphFaceFactory(getId, getLabel, getCanvasPosition);
-    const domFace = domFaceFactory();
+    const domFace = domFaceFactory(getDomPosition);
     const { createNode, createNodeWithKnownPosition } = graphFace;
-
     if (canvasPosition) createNodeWithKnownPosition();
     else createNode();
 
     return {
       id,
+      setDomPosition,
       activeFace: activeFaceFactory(domFace, graphFace),
       inertFace: inertFaceFactory(domFace, graphFace),
     };

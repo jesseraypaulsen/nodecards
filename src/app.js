@@ -85,10 +85,10 @@ export default function App(
       const card = deck.nodecards.find((card) => card.id === id);
 
       if (childEvent.type === "cardActivated") {
+        //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
+        card.setDomPosition(domPosition);
         const view = reader(id, text);
         card.inertFace.activate({
-          x: domPosition.x,
-          y: domPosition.y,
           view,
         });
       }

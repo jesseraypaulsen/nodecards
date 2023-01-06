@@ -1,13 +1,13 @@
 import { render, div, setPosition } from "./dom-helpers";
 
-export const domFaceFactory = () => {
+export const domFaceFactory = (getDomPosition) => {
   //the closured variable must be a property of an object,
   //or its mutations will be inaccessible to the methods.
   let _private = { el: {} };
 
   return {
     ...elementRemover(_private),
-    ...expander(_private),
+    ...expander(_private, getDomPosition),
     ...elementFiller(_private),
     ...editorUpdater(_private),
     ...collapser(_private),
@@ -27,11 +27,12 @@ export const elementRemover = (_) => ({
   },
 });
 
-const expander = (_) => ({
-  expand({ x, y, view }) {
+const expander = (_, getDomPosition) => ({
+  expand({ view }) {
     _.el = div("nodecard", "expand");
     this.fillElement(view);
     render(_.el); // MUST RENDER BEFORE setPosition is called!!!
+    const { x, y } = getDomPosition();
     setPosition(_.el, x, y);
   },
 });
