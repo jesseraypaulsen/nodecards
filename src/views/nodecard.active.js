@@ -5,8 +5,8 @@ export default (domFace, graphFace) => {
     createLink({ id, label, from, to }) {
       graphFace.createEdge(id, label, from, to);
     },
-    discard(id) {
-      graphFace.removeNode(id);
+    discard() {
+      graphFace.removeNode();
       domFace.removeElement();
       //TODO: should delete entire Nodecard instance
     },

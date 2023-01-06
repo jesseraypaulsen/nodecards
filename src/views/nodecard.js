@@ -11,12 +11,14 @@ export default (graphFaceFactory, domFaceFactory) =>
   ({ id, label, text, domPosition, canvasPosition }) => {
     //TODO: if (!id) id = generateId();
     const getId = () => id;
-    const graphFace = graphFaceFactory(getId);
+    const getLabel = () => label;
+    const getCanvasPosition = () => canvasPosition;
+    const graphFace = graphFaceFactory(getId, getLabel, getCanvasPosition);
     const domFace = domFaceFactory();
     const { createNode, createNodeWithKnownPosition } = graphFace;
 
-    if (canvasPosition) createNodeWithKnownPosition(id, label, canvasPosition);
-    else createNode(id, label);
+    if (canvasPosition) createNodeWithKnownPosition();
+    else createNode();
 
     return {
       id,

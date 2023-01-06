@@ -1,11 +1,12 @@
 export default function graphFaceFactoryFactory(network) {
-  return (getId) => {
-    const createNode = (id, label) => {
-      network.body.data.nodes.add({ id, label });
+  return (getId, getLabel, getCanvasPosition) => {
+    const createNode = () => {
+      network.body.data.nodes.add({ id: getId(), label: getLabel() });
     };
 
-    const createNodeWithKnownPosition = (id, label, { x, y }) => {
-      network.body.data.nodes.add({ id, label, x, y });
+    const createNodeWithKnownPosition = () => {
+      const { x, y } = getCanvasPosition();
+      network.body.data.nodes.add({ id: getId(), label: getLabel(), x, y });
     };
     /*
     const createEdge = (id, label, from, to) => {

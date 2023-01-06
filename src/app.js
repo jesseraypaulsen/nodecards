@@ -116,7 +116,7 @@ export default function App(
       if (childEvent.type === "TYPING")
         card.activeFace.updateEditor(childEvent); // controlled element
 
-      if (childEvent.type === "DELETE") card.activeFace.discard(id);
+      if (childEvent.type === "DELETE") card.activeFace.discard();
     }
   };
 
