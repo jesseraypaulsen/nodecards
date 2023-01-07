@@ -1,7 +1,7 @@
-export default function activeFaceFactory(domFace, graphFace) {
+export default function inertFaceFactory(domFace, graphFace) {
   return {
-    activate({ view }) {
-      domFace.expand({ view });
+    activate() {
+      domFace.expand();
     },
   };
 }

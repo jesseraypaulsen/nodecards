@@ -1,18 +1,24 @@
 import { render, div, setPosition } from "./dom-helpers";
 
-export const domFaceFactory = (getDomPosition) => {
-  //the closured variable must be a property of an object,
-  //or its mutations will be inaccessible to the methods.
-  let _private = { el: {} };
+export const domFaceFactoryFactory =
+  (activeTemplates, buttonTemplates) => (getDomPosition, getText, getId) => {
+    //the closured variable must be a property of an object,
+    //or its mutations will be inaccessible to the methods.
+    let _private = { el: {} };
 
-  return {
-    ...elementRemover(_private),
-    ...expander(_private, getDomPosition),
-    ...elementFiller(_private),
-    ...editorUpdater(_private),
-    ...collapser(_private),
+    return {
+      ...elementRemover(_private),
+      ...expander(_private, getDomPosition),
+      ...elementFiller(_private),
+      ...editorUpdater(_private, getText),
+      ...collapser(_private),
+      ...readerRenderer(),
+      ...editorRenderer(),
+      reader: createReader(activeTemplates, buttonTemplates, getId, getText),
+      editor: createEditor(activeTemplates, buttonTemplates, getId, getText),
+    };
   };
-};
+
 /* 
   The factory wrappers allow us inject the private variable so we can export the methods individually for unit testing.
   But that purpose is defeated when methods call other methods -- as they must do so via 'this'. So the entire instance has to be mocked. 
@@ -27,13 +33,37 @@ export const elementRemover = (_) => ({
   },
 });
 
+const createReader =
+  (activeTemplates, buttonTemplates, getId, getText) => () => ({
+    main: activeTemplates(getId(), getText()).reader(),
+    bar: buttonTemplates(getId(), null).readerBar(),
+  });
+
+const createEditor =
+  (activeTemplates, buttonTemplates, getId, getText) => () => ({
+    main: activeTemplates(getId(), getText()).editor(),
+    bar: buttonTemplates(getId(), null).editorBar(),
+  });
+
 const expander = (_, getDomPosition) => ({
-  expand({ view }) {
+  expand() {
     _.el = div("nodecard", "expand");
-    this.fillElement(view);
+    this.renderReader();
     render(_.el); // MUST RENDER BEFORE setPosition is called!!!
     const { x, y } = getDomPosition();
     setPosition(_.el, x, y);
+  },
+});
+
+const readerRenderer = () => ({
+  renderReader() {
+    this.fillElement(this.reader());
+  },
+});
+
+const editorRenderer = () => ({
+  renderEditor() {
+    this.fillElement(this.editor());
   },
 });
 
@@ -46,9 +76,9 @@ const elementFiller = (_) => ({
   },
 });
 
-const editorUpdater = (_) => ({
-  updateEditor(text) {
-    _.el.firstElementChild.value = text;
+const editorUpdater = (_, getText) => ({
+  updateEditor() {
+    _.el.firstElementChild.value = getText();
     _.el.firstElementChild.focus();
   },
 });

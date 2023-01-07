@@ -14,11 +14,14 @@ export default (domFace, graphFace) => {
       domFace.collapse(); // TODO: should delete domView instance
       //updateNode(id)
     },
-    choose(view) {
-      domFace.fillElement(view);
+    renderReader() {
+      domFace.renderReader();
     },
-    updateEditor({ text }) {
-      domFace.updateEditor(text);
+    renderEditor() {
+      domFace.renderEditor();
+    },
+    updateEditor() {
+      domFace.updateEditor();
     },
   };
 

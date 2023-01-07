@@ -1,7 +1,5 @@
 export default function App(
   cardFace,
-  activeTemplates,
-  buttonTemplates,
   settingsPanelView,
   { openPrompt, closePrompt },
   synchSettingsPanel,
@@ -64,16 +62,6 @@ export default function App(
     }
   */
 
-  const reader = (id, text) => ({
-    main: activeTemplates(id, text).reader(),
-    bar: buttonTemplates(id, null).readerBar(),
-  });
-
-  const editor = (id, text) => ({
-    main: activeTemplates(id, text).editor(),
-    bar: buttonTemplates(id, null).editorBar(),
-  });
-
   //TODO: call this function from app-machine.js -> spawn card machine -> onTransition
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
@@ -87,21 +75,14 @@ export default function App(
       if (childEvent.type === "cardActivated") {
         //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
         card.setDomPosition(domPosition);
-        const view = reader(id, text);
-        card.inertFace.activate({
-          view,
-        });
+        card.inertFace.activate();
       }
 
       if (childEvent.type === "cardDeactivated") card.activeFace.inertify(id);
 
       //if (childState.changed && childState.value.active === "read") -> BREAKING! called before cardActivated, precluding the creation of the dom element!
       if (childEvent.type === "SWITCH.READ") {
-        //const nestedState = childState.value.active;
-        console.log("read: ", childState);
-
-        const view = reader(id, text);
-        card.activeFace.choose(view);
+        card.activeFace.renderReader();
       }
       if (childState.changed && childState.value.active === "edit") {
         //if (childEvent.type === "SWITCH.EDIT") {
@@ -109,13 +90,13 @@ export default function App(
         //console.log("edit: ", childState);
         //console.log("nestedState: ", nestedState);
 
-        const view = editor(id, text);
-        card.activeFace.choose(view);
+        card.activeFace.renderEditor();
       }
 
-      if (childEvent.type === "TYPING")
-        card.activeFace.updateEditor(childEvent); // controlled element
-
+      if (childEvent.type === "TYPING") {
+        card.setText(childEvent.text);
+        card.activeFace.updateEditor(); // controlled element
+      }
       if (childEvent.type === "DELETE") card.activeFace.discard();
     }
   };

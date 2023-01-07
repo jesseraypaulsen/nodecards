@@ -4,7 +4,7 @@ import { interpret } from "xstate";
 import { appMachine } from "./statecharts/app-machine";
 import App from "./app";
 import nodecard from "./views/nodecard";
-import { domFaceFactory } from "./views/nodecard.dom";
+import { domFaceFactoryFactory } from "./views/nodecard.dom";
 import activeTemplates from "./views/active-templates";
 import createButtonBar from "./views/button-bar";
 import { settingsPanel, synchPanel } from "./views/settings-panel";
@@ -23,12 +23,6 @@ const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
 
 const service = interpret(appMachine);
-
-network.on("click", graphController(service.send));
-
-const graphFaceFactory = graphFaceFactoryFactory(network);
-const cardFace = nodecard(graphFaceFactory, domFaceFactory);
-
 const {
   editorController,
   buttonsControllers,
@@ -41,6 +35,15 @@ const buttonTemplatesWithControllers = createButtonBar(buttonsControllers);
 const settingsPanelWithControllers = settingsPanel(panelControllers);
 const promptWithController = promptView(promptController);
 
+network.on("click", graphController(service.send));
+
+const graphFaceFactory = graphFaceFactoryFactory(network);
+const domFaceFactory = domFaceFactoryFactory(
+  activeTemplatesWithController,
+  buttonTemplatesWithControllers
+);
+const cardFace = nodecard(graphFaceFactory, domFaceFactory);
+
 //const { setPhysics, createEdge } = graphFace;
 const createEdge = (id, label, from, to) => {
   network.body.data.edges.add({ id, label, from, to });
@@ -52,8 +55,6 @@ const setPhysics = (value) => {
 
 const app = App(
   cardFace,
-  activeTemplatesWithController,
-  buttonTemplatesWithControllers,
   settingsPanelWithControllers,
   promptWithController,
   synchPanel,
