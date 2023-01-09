@@ -84,7 +84,6 @@ export const appMachine = createMachine(
                         actions: send({ type: "closePrompt" }),
                       },
                       CREATECARD: {
-                        //TODO: change name to createCardWithKnownPosition??
                         actions: [
                           "createNewCard",
                           send({ type: "CLOSE.PROMPT" }),
@@ -161,24 +160,8 @@ export const appMachine = createMachine(
               "INIT.COMPLETE": {
                 actions: send("APP.READONLY"),
               },
-              setCardDOMPosition: {
-                actions: ({ cards }, { id, domPosition }) => {
-                  const card = cards.find((card) => id === card.id);
-                  card.ref.send({
-                    type: "setDOMPosition",
-                    domPosition,
-                  });
-                },
-              },
-              setCardCanvasPosition: {
-                actions: ({ cards }, { id, canvasPosition }) => {
-                  const card = cards.find((card) => id === card.id);
-                  card.ref.send({
-                    type: "setCanvasPosition",
-                    canvasPosition,
-                  });
-                },
-              },
+              setCardDOMPosition: { actions: "setCardDOMPosition" },
+              setCardCanvasPosition: { actions: "setCardCanvasPosition" },
             },
           },
           disabled: {
@@ -194,6 +177,8 @@ export const appMachine = createMachine(
           "APP.READONLY": { target: "mode.active.readOnly" },
           "APP.MODIFIABLE": { target: "mode.active.modifiable" },
           "APP.DISABLE": { target: "mode.disabled" },
+          setCardDOMPosition: { actions: "setCardDOMPosition" },
+          setCardCanvasPosition: { actions: "setCardCanvasPosition" },
         }, //transitions are placed on the 'mode' state instead of its child states, since any state can transition to any other.
         //otherwise you have to duplicate transitions for each state.
       },
@@ -295,6 +280,20 @@ export const appMachine = createMachine(
           });
         },
       }),
+      setCardCanvasPosition: ({ cards }, { id, canvasPosition }) => {
+        const card = cards.find((card) => id === card.id);
+        card.ref.send({
+          type: "setCanvasPosition",
+          canvasPosition,
+        });
+      },
+      setCardDOMPosition: ({ cards }, { id, domPosition }) => {
+        const card = cards.find((card) => id === card.id);
+        card.ref.send({
+          type: "setDOMPosition",
+          domPosition,
+        });
+      },
     },
   }
 );

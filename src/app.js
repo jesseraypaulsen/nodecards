@@ -46,6 +46,7 @@ export default function App(
     // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
     setTimeout(() => {
       send({ type: "INIT.COMPLETE" });
+      console.log(deck);
     }, 1000);
   };
 
@@ -103,22 +104,24 @@ export default function App(
       if (state.matches("mode.initializing")) {
         // convert data after creation
         console.log("convertDataAfterCreation!!!");
-
-        let canvasPosition = network.getPosition(id);
-        let domPosition = network.canvasToDOM({
-          x: canvasPosition.x,
-          y: canvasPosition.y,
-        });
-        send({
-          type: "setCardDOMPosition",
-          id,
-          domPosition,
-        });
-        send({
-          type: "setCardCanvasPosition",
-          id,
-          canvasPosition,
-        });
+        setTimeout(() => {
+          let canvasPosition = network.getPosition(id);
+          let domPosition = network.canvasToDOM({
+            x: canvasPosition.x,
+            y: canvasPosition.y,
+          });
+          console.log(id, domPosition, canvasPosition);
+          send({
+            type: "setCardDOMPosition",
+            id,
+            domPosition,
+          });
+          send({
+            type: "setCardCanvasPosition",
+            id,
+            canvasPosition,
+          });
+        }, 1000);
       }
     } else if (event.type === "xstate.update") renderNodecard(event.state);
     else if (event.type === "convertDataBeforeCreation") {
