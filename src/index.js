@@ -4,12 +4,12 @@ import { interpret } from "xstate";
 import { appMachine } from "./statecharts/app-machine";
 import App from "./app";
 import nodecard from "./views/nodecard";
-import { domFaceFactoryFactory } from "./views/nodecard.dom";
+import { domAdapterFactoryFactory } from "./views/nodecard.dom-adapter";
 import activeTemplates from "./views/active-templates";
 import createButtonBar from "./views/button-bar";
 import { settingsPanel, synchPanel } from "./views/settings-panel";
 import promptView from "./views/prompt";
-import graphFaceFactoryFactory from "./views/graph";
+import graphAdapterFactoryFactory from "./views/graph-adapter";
 import { domControllers } from "./controllers/dom.controllers";
 import { graphController } from "./controllers/graph.controllers";
 import "../assets/styles/main.css";
@@ -37,12 +37,12 @@ const promptWithController = promptView(promptController);
 
 network.on("click", graphController(service.send));
 
-const graphFaceFactory = graphFaceFactoryFactory(network);
-const domFaceFactory = domFaceFactoryFactory(
+const graphAdapterFactory = graphAdapterFactoryFactory(network);
+const domAdapterFactory = domAdapterFactoryFactory(
   activeTemplatesWithController,
   buttonTemplatesWithControllers
 );
-const cardFace = nodecard(graphFaceFactory, domFaceFactory);
+const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
 
 //const { setPhysics, createEdge } = graphFace;
 const createEdge = (id, label, from, to) => {

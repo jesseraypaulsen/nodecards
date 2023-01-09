@@ -9,7 +9,6 @@ export const appMachine = createMachine(
     context: {
       cards: [],
       links: [],
-      active: [],
     },
     states: {
       mode: {
@@ -152,11 +151,12 @@ export const appMachine = createMachine(
           },
           initializing: {
             on: {
-              CREATECARD: {
-                actions: "createNewCard",
+              hydrateCard: {
+                actions: ["hydrateCard"],
               },
-              CREATELINK: {
-                actions: "createNewLink",
+              //convertDataAfterCreation: {},
+              hydrateLink: {
+                actions: "hydrateLink",
               },
               "INIT.COMPLETE": {
                 actions: send("APP.READONLY"),
@@ -174,7 +174,7 @@ export const appMachine = createMachine(
                 actions: ({ cards }, { id, canvasPosition }) => {
                   const card = cards.find((card) => id === card.id);
                   card.ref.send({
-                    type: "setCardCanvasPosition",
+                    type: "setCanvasPosition",
                     canvasPosition,
                   });
                 },
@@ -263,24 +263,18 @@ export const appMachine = createMachine(
           });
         },
       }),
-      createCardWithKnownPosition: assign({
+      hydrateCard: assign({
         cards: (context, event) => {
-          const { id, label, text, domPosition, canvasPosition } = event;
-          console.log("createNewCard -> domPosition", domPosition);
-          console.log("createNewCard -> domPosition", domPosition);
-
+          const { id, label, text } = event;
           return context.cards.concat({
             id,
-            ref: spawn(
-              cardMachine({ id, label, text, domPosition, canvasPosition }),
-              {
-                name: id,
-                sync: true,
-              }
-            ).onTransition((state) => {
+            ref: spawn(cardMachine({ id, label, text }), {
+              name: id,
+              sync: true,
+            }).onTransition((state) => {
               //TODO: call renderNodecard from here
               console.log(
-                "child actor machine: ",
+                "hydrated card -> cardMachine -> onTransition -> ",
                 "value: ",
                 state.value,
                 "context: ",
@@ -290,7 +284,7 @@ export const appMachine = createMachine(
           });
         },
       }),
-      createNewLink: assign({
+      hydrateLink: assign({
         links: (context, event) => {
           const { id, label, from, to } = event;
           return context.links.concat({

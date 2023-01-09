@@ -1,6 +1,6 @@
 import { render, div, setPosition } from "./dom-helpers";
 
-export const domFaceFactoryFactory =
+export const domAdapterFactoryFactory =
   (activeTemplates, buttonTemplates) => (getDomPosition, getText, getId) => {
     //the closured variable must be a property of an object,
     //or its mutations will be inaccessible to the methods.

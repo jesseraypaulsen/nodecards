@@ -1,4 +1,4 @@
-export default function graphFaceFactoryFactory(network) {
+export default function graphAdapterFactoryFactory(network) {
   return (getId, getLabel, getCanvasPosition) => {
     const createNode = () => {
       network.body.data.nodes.add({ id: getId(), label: getLabel() });

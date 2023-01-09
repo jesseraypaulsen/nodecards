@@ -12,46 +12,16 @@ export default function App(
     links: [],
   };
 
-  // TODO: 'invoke' data calls from XState?
-  const init = (data, send, network) => {
-    settingsPanelView();
-    data.cards.map(({ id, label, text, position }) => {
-      // do not pass in the position here, because the physics engine generates it later on.
-      // if the initial data for a node provides the position, it should be inserted into the card machine in a separate event somewhere.
-      send({ type: "CREATECARD", id, label, text });
-    });
-
-    data.links.map(({ id, label, from, to }) => {
-      send({ type: "CREATELINK", id, label, from, to });
-    });
-
-    setTimeout(() => {
-      deck.nodecards.map((card) => {
-        let canvasPosition = network.getPosition(card.id);
-        let domPosition = network.canvasToDOM({
-          x: canvasPosition.x,
-          y: canvasPosition.y,
-        });
-        send({
-          type: "setCardDOMPosition",
-          id: card.id,
-          domPosition,
-        });
-        send({
-          type: "setCardCanvasPosition",
-          id: card.id,
-          canvasPosition,
-        });
-      });
-      send({ type: "INIT.COMPLETE" });
-    }, 1000); // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
-  };
-
   const createCard = ({ id, label, text, domPosition, canvasPosition }) => {
     const card = cardFace({ id, label, text, domPosition, canvasPosition });
     deck.nodecards.push(card);
-    console.log("createCard ->", id);
   };
+
+  const destroyCard = (id) => {
+    deck.nodecards = [...deck.nodecards.filter((card) => card.getId() !== id)];
+  };
+
+  const getCard = (id) => deck.nodecards.find((card) => card.getId() === id);
 
   const generateId = () => Math.random().toString().substring(2, 9);
 
@@ -62,42 +32,55 @@ export default function App(
     }
   */
 
+  // TODO: 'invoke' data calls from XState?
+  const init = (data, send, network) => {
+    settingsPanelView();
+    data.cards.map(({ id, label, text, position }) => {
+      send({ type: "hydrateCard", id, label, text });
+    });
+
+    data.links.map(({ id, label, from, to }) => {
+      send({ type: "hydrateLink", id, label, from, to });
+    });
+
+    // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
+    setTimeout(() => {
+      send({ type: "INIT.COMPLETE" });
+    }, 1000);
+  };
+
   //TODO: call this function from app-machine.js -> spawn card machine -> onTransition
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
     let { id, label, text, domPosition, canvasPosition } = childState.context;
 
-    if (childEvent.type === "xstate.init") {
-      createCard({ id, label, text, domPosition, canvasPosition });
-    } else {
-      const card = deck.nodecards.find((card) => card.id === id);
+    //if (childEvent.type === "xstate.init")
+    const card = getCard(id);
 
-      if (childEvent.type === "cardActivated") {
-        //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
-        card.setDomPosition(domPosition);
-        card.inertFace.activate();
-      }
+    if (childEvent.type === "cardActivated") {
+      //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
+      card.setDomPosition(domPosition);
+      card.inertFace.activate();
+    }
 
-      if (childEvent.type === "cardDeactivated") card.activeFace.inertify(id);
+    if (childEvent.type === "cardDeactivated") card.activeFace.inertify();
 
-      //if (childState.changed && childState.value.active === "read") -> BREAKING! called before cardActivated, precluding the creation of the dom element!
-      if (childEvent.type === "SWITCH.READ") {
-        card.activeFace.renderReader();
-      }
-      if (childState.changed && childState.value.active === "edit") {
-        //if (childEvent.type === "SWITCH.EDIT") {
-        //const nestedState = childState.value.active;
-        //console.log("edit: ", childState);
-        //console.log("nestedState: ", nestedState);
+    //if (childState.changed && childState.matches("active.read")) -> BREAKING! called before cardActivated, precluding the creation of the dom element!
+    if (childEvent.type === "SWITCH.READ") {
+      card.activeFace.renderReader();
+    }
+    if (childState.changed && childState.matches("active.edit")) {
+      //if (childEvent.type === "SWITCH.EDIT")
+      card.activeFace.renderEditor();
+    }
 
-        card.activeFace.renderEditor();
-      }
-
-      if (childEvent.type === "TYPING") {
-        card.setText(childEvent.text);
-        card.activeFace.updateEditor(); // controlled element
-      }
-      if (childEvent.type === "DELETE") card.activeFace.discard();
+    if (childEvent.type === "TYPING") {
+      card.setText(childEvent.text);
+      card.activeFace.updateEditor(); // controlled element
+    }
+    if (childEvent.type === "DELETE") {
+      card.activeFace.discard();
+      destroyCard(id);
     }
   };
 
@@ -106,8 +89,38 @@ export default function App(
     const event = state.event;
     synchSettingsPanel(event);
 
+    /* "xstate.update" events show the id of the card machine. therefore you can use that to send events directly to the card machine.
+      this might be useful for elminating excessive transitions.
+    */
+
     // child state updates enabled by {sync: true} arg to spawn()
-    if (event.type === "xstate.update") renderNodecard(event.state);
+    if (event.type === "xstate.update" && event.state.changed === undefined) {
+      //For the "xstate.update" event that fires when card machines are spawned, state.changed evaluates to undefined.
+      //For some "xstate.update" events, state.changed evaluates to false, so testing for falsey doesn't work.
+      const { id, label, text, domPosition, canvasPosition } =
+        event.state.context;
+      createCard({ id, label, text, domPosition, canvasPosition });
+      if (state.matches("mode.initializing")) {
+        // convert data after creation
+        console.log("convertDataAfterCreation!!!");
+
+        let canvasPosition = network.getPosition(id);
+        let domPosition = network.canvasToDOM({
+          x: canvasPosition.x,
+          y: canvasPosition.y,
+        });
+        send({
+          type: "setCardDOMPosition",
+          id,
+          domPosition,
+        });
+        send({
+          type: "setCardCanvasPosition",
+          id,
+          canvasPosition,
+        });
+      }
+    } else if (event.type === "xstate.update") renderNodecard(event.state);
     else if (event.type === "convertDataBeforeCreation") {
       const domPosition = event.domPosition;
       const canvasPosition = network.DOMtoCanvas({
@@ -126,7 +139,7 @@ export default function App(
         label,
         text,
       });
-    } else if (event.type === "CREATELINK") {
+    } else if (event.type === "hydrateLink") {
       const { id, label, from, to } = event;
 
       createEdge(id, label, from, to); //TODO: createLink
@@ -190,7 +203,7 @@ export default function App(
 
  - when physics is turned on while a nodecard is active, an error related to the nodecard dom element occurs
 
- - selecting "Disabled" from the panel while a nodecard is active, results in error: "_element not undefined"
+ - selecting "Disabled" from the panel while a nodecard is active, results in error: "_element not undefined" (DONE)
 
  - add 'source' argument to createButtonBar
 
