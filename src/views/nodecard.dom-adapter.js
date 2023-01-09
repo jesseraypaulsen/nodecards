@@ -1,7 +1,8 @@
 import { render, div, setPosition } from "./dom-helpers";
 
 export const domAdapterFactoryFactory =
-  (activeTemplates, buttonTemplates) => (getDomPosition, getText, getId) => {
+  (activeTemplates, buttonTemplates) =>
+  (getDomPosition, getText, getId, sendToMachine) => {
     //the closured variable must be a property of an object,
     //or its mutations will be inaccessible to the methods.
     let _private = { el: {} };
@@ -14,8 +15,20 @@ export const domAdapterFactoryFactory =
       ...collapser(_private),
       ...readerRenderer(),
       ...editorRenderer(),
-      reader: createReader(activeTemplates, buttonTemplates, getId, getText),
-      editor: createEditor(activeTemplates, buttonTemplates, getId, getText),
+      reader: createReader(
+        activeTemplates,
+        buttonTemplates,
+        getId,
+        getText,
+        sendToMachine
+      ),
+      editor: createEditor(
+        activeTemplates,
+        buttonTemplates,
+        getId,
+        getText,
+        sendToMachine
+      ),
     };
   };
 
@@ -34,15 +47,15 @@ export const elementRemover = (_) => ({
 });
 
 const createReader =
-  (activeTemplates, buttonTemplates, getId, getText) => () => ({
-    main: activeTemplates(getId(), getText()).reader(),
-    bar: buttonTemplates(getId(), null).readerBar(),
+  (activeTemplates, buttonTemplates, getId, getText, sendToMachine) => () => ({
+    main: activeTemplates(getId(), getText(), sendToMachine).reader(),
+    bar: buttonTemplates(getId(), null, sendToMachine).readerBar(),
   });
 
 const createEditor =
-  (activeTemplates, buttonTemplates, getId, getText) => () => ({
-    main: activeTemplates(getId(), getText()).editor(),
-    bar: buttonTemplates(getId(), null).editorBar(),
+  (activeTemplates, buttonTemplates, getId, getText, sendToMachine) => () => ({
+    main: activeTemplates(getId(), getText(), sendToMachine).editor(),
+    bar: buttonTemplates(getId(), null, sendToMachine).editorBar(),
   });
 
 const expander = (_, getDomPosition) => ({

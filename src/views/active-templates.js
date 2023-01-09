@@ -1,5 +1,5 @@
 // chooseActiveView
-export default (controller) => (id, text) => {
+export default (controller) => (id, text, sendToMachine) => {
   const htmlText = (text) => {
     if (text) {
       return text

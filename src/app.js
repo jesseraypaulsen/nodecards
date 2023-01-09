@@ -12,9 +12,25 @@ export default function App(
     links: [],
   };
 
-  const createCard = ({ id, label, text, domPosition, canvasPosition }) => {
-    const card = cardFace({ id, label, text, domPosition, canvasPosition });
+  const createCard = ({
+    id,
+    label,
+    text,
+    domPosition,
+    canvasPosition,
+    machineRef,
+  }) => {
+    const card = cardFace({
+      id,
+      label,
+      text,
+      domPosition,
+      canvasPosition,
+      machineRef,
+    });
+    //card.machine = machine;
     deck.nodecards.push(card);
+    console.log("createCard -> ", deck.nodecards);
   };
 
   const destroyCard = (id) => {
@@ -57,6 +73,7 @@ export default function App(
 
     //if (childEvent.type === "xstate.init")
     const card = getCard(id);
+    //card.machine.send("test");
 
     if (childEvent.type === "cardActivated") {
       //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
@@ -66,11 +83,11 @@ export default function App(
 
     if (childEvent.type === "cardDeactivated") card.activeFace.inertify();
 
-    //if (childState.changed && childState.matches("active.read")) -> BREAKING! called before cardActivated, precluding the creation of the dom element!
-    if (childEvent.type === "SWITCH.READ") {
+    //if (childState.changed && childState.matches("active.reading")) -> BREAKING! called before cardActivated, precluding the creation of the dom element!
+    if (childEvent.type === "READ") {
       card.activeFace.renderReader();
     }
-    if (childState.changed && childState.matches("active.edit")) {
+    if (childState.changed && childState.matches("active.editing")) {
       //if (childEvent.type === "SWITCH.EDIT")
       card.activeFace.renderEditor();
     }
@@ -85,14 +102,51 @@ export default function App(
     }
   };
 
+  const positionAfterCreation = (id, send, network) => {
+    // delay until after the machine transitions from mode.intializing to mode.active, so that physics engine is turned off.
+    // otherwise the position data will not be accurate.
+    setTimeout(() => {
+      let canvasPosition = network.getPosition(id);
+      let domPosition = network.canvasToDOM({
+        x: canvasPosition.x,
+        y: canvasPosition.y,
+      });
+      console.log(id, domPosition, canvasPosition);
+      send({
+        type: "setCardDOMPosition",
+        id,
+        domPosition,
+      });
+      send({
+        type: "setCardCanvasPosition",
+        id,
+        canvasPosition,
+      });
+    }, 1000);
+  };
+
+  const positionBeforeCreation = (domPosition, send, network) => {
+    const canvasPosition = network.DOMtoCanvas({
+      x: domPosition.x,
+      y: domPosition.y,
+    });
+    const id = generateId();
+    const label = "new node";
+    const text = "";
+    send({
+      type: "CREATECARD",
+      domPosition,
+      canvasPosition,
+      id,
+      label,
+      text,
+    });
+  };
+
   const render = (state, send, network) => {
     console.log("render", state);
     const event = state.event;
     synchSettingsPanel(event);
-
-    /* "xstate.update" events show the id of the card machine. therefore you can use that to send events directly to the card machine.
-      this might be useful for elminating excessive transitions.
-    */
 
     // child state updates enabled by {sync: true} arg to spawn()
     if (event.type === "xstate.update" && event.state.changed === undefined) {
@@ -100,48 +154,22 @@ export default function App(
       //For some "xstate.update" events, state.changed evaluates to false, so testing for falsey doesn't work.
       const { id, label, text, domPosition, canvasPosition } =
         event.state.context;
-      createCard({ id, label, text, domPosition, canvasPosition });
-      if (state.matches("mode.initializing")) {
-        // convert data after creation
-        console.log("convertDataAfterCreation!!!");
-        setTimeout(() => {
-          let canvasPosition = network.getPosition(id);
-          let domPosition = network.canvasToDOM({
-            x: canvasPosition.x,
-            y: canvasPosition.y,
-          });
-          console.log(id, domPosition, canvasPosition);
-          send({
-            type: "setCardDOMPosition",
-            id,
-            domPosition,
-          });
-          send({
-            type: "setCardCanvasPosition",
-            id,
-            canvasPosition,
-          });
-        }, 1000);
-      }
-    } else if (event.type === "xstate.update") renderNodecard(event.state);
-    else if (event.type === "convertDataBeforeCreation") {
-      const domPosition = event.domPosition;
-      const canvasPosition = network.DOMtoCanvas({
-        x: domPosition.x,
-        y: domPosition.y,
-      });
-      const id = generateId();
-      const label = "new node";
-      const text = "";
-      send({
-        //type: "createCardWithKnownPosition",
-        type: "CREATECARD",
-        domPosition,
-        canvasPosition,
+      const item = state.context.cards.find((card) => card.id === id);
+      createCard({
         id,
         label,
         text,
+        domPosition,
+        canvasPosition,
+        machineRef: item.ref,
       });
+      if (state.matches("mode.initializing")) {
+        positionAfterCreation(id, send, network);
+      }
+    } else if (event.type === "xstate.update") renderNodecard(event.state);
+    else if (event.type === "convertDataBeforeCreation") {
+      // is this event even necessary? why not just call the function directly from dom.controllers.js instead of sending another event?
+      positionBeforeCreation(event.domPosition, send, network);
     } else if (event.type === "hydrateLink") {
       const { id, label, from, to } = event;
 

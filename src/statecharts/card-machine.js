@@ -31,8 +31,7 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
     },
     states: {
       active: {
-        initial: "read",
-        //entry: send((_, { x, y }) => ({ type: "cardActivated", x, y })),
+        initial: "reading",
         entry: send(({ domPosition }) => ({
           type: "cardActivated",
           x: domPosition.x,
@@ -42,16 +41,16 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
           type: "cardDeactivated",
         })),
         states: {
-          read: {
+          reading: {
             on: {
-              "SWITCH.EDIT": {
-                target: "edit",
+              EDIT: {
+                target: "editing",
               },
             },
           },
-          edit: {
+          editing: {
             on: {
-              "SWITCH.READ": { target: "read" }, // this transition can occur if appMachine is in 'readOnly' or 'modifiable'.
+              READ: { target: "reading" }, // this transition can occur if appMachine is in 'readOnly' or 'modifiable'.
               TYPING: {
                 actions: [
                   assign({ text: (context, event) => event.text }),

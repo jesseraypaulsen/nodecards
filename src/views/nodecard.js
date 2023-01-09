@@ -8,12 +8,13 @@ import inertFaceFactory from "./nodecard.inert";
   @returns {object}
 */
 export default (graphAdapterFactory, domAdapterFactory) =>
-  ({ id, label, text, domPosition, canvasPosition }) => {
+  ({ id, label, text, domPosition, canvasPosition, machineRef }) => {
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;
     const getCanvasPosition = () => canvasPosition;
     const getDomPosition = () => domPosition;
+    const sendToMachine = (msg) => machineRef.send(msg);
 
     const setText = (nextText) => {
       text = nextText;
@@ -26,7 +27,12 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       getLabel,
       getCanvasPosition
     );
-    const domAdapter = domAdapterFactory(getDomPosition, getText, getId);
+    const domAdapter = domAdapterFactory(
+      getDomPosition,
+      getText,
+      getId,
+      sendToMachine
+    );
     const { createNode, createNodeWithKnownPosition } = graphAdapter;
     if (canvasPosition) createNodeWithKnownPosition();
     else createNode();

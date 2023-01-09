@@ -1,9 +1,4 @@
-export function domControllers(send) {
-  // for edit
-  const editorController = (e, id) => {
-    send({ type: "CARD.EDIT.TYPING", text: e.target.value, id });
-  };
-
+export default (send) => {
   const panelControllers = {
     userEvent: (type) => ({ type, sentByUser: true }),
 
@@ -24,13 +19,6 @@ export function domControllers(send) {
     },
   };
 
-  const buttonsControllers = {
-    edit: (id) => send({ type: "CARD.EDIT", id }),
-    read: (id) => send({ type: "CARD.READ", id }),
-    delete: (id) => send({ type: "CARD.DELETE", id }),
-    inertify: (id) => send({ type: "CARD.INERTIFY", id }),
-  };
-
   const promptController = {
     // "open" is triggered by the graph controller
     close: () => send({ type: "CLOSE.PROMPT" }),
@@ -42,9 +30,7 @@ export function domControllers(send) {
   };
 
   return {
-    editorController,
     panelControllers,
-    buttonsControllers,
     promptController,
   };
-}
+};

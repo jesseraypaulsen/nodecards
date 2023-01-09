@@ -17,9 +17,9 @@ export const appMachine = createMachine(
           active: {
             on: {
               "CARD.CLICK": {
-                actions: (context, { id, x, y }) => {
+                actions: (context, { id }) => {
                   const card = context.cards.find((card) => id === card.id);
-                  card.ref.send({ type: "OPEN", x, y });
+                  card.ref.send({ type: "OPEN" });
                 },
               },
               "CARD.INERTIFY": {
@@ -35,7 +35,7 @@ export const appMachine = createMachine(
                   const card = context.cards.find(
                     (card) => event.id === card.id
                   );
-                  card.ref.send({ type: "SWITCH.READ" });
+                  card.ref.send({ type: "READ" });
                 },
               },
             },
@@ -112,10 +112,7 @@ export const appMachine = createMachine(
                     // popup button for deleting the edge
                   },
                   "CARD.EDIT": {
-                    actions: send(
-                      { type: "SWITCH.EDIT" },
-                      { to: (_, e) => e.id }
-                    ),
+                    actions: send({ type: "EDIT" }, { to: (_, e) => e.id }),
                   },
                   "CARD.EDIT.TYPING": {
                     actions: (context, { text, id }) => {
@@ -153,15 +150,12 @@ export const appMachine = createMachine(
               hydrateCard: {
                 actions: ["hydrateCard"],
               },
-              //convertDataAfterCreation: {},
               hydrateLink: {
                 actions: "hydrateLink",
               },
               "INIT.COMPLETE": {
                 actions: send("APP.READONLY"),
               },
-              setCardDOMPosition: { actions: "setCardDOMPosition" },
-              setCardCanvasPosition: { actions: "setCardCanvasPosition" },
             },
           },
           disabled: {
@@ -179,22 +173,8 @@ export const appMachine = createMachine(
           "APP.DISABLE": { target: "mode.disabled" },
           setCardDOMPosition: { actions: "setCardDOMPosition" },
           setCardCanvasPosition: { actions: "setCardCanvasPosition" },
-        }, //transitions are placed on the 'mode' state instead of its child states, since any state can transition to any other.
+        }, //APP.* transitions are placed on the 'mode' state instead of its child states, since any state can transition to any other.
         //otherwise you have to duplicate transitions for each state.
-      },
-      persisting: {
-        initial: "disabled",
-        states: {
-          enabled: {
-            "PERSIST.OFF": { target: "disabled" },
-            "CARD.PERSIST": { actions: (context, event) => {} },
-            "LINK.PERSIST": { actions: (context, event) => {} },
-            "NEWCARD.PERSIST": { actions: (context, event) => {} },
-          },
-          disabled: {
-            "PERSIST.ON": { target: "enabled" },
-          },
-        },
       },
       physics: {
         initial: "initializing",
@@ -214,6 +194,17 @@ export const appMachine = createMachine(
             on: {
               turnPhysicsOn: { target: "enabled" },
             },
+          },
+        },
+      },
+      persisting: {
+        initial: "disabled",
+        states: {
+          enabled: {
+            "PERSIST.OFF": { target: "disabled" },
+          },
+          disabled: {
+            "PERSIST.ON": { target: "enabled" },
           },
         },
       },
@@ -256,15 +247,9 @@ export const appMachine = createMachine(
             ref: spawn(cardMachine({ id, label, text }), {
               name: id,
               sync: true,
-            }).onTransition((state) => {
+            }).onTransition((state, event) => {
               //TODO: call renderNodecard from here
-              console.log(
-                "hydrated card -> cardMachine -> onTransition -> ",
-                "value: ",
-                state.value,
-                "context: ",
-                state.context
-              );
+              console.log("hydrated card -> onTransition -> event", event);
             }),
           });
         },
