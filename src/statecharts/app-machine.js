@@ -214,7 +214,8 @@ export const appMachine = createMachine(
     actions: {
       createNewCard: assign({
         //TODO: remove position, change name to createCard
-        cards: (context, event) => {
+        cards: (context, event, meta) => {
+          console.log("createNewCard -> meta", meta);
           const { id, label, text, domPosition, canvasPosition } = event;
           return context.cards.concat({
             id,
@@ -224,17 +225,8 @@ export const appMachine = createMachine(
                 name: id,
                 sync: true,
               }
-            ).onTransition((state) => {
+            ).onTransition((state, event) => {
               //TODO: call renderNodecard from here
-              /*console.log(
-                "child actor machine: ",
-                "value: ",
-                state.value,
-                "context: ",
-                state.context,
-                "event: ",
-                state.event
-              );*/
             }),
           });
         },

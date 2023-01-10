@@ -5,7 +5,7 @@ import editOffIcon from "../../assets/icons/edit_off.png";
 import linkIcon from "../../assets/icons/link.png";
 import inertifyIcon from "../../assets/icons/swipe_down_alt.png";
 
-export default (controllers, id, source, sendToMachine) => {
+export default (controllers, id, source) => {
   // pass id into controller
   const wrapController = (e, controller) => {
     //const parent = e.target.parentElement.parentElement.parentElement;

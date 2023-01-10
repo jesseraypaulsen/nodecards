@@ -1,5 +1,6 @@
 import activeFaceFactory from "./nodecard.active";
 import inertFaceFactory from "./nodecard.inert";
+import controllers from "../controllers/nodecard.controllers";
 
 /*
   Bridges together two different rendering environments, to produce a single indivisible UI entity called a Nodecard.
@@ -22,6 +23,9 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     const setDomPosition = (nextDomPosition) => {
       domPosition = nextDomPosition;
     };
+
+    const { editorController, buttonsControllers } = controllers(sendToMachine);
+
     const graphAdapter = graphAdapterFactory(
       getId,
       getLabel,
@@ -31,7 +35,8 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       getDomPosition,
       getText,
       getId,
-      sendToMachine
+      editorController,
+      buttonsControllers
     );
     const { createNode, createNodeWithKnownPosition } = graphAdapter;
     if (canvasPosition) createNodeWithKnownPosition();

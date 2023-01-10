@@ -2,7 +2,7 @@ import fillTemplates from "./button-templates";
 import { div, span } from "./dom-helpers";
 
 //createButtonBar
-export default (controllers) => (id, source, sendToMachine) => {
+export default (id, source, controllers) => {
   const templates = fillTemplates(controllers, id, source);
 
   let buttons = {};

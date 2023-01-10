@@ -1,8 +1,10 @@
 import { render, div, setPosition } from "./dom-helpers";
+import activeTemplates from "./active-templates";
+import createButtonBar from "./button-bar";
 
-export const domAdapterFactoryFactory =
-  (activeTemplates, buttonTemplates) =>
-  (getDomPosition, getText, getId, sendToMachine) => {
+export const domAdapterFactory =
+  //(activeTemplates, buttonTemplates) =>
+  (getDomPosition, getText, getId, editorController, buttonsControllers) => {
     //the closured variable must be a property of an object,
     //or its mutations will be inaccessible to the methods.
     let _private = { el: {} };
@@ -16,18 +18,16 @@ export const domAdapterFactoryFactory =
       ...readerRenderer(),
       ...editorRenderer(),
       reader: createReader(
-        activeTemplates,
-        buttonTemplates,
         getId,
         getText,
-        sendToMachine
+        buttonsControllers,
+        editorController
       ),
       editor: createEditor(
-        activeTemplates,
-        buttonTemplates,
         getId,
         getText,
-        sendToMachine
+        buttonsControllers,
+        editorController
       ),
     };
   };
@@ -47,15 +47,15 @@ export const elementRemover = (_) => ({
 });
 
 const createReader =
-  (activeTemplates, buttonTemplates, getId, getText, sendToMachine) => () => ({
-    main: activeTemplates(getId(), getText(), sendToMachine).reader(),
-    bar: buttonTemplates(getId(), null, sendToMachine).readerBar(),
+  (getId, getText, buttonsControllers, editorController) => () => ({
+    main: activeTemplates(getId(), getText(), editorController).reader(),
+    bar: createButtonBar(getId(), null, buttonsControllers).readerBar(),
   });
 
 const createEditor =
-  (activeTemplates, buttonTemplates, getId, getText, sendToMachine) => () => ({
-    main: activeTemplates(getId(), getText(), sendToMachine).editor(),
-    bar: buttonTemplates(getId(), null, sendToMachine).editorBar(),
+  (getId, getText, buttonsControllers, editorController) => () => ({
+    main: activeTemplates(getId(), getText(), editorController).editor(),
+    bar: createButtonBar(getId(), null, buttonsControllers).editorBar(),
   });
 
 const expander = (_, getDomPosition) => ({

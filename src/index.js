@@ -4,15 +4,12 @@ import { interpret } from "xstate";
 import { appMachine } from "./statecharts/app-machine";
 import App from "./app";
 import nodecard from "./views/nodecard";
-import { domAdapterFactoryFactory } from "./views/nodecard.dom-adapter";
-import activeTemplates from "./views/active-templates";
-import createButtonBar from "./views/button-bar";
+import { domAdapterFactory } from "./views/nodecard.dom-adapter";
 import { settingsPanel, synchPanel } from "./views/settings-panel";
 import promptView from "./views/prompt";
 import graphAdapterFactoryFactory from "./views/graph-adapter";
 import pControllers from "./controllers/p-controllers";
 import { graphController } from "./controllers/graph.controllers";
-import nodecardControllers from "./controllers/nodecard.controllers";
 import "../assets/styles/main.css";
 import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
@@ -26,25 +23,15 @@ const network = new vis.Network(container, {}, options);
 const service = interpret(appMachine);
 const { panelControllers, promptController } = pControllers(service.send);
 
-const { editorController, buttonsControllers } = nodecardControllers(
-  service.send
-);
-
-const activeTemplatesWithController = activeTemplates(editorController);
-const buttonTemplatesWithControllers = createButtonBar(buttonsControllers);
 const settingsPanelWithControllers = settingsPanel(panelControllers);
 const promptWithController = promptView(promptController);
 
 network.on("click", graphController(service.send));
 
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
-const domAdapterFactory = domAdapterFactoryFactory(
-  activeTemplatesWithController,
-  buttonTemplatesWithControllers
-);
+
 const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
 
-//const { setPhysics, createEdge } = graphFace;
 const createEdge = (id, label, from, to) => {
   network.body.data.edges.add({ id, label, from, to });
 };

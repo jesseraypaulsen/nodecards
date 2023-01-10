@@ -73,7 +73,6 @@ export default function App(
 
     //if (childEvent.type === "xstate.init")
     const card = getCard(id);
-    //card.machine.send("test");
 
     if (childEvent.type === "cardActivated") {
       //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
