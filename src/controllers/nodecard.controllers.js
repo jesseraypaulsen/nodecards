@@ -1,12 +1,17 @@
 export default (send) => {
   const editorController = (e, id) => {
-    send({ type: "TYPING", text: e.target.value, id });
+    send({
+      type: "mediateToModify",
+      childType: "TYPING",
+      data: { text: e.target.value, id },
+    });
   };
   const buttonsControllers = {
-    edit: (id) => send({ type: "EDIT", id }),
-    read: (id) => send({ type: "READ", id }),
-    delete: (id) => send({ type: "DELETE", id }),
-    inertify: (id) => send({ type: "INERTIFY", id }),
+    edit: (id) =>
+      send({ type: "mediateToModify", childType: "EDIT", data: { id } }),
+    read: (id) => send({ type: "mediate", childType: "READ", id }),
+    delete: (id) => send({ type: "deleteCard", id }),
+    inertify: (id) => send({ type: "mediate", childType: "INERTIFY", id }),
   };
 
   return {

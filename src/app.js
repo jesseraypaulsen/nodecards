@@ -18,6 +18,7 @@ export default function App(
     text,
     domPosition,
     canvasPosition,
+    send,
     machineRef,
   }) => {
     const card = cardFace({
@@ -26,6 +27,7 @@ export default function App(
       text,
       domPosition,
       canvasPosition,
+      send,
       machineRef,
     });
     //card.machine = machine;
@@ -59,11 +61,8 @@ export default function App(
       send({ type: "hydrateLink", id, label, from, to });
     });
 
-    // delay transition into mode.active, allowing physics engine to lay out the nodes before it's disabled.
-    setTimeout(() => {
-      send({ type: "INIT.COMPLETE" });
-      console.log(deck);
-    }, 1000);
+    // disable physics engine after 1 second.
+    // send("INIT.COMPLETE");
   };
 
   //TODO: call this function from app-machine.js -> spawn card machine -> onTransition
@@ -92,7 +91,7 @@ export default function App(
     }
 
     if (childEvent.type === "TYPING") {
-      card.setText(childEvent.text);
+      card.setText(childEvent.data.text);
       card.activeFace.updateEditor(); // controlled element
     }
     if (childEvent.type === "DELETE") {
@@ -133,7 +132,7 @@ export default function App(
     const label = "new node";
     const text = "";
     send({
-      type: "CREATECARD",
+      type: "createCard",
       domPosition,
       canvasPosition,
       id,
@@ -160,6 +159,7 @@ export default function App(
         text,
         domPosition,
         canvasPosition,
+        send,
         machineRef: item.ref,
       });
       if (state.matches("mode.initializing")) {

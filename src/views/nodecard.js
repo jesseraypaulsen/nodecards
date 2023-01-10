@@ -9,13 +9,14 @@ import controllers from "../controllers/nodecard.controllers";
   @returns {object}
 */
 export default (graphAdapterFactory, domAdapterFactory) =>
-  ({ id, label, text, domPosition, canvasPosition, machineRef }) => {
+  ({ id, label, text, domPosition, canvasPosition, send, machineRef }) => {
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;
     const getCanvasPosition = () => canvasPosition;
     const getDomPosition = () => domPosition;
-    const sendToMachine = (msg) => machineRef.send(msg);
+    const sendToCardMachine = (msg) => machineRef.send(msg);
+    const sendToAppMachine = (msg) => send(msg);
 
     const setText = (nextText) => {
       text = nextText;
@@ -24,7 +25,9 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       domPosition = nextDomPosition;
     };
 
-    const { editorController, buttonsControllers } = controllers(sendToMachine);
+    const { editorController, buttonsControllers } =
+      //controllers(sendToCardMachine);
+      controllers(sendToAppMachine);
 
     const graphAdapter = graphAdapterFactory(
       getId,

@@ -52,13 +52,7 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
             on: {
               READ: { target: "reading" }, // this transition can occur if appMachine is in 'readOnly' or 'modifiable'.
               TYPING: {
-                actions: [
-                  assign({ text: (context, event) => event.text }),
-                  /*sendParent((context, event) => ({
-                    type: "CARD.PERSIST",
-                    load: context,
-                  })),*/
-                ],
+                actions: [assign({ text: (context, event) => event.text })],
               },
             },
           },
@@ -82,7 +76,7 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
           type: "cardDeactivated",
         })),*/
         on: {
-          OPEN: { target: "active" },
+          activate: { target: "active" },
         },
       },
     },

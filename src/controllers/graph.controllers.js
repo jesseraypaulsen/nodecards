@@ -1,26 +1,28 @@
-import { typeofSelection } from "../utils";
+import { findEventType } from "../utils";
 
 export const graphController = (send) => {
   const handlers = {
-    BG: (e) => {
+    background: (e) => {
       send({
-        type: "CLICK.BACKGROUND",
+        type: "clickedBackground",
         x: e.pointer.DOM.x,
         y: e.pointer.DOM.y,
       });
     },
-    NC: (e) => {
+    nodecard: (e) => {
       send({
-        type: "CARD.CLICK",
+        type: "mediate",
+        childType: "activate",
         id: e.nodes[0],
-        x: e.pointer.DOM.x,
-        y: e.pointer.DOM.y,
       });
+    },
+    link: (e) => {
+      send({ type: "clickedLink", e });
     },
   };
 
   return (e) => {
-    const eventType = typeofSelection(e);
+    const eventType = findEventType(e);
     handlers[eventType](e);
   };
 };

@@ -16,44 +16,26 @@ export const appMachine = createMachine(
         states: {
           active: {
             on: {
-              "CARD.CLICK": {
-                actions: (context, { id }) => {
+              mediate: {
+                actions: (context, { id, childType }) => {
                   const card = context.cards.find((card) => id === card.id);
-                  card.ref.send({ type: "OPEN" });
-                },
-              },
-              "CARD.INERTIFY": {
-                actions: (context, event) => {
-                  const card = context.cards.find(
-                    (card) => event.id === card.id
-                  );
-                  card.ref.send({ type: "INERTIFY" });
-                },
-              },
-              "CARD.READ": {
-                actions: (context, event) => {
-                  const card = context.cards.find(
-                    (card) => event.id === card.id
-                  );
-                  card.ref.send({ type: "READ" });
+                  card.ref.send({ type: childType });
                 },
               },
             },
             entry: send({ type: "turnPhysicsOff", sentByUser: false }), // switch physics off when app is active
             states: {
-              readOnly: {
-                // popup buttons do not appear, each card's branch and edit buttons are disabled. 'edit' is not possible on cards.
-              },
+              readOnly: {},
               modifiable: {
                 initial: "regular",
                 states: {
-                  linkcreation: {
+                  linkCreation: {
                     entry: {
                       // desktop: change behavior of mouse cursor;
                       // mobile: do something else
                     },
                     on: {
-                      "BACKGROUND.CLICK": {
+                      clickedBackground: {
                         actions: [
                           // create nodecard + link;
                           // send transition for 'persisting' state.
@@ -68,14 +50,14 @@ export const appMachine = createMachine(
                       },
                     },
                   },
-                  cardcreation: {
+                  cardCreation: {
                     entry: send((_, { x, y }) => ({
                       type: "openPrompt",
                       x,
                       y,
                     })),
                     on: {
-                      "CLICK.BACKGROUND": {
+                      clickedBackground: {
                         target: "regular",
                         actions: send({ type: "closePrompt" }),
                       },
@@ -83,16 +65,16 @@ export const appMachine = createMachine(
                         target: "regular",
                         actions: send({ type: "closePrompt" }),
                       },
-                      CREATECARD: {
+                      createCard: {
                         actions: [
-                          "createNewCard",
+                          "createCard",
                           send({ type: "CLOSE.PROMPT" }),
                           (context, e) => {
                             const card = context.cards.find(
                               (card) => e.id === card.id
                             );
                             card.ref.send({
-                              type: "OPEN",
+                              type: "activate",
                             });
                           },
                         ],
@@ -102,29 +84,24 @@ export const appMachine = createMachine(
                   },
                   regular: {
                     on: {
-                      "BRANCHBUTTON.CLICK": { target: "linkcreation" },
-                      "CLICK.BACKGROUND": { target: "cardcreation" },
+                      "BRANCHBUTTON.CLICK": { target: "linkCreation" },
+                      clickedBackground: { target: "cardCreation" },
                     },
                   },
                 },
                 on: {
+                  mediateToModify: {
+                    actions: (context, { childType, data }) => {
+                      const card = context.cards.find(
+                        (card) => data.id === card.id
+                      );
+                      card.ref.send({ type: childType, data });
+                    },
+                  },
                   "CLICK.EDGE": {
                     // popup button for deleting the edge
                   },
-                  "CARD.EDIT": {
-                    actions: send({ type: "EDIT" }, { to: (_, e) => e.id }),
-                  },
-                  "CARD.EDIT.TYPING": {
-                    actions: (context, { text, id }) => {
-                      const card = context.cards.find((card) => id === card.id);
-                      card.ref.send({ type: "TYPING", text, id });
-                    },
-                    // None of these work for using the "to" option when passing data thru the event. The docs have no explanation.
-                    //send({ type: "TYPING", text: (_,e) => e.text }, { to: (context,event) => event.id})
-                    //send((_,e) => ({ type: "TYPING", text: e.text }, { to: e.id }))
-                    //send((_,e) => ({ type: "TYPING", text: e.text }), { to: (_,e) => e.id })
-                  },
-                  "CARD.DELETE": {
+                  deleteCard: {
                     actions: [
                       (context, event) => {
                         const card = context.cards.find(
@@ -153,9 +130,10 @@ export const appMachine = createMachine(
               hydrateLink: {
                 actions: "hydrateLink",
               },
-              "INIT.COMPLETE": {
-                actions: send("APP.READONLY"),
-              },
+              //"INIT.COMPLETE": { target: "active.readOnly" },
+            },
+            after: {
+              1000: { target: "active.readOnly" },
             },
           },
           disabled: {
@@ -212,10 +190,9 @@ export const appMachine = createMachine(
   },
   {
     actions: {
-      createNewCard: assign({
+      createCard: assign({
         //TODO: remove position, change name to createCard
-        cards: (context, event, meta) => {
-          console.log("createNewCard -> meta", meta);
+        cards: (context, event) => {
           const { id, label, text, domPosition, canvasPosition } = event;
           return context.cards.concat({
             id,
