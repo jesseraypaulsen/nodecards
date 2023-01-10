@@ -101,13 +101,13 @@ export const appMachine = createMachine(
                   "CLICK.EDGE": {
                     // popup button for deleting the edge
                   },
-                  deleteCard: {
+                  destroyCard: {
                     actions: [
                       (context, event) => {
                         const card = context.cards.find(
                           (card) => event.id === card.id
                         );
-                        card.ref.send({ type: "DELETE" });
+                        card.ref.send({ type: "DESTROY" });
                         card.ref.stop();
                       },
                       assign({

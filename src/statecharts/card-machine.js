@@ -1,7 +1,13 @@
 import { createMachine, assign, sendParent } from "xstate";
 import { send } from "xstate/lib/actions";
 
-export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
+export const cardMachine = ({
+  id,
+  text = "",
+  label = id,
+  canvasPosition,
+  domPosition,
+}) =>
   createMachine({
     predictableActionArguments: true,
     id: "nodecard",
@@ -34,8 +40,8 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
         initial: "reading",
         entry: send(({ domPosition }) => ({
           type: "cardActivated",
-          x: domPosition.x,
-          y: domPosition.y,
+          //x: domPosition.x,
+          //y: domPosition.y,
         })),
         exit: send(() => ({
           type: "cardDeactivated",
@@ -67,7 +73,7 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
           INERTIFY: {
             target: "inert",
           },
-          DELETE: {},
+          DESTROY: {},
         },
       },
       inert: {

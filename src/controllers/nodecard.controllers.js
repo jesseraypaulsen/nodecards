@@ -10,7 +10,7 @@ export default (send) => {
     edit: (id) =>
       send({ type: "mediateToModify", childType: "EDIT", data: { id } }),
     read: (id) => send({ type: "mediate", childType: "READ", id }),
-    delete: (id) => send({ type: "deleteCard", id }),
+    delete: (id) => send({ type: "destroyCard", id }),
     inertify: (id) => send({ type: "mediate", childType: "INERTIFY", id }),
   };
 

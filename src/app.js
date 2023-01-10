@@ -35,7 +35,7 @@ export default function App(
     console.log("createCard -> ", deck.nodecards);
   };
 
-  const destroyCard = (id) => {
+  const removeCard = (id) => {
     deck.nodecards = [...deck.nodecards.filter((card) => card.getId() !== id)];
   };
 
@@ -69,34 +69,41 @@ export default function App(
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
     let { id, label, text, domPosition, canvasPosition } = childState.context;
+    console.log(
+      "renderNodecard -> childEvent and childState -> ",
+      childEvent,
+      childState
+    );
 
-    //if (childEvent.type === "xstate.init")
-    const card = getCard(id);
+    if (childEvent.type === "setDOMPosition")
+      getCard(id).setDomPosition(domPosition);
 
     if (childEvent.type === "cardActivated") {
       //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
-      card.setDomPosition(domPosition);
-      card.inertFace.activate();
+      //card.setDomPosition(domPosition);
+      getCard(id).inertFace.activate();
     }
 
-    if (childEvent.type === "cardDeactivated") card.activeFace.inertify();
+    if (childEvent.type === "cardDeactivated")
+      getCard(id).activeFace.inertify();
 
     //if (childState.changed && childState.matches("active.reading")) -> BREAKING! called before cardActivated, precluding the creation of the dom element!
     if (childEvent.type === "READ") {
-      card.activeFace.renderReader();
+      getCard(id).activeFace.renderReader();
     }
     if (childState.changed && childState.matches("active.editing")) {
-      //if (childEvent.type === "SWITCH.EDIT")
-      card.activeFace.renderEditor();
+      //if (childEvent.type === "EDIT")
+      getCard(id).activeFace.renderEditor();
     }
 
     if (childEvent.type === "TYPING") {
+      const card = getCard(id);
       card.setText(childEvent.data.text);
-      card.activeFace.updateEditor(); // controlled element
+      card.activeFace.updateEditor();
     }
-    if (childEvent.type === "DELETE") {
-      card.activeFace.discard();
-      destroyCard(id);
+    if (childEvent.type === "DESTROY") {
+      getCard(id).activeFace.discard();
+      removeCard(id);
     }
   };
 
@@ -109,7 +116,6 @@ export default function App(
         x: canvasPosition.x,
         y: canvasPosition.y,
       });
-      console.log(id, domPosition, canvasPosition);
       send({
         type: "setCardDOMPosition",
         id,
@@ -123,21 +129,17 @@ export default function App(
     }, 1000);
   };
 
-  const positionBeforeCreation = (domPosition, send, network) => {
+  const positionBeforeCreation = (id, domPosition, send, network) => {
     const canvasPosition = network.DOMtoCanvas({
       x: domPosition.x,
       y: domPosition.y,
     });
-    const id = generateId();
-    const label = "new node";
-    const text = "";
+
     send({
       type: "createCard",
       domPosition,
       canvasPosition,
       id,
-      label,
-      text,
     });
   };
 
@@ -153,6 +155,7 @@ export default function App(
       const { id, label, text, domPosition, canvasPosition } =
         event.state.context;
       const item = state.context.cards.find((card) => card.id === id);
+      //TODO: deckManager("create", data)   AND deckManager("hydrate", data)
       createCard({
         id,
         label,
@@ -167,8 +170,8 @@ export default function App(
       }
     } else if (event.type === "xstate.update") renderNodecard(event.state);
     else if (event.type === "convertDataBeforeCreation") {
-      // is this event even necessary? why not just call the function directly from dom.controllers.js instead of sending another event?
-      positionBeforeCreation(event.domPosition, send, network);
+      const id = generateId();
+      positionBeforeCreation(id, event.domPosition, send, network);
     } else if (event.type === "hydrateLink") {
       const { id, label, from, to } = event;
 
