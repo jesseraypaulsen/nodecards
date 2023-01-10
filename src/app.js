@@ -154,8 +154,8 @@ export default function App(
       //For some "xstate.update" events, state.changed evaluates to false, so testing for falsey doesn't work.
       const { id, label, text, domPosition, canvasPosition } =
         event.state.context;
-      const item = state.context.cards.find((card) => card.id === id);
-      //TODO: deckManager("create", data)   AND deckManager("hydrate", data)
+      //const cardMachine = state.context.cards.find((card) => card.id === id);
+      //TODO: branch #1: deckManager("create", data)   AND branch #2: deckManager("hydrate", data)
       createCard({
         id,
         label,
@@ -163,7 +163,7 @@ export default function App(
         domPosition,
         canvasPosition,
         send,
-        machineRef: item.ref,
+        //machineRef: cardMachine.ref,
       });
       if (state.matches("mode.initializing")) {
         positionAfterCreation(id, send, network);

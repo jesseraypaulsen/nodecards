@@ -3,6 +3,7 @@ import * as vis from "vis-network";
 import { interpret } from "xstate";
 import { appMachine } from "./statecharts/app-machine";
 import App from "./app";
+import DeckManager from "./views/deck-manager";
 import nodecard from "./views/nodecard";
 import { domAdapterFactory } from "./views/nodecard.dom-adapter";
 import { settingsPanel, synchPanel } from "./views/settings-panel";
@@ -19,18 +20,16 @@ import "../assets/styles/prompt.css";
 
 const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
-
-const service = interpret(appMachine);
+const graphAdapterFactory = graphAdapterFactoryFactory(network);
+const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
+const { outerEffect, innerEffect } = DeckManager(cardFace);
+const service = interpret(appMachine(innerEffect));
 const { panelControllers, promptController } = pControllers(service.send);
 
 const settingsPanelWithControllers = settingsPanel(panelControllers);
 const promptWithController = promptView(promptController);
 
 network.on("click", graphController(service.send));
-
-const graphAdapterFactory = graphAdapterFactoryFactory(network);
-
-const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
 
 const createEdge = (id, label, from, to) => {
   network.body.data.edges.add({ id, label, from, to });
