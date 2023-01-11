@@ -1,4 +1,4 @@
-export default (send) => {
+export default (send, calculatePositionThenCreate) => {
   const panelControllers = {
     userEvent: (type) => ({ type, sentByUser: true }),
 
@@ -22,11 +22,15 @@ export default (send) => {
   const promptController = {
     // "open" is triggered by the graph controller
     close: () => send({ type: "CLOSE.PROMPT" }),
-    create: (domPosition) =>
-      send({
-        type: "convertDataBeforeCreation",
-        domPosition,
-      }),
+    create: (domPosition) => {
+      const generateId = () => Math.random().toString().substring(2, 9);
+
+      const id = generateId();
+      const label = id;
+      const text = "";
+
+      calculatePositionThenCreate(id, label, text, domPosition);
+    },
   };
 
   return {

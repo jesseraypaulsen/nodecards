@@ -5,7 +5,7 @@ export default (id, text, controller) => {
       return text
         .replace(/\n/g, "<br>")
         .replace(/\t/g, "&nbsp; &nbsp; &nbsp; &nbsp;");
-    }
+    } else return "";
   };
 
   return {

@@ -74,7 +74,6 @@ export const appMachine = (innerEffect) =>
                             send({ type: "CLOSE.PROMPT" }),
                           ],
                         },
-                        convertDataBeforeCreation: {},
                       },
                     },
                     regular: {
@@ -193,17 +192,15 @@ export const appMachine = (innerEffect) =>
             const { id, label, text, domPosition, canvasPosition } = event;
             return context.cards.concat({
               id,
-              ref: spawn(cardMachine({ id, domPosition, canvasPosition }), {
-                name: id,
-                sync: true,
-              }).onTransition((state, event) => {
-                console.log("createCard -> event", event.type);
+              ref: spawn(
+                cardMachine({ id, text, label, domPosition, canvasPosition }),
+                {
+                  name: id,
+                  sync: true,
+                }
+              ).onTransition((state, event) => {
                 if (event.type !== "xstate.init") {
                   const { id, text, domPosition } = state.context;
-                  console.log(
-                    "createCard -> onTransition - state.context ",
-                    state.context
-                  );
 
                   innerEffect(event.type, {
                     id,
@@ -219,23 +216,22 @@ export const appMachine = (innerEffect) =>
         hydrateCard: assign({
           cards: (context, event) => {
             const { id, label, text } = event;
-            console.log("hydrateCard -> event.text", event.text);
             return context.cards.concat({
               id,
               ref: spawn(cardMachine({ id, label, text }), {
                 name: id,
                 sync: true,
               }).onTransition((state, event) => {
-                console.log("onTransition -> event.type: ", event.type);
-
                 if (event.type !== "xstate.init") {
                   const { id, text, domPosition, canvasPosition } =
                     state.context;
-                  console.log(
-                    "hydrateCard -> onTransition - state.context.text ",
-                    text
-                  );
-                  innerEffect(event.type, { id, text, domPosition });
+
+                  innerEffect(event.type, {
+                    id,
+                    text,
+                    canvasPosition,
+                    domPosition,
+                  });
                 }
               }),
             });

@@ -1,49 +1,48 @@
 import { qs, render, div } from "./dom-helpers";
 
 export function settingsPanel(controllers) {
-  return () => {
-    const cp = div("control-panel");
+  const cp = div("control-panel");
 
-    const obj = {
-      "cp-dropdown-btn": [
-        "click",
-        (e) => {
-          e.target.nextElementSibling.style.display = "flex";
-          e.target.style.display = "none";
-        },
-      ],
-      "close-button": [
-        "click",
-        (e) => {
-          qs(".cp-dropdown-btn").style.display = "block";
-          e.target.parentNode.style.display = "none";
-        },
-      ],
-      persist: [
-        "change",
-        (e) => {
-          controllers.persist(e);
-        },
-        true,
-      ],
-      physics: [
-        "change",
-        (e) => {
-          controllers.physics(e);
-        },
-        true,
-      ],
-      "app-modes": [
-        "change",
-        (e) => {
-          controllers.select(e);
-        },
-      ],
-    };
+  const obj = {
+    "cp-dropdown-btn": [
+      "click",
+      (e) => {
+        e.target.nextElementSibling.style.display = "flex";
+        e.target.style.display = "none";
+      },
+    ],
+    "close-button": [
+      "click",
+      (e) => {
+        qs(".cp-dropdown-btn").style.display = "block";
+        e.target.parentNode.style.display = "none";
+      },
+    ],
+    persist: [
+      "change",
+      (e) => {
+        controllers.persist(e);
+      },
+      true,
+    ],
+    physics: [
+      "change",
+      (e) => {
+        controllers.physics(e);
+      },
+      true,
+    ],
+    "app-modes": [
+      "change",
+      (e) => {
+        controllers.select(e);
+      },
+    ],
+  };
 
-    const classes = Object.keys(obj);
+  const classes = Object.keys(obj);
 
-    let template = `
+  let template = `
       <div class="${classes[0]}">&#9881;</div>
       <div class="cp-dropdown">
   
@@ -68,19 +67,18 @@ export function settingsPanel(controllers) {
       </div>
     `;
 
-    cp.innerHTML = template;
+  cp.innerHTML = template;
 
-    render(cp);
+  render(cp);
 
-    for (let key in obj) {
-      const items = obj[key];
-      const className = "." + key;
-      let el;
-      if (items[2]) el = qs(className).firstElementChild;
-      else el = qs(className);
-      el.addEventListener(items[0], items[1]);
-    }
-  };
+  for (let key in obj) {
+    const items = obj[key];
+    const className = "." + key;
+    let el;
+    if (items[2]) el = qs(className).firstElementChild;
+    else el = qs(className);
+    el.addEventListener(items[0], items[1]);
+  }
 }
 
 export const synchPanel = (event) => {

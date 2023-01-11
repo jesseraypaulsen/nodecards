@@ -1,10 +1,9 @@
 export default function App(
-  outerEffect,
-  settingsPanelView,
-  { openPrompt, closePrompt },
+  runParentEffect,
   synchSettingsPanel,
-  setPhysics,
-  createEdge
+  createEdge,
+  wrappers,
+  peripheralEffects
 ) {
   /*TODO:
  const createLink = (id,label,from,to) {
@@ -12,62 +11,24 @@ export default function App(
    deck.links.push(linkId)   
   }
   */
-  const generateId = () => Math.random().toString().substring(2, 9);
+  const { hydrateCard, hydrateLink, setPositionAfterCreation } = wrappers;
 
   // TODO: 'invoke' data calls from XState?
-  const init = (data, send, network) => {
-    settingsPanelView();
+  const init = (data) => {
     data.cards.map(({ id, label, text, position }) => {
-      send({ type: "hydrateCard", id, label, text });
+      hydrateCard({ id, label, text });
     });
 
     data.links.map(({ id, label, from, to }) => {
-      send({ type: "hydrateLink", id, label, from, to });
+      hydrateLink({ id, label, from, to });
     });
 
     // disable physics engine after 1 second.
     // send("INIT.COMPLETE");
   };
 
-  const positionAfterCreation = (id, send, network) => {
-    // delay until after the machine transitions from mode.intializing to mode.active, so that physics engine is turned off.
-    // otherwise the position data will not be accurate.
-    setTimeout(() => {
-      let canvasPosition = network.getPosition(id);
-      let domPosition = network.canvasToDOM({
-        x: canvasPosition.x,
-        y: canvasPosition.y,
-      });
-      send({
-        type: "setCardDOMPosition",
-        id,
-        domPosition,
-      });
-      send({
-        type: "setCardCanvasPosition",
-        id,
-        canvasPosition,
-      });
-    }, 1000);
-  };
-
-  const positionBeforeCreation = (id, domPosition, send, network) => {
-    const canvasPosition = network.DOMtoCanvas({
-      x: domPosition.x,
-      y: domPosition.y,
-    });
-
-    send({
-      type: "createCard",
-      domPosition,
-      canvasPosition,
-      id,
-    });
-  };
-
-  const render = (state, send, network) => {
-    console.log("render", state);
-    const event = state.event;
+  const render = (state, event, send) => {
+    //const event = state.event;
     synchSettingsPanel(event);
 
     // child state updates enabled by {sync: true} arg to spawn()
@@ -75,7 +36,6 @@ export default function App(
       //For the "xstate.update" event that fires when card machines are spawned, state.changed evaluates to undefined.
       //For some "xstate.update" events, state.changed evaluates to false, so testing for falsey doesn't work.
 
-      //const cardMachine = state.context.cards.find((card) => card.id === id);
       if (state.matches("mode.initializing")) {
         const { id, label, text } = event.state.context;
         const data = {
@@ -83,37 +43,28 @@ export default function App(
           label,
           text,
           send,
-          //machineRef: cardMachine.ref,
         };
-        outerEffect("hydrateCard", data);
-        positionAfterCreation(id, send, network);
+        runParentEffect("hydrateCard", data);
+        setPositionAfterCreation(id, 1000);
       } else if (state.matches("mode.active")) {
-        const { id, domPosition, canvasPosition } = event.state.context;
+        const { id, label, text, domPosition, canvasPosition } =
+          event.state.context;
         const data = {
           id,
+          label,
+          text,
           domPosition,
           canvasPosition,
           send,
         };
-        outerEffect("createCard", data);
+        runParentEffect("createCard", data);
       }
-    } //else if (event.type === "xstate.update") renderNodecard(event.state);
-    else if (event.type === "convertDataBeforeCreation") {
-      const id = generateId();
-      positionBeforeCreation(id, event.domPosition, send, network);
     } else if (event.type === "hydrateLink") {
       const { id, label, from, to } = event;
 
       createEdge(id, label, from, to); //TODO: createLink
-    } else if (event.type === "turnPhysicsOff") {
-      setPhysics(false);
-    } else if (event.type === "turnPhysicsOn") {
-      setPhysics(true);
-    } else if (event.type === "openPrompt") {
-      openPrompt(event);
-    } else if (event.type === "closePrompt") {
-      closePrompt();
-    }
+    } else if (Object.keys(peripheralEffects).find((key) => key === event.type))
+      peripheralEffects[event.type](event);
   };
 
   return { init, render };

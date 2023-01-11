@@ -19,10 +19,12 @@ export default function DeckManager(cardFace) {
     hydrateCard: ({ id, label, text, send }) => {
       addCard(cardFace({ id, label, text, send }));
     },
-    createCard: ({ id, domPosition, canvasPosition, send }) => {
+    createCard: ({ id, label, text, domPosition, canvasPosition, send }) => {
       addCard(
         cardFace({
           id,
+          label,
+          text,
           domPosition,
           canvasPosition,
           send,
@@ -65,18 +67,13 @@ export default function DeckManager(cardFace) {
   const isValid = (o, action) => Object.keys(o).find((key) => key === action);
 
   return {
-    outerEffect: (action, data) => {
-      console.log("innerEffect -> ", action, data);
-
+    runParentEffect: (action, data) => {
       const valid = isValid(childEffects, action);
-      console.log("valid ", valid);
       parentEffects[action](data);
-      //if (valid) parentEffects[action](data); TODO: why does testing for valid cause a bug here? and why does its absence NOT cause bugs?
+      //if (valid) parentEffects[action](data); TODO: why does conditioning on valid cause a bug here? and why does its absence NOT cause bugs?
     },
-    innerEffect: (action, data) => {
-      console.log("innerEffect -> ", action, data);
+    runChildEffect: (action, data) => {
       const valid = isValid(childEffects, action);
-      console.log("valid ", valid);
       if (valid) childEffects[action](data);
     },
   };

@@ -1,13 +1,7 @@
 import { createMachine, assign, sendParent } from "xstate";
 import { send } from "xstate/lib/actions";
 
-export const cardMachine = ({
-  id,
-  text,
-  label = id,
-  canvasPosition,
-  domPosition,
-}) =>
+export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
   createMachine({
     predictableActionArguments: true,
     id: "nodecard",

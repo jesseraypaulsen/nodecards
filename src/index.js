@@ -11,6 +11,7 @@ import promptView from "./views/prompt";
 import graphAdapterFactoryFactory from "./views/graph-adapter";
 import pControllers from "./controllers/p-controllers";
 import { graphController } from "./controllers/graph.controllers";
+import Wrappers from "./library-wrappers";
 import "../assets/styles/main.css";
 import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
@@ -22,12 +23,17 @@ const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
 const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
-const { outerEffect, innerEffect } = DeckManager(cardFace);
-const service = interpret(appMachine(innerEffect));
-const { panelControllers, promptController } = pControllers(service.send);
+const { runParentEffect, runChildEffect } = DeckManager(cardFace);
+const service = interpret(appMachine(runChildEffect));
+const wrappers = Wrappers(network, service.send);
+const { calculatePositionThenCreate } = wrappers;
+const { panelControllers, promptController } = pControllers(
+  service.send,
+  calculatePositionThenCreate
+);
 
-const settingsPanelWithControllers = settingsPanel(panelControllers);
-const promptWithController = promptView(promptController);
+//const settingsPanelWithControllers = settingsPanel(panelControllers);
+const { openPrompt, closePrompt } = promptView(promptController);
 
 network.on("click", graphController(service.send));
 
@@ -39,13 +45,21 @@ const setPhysics = (value) => {
   network.setOptions(options);
 };
 
+const peripheralEffects = {
+  turnPhysicsOff: () => setPhysics(false),
+  turnPhysicsOn: () => setPhysics(true),
+  openPrompt: (eventData) => openPrompt(eventData),
+  closePrompt: () => closePrompt(),
+};
+
+settingsPanel(panelControllers);
+
 const app = App(
-  outerEffect,
-  settingsPanelWithControllers,
-  promptWithController,
+  runParentEffect,
   synchPanel,
-  setPhysics,
-  createEdge
+  createEdge,
+  wrappers,
+  peripheralEffects
 );
 
 const data = {
@@ -67,9 +81,9 @@ const data = {
 };
 
 // subscribe views
-service.onTransition((state) => {
-  if (state.event.type === "xstate.init") app.init(data, service.send, network);
-  else app.render(state, service.send, network);
+service.onTransition((state, event) => {
+  if (state.event.type === "xstate.init") app.init(data);
+  else app.render(state, event, service.send);
 });
 
 service.start();
