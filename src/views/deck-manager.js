@@ -1,6 +1,6 @@
 export default function DeckManager(cardFace) {
-  const nodecards = [];
-  const links = [];
+  let nodecards = [];
+  let links = [];
 
   const addCard = (card) => {
     nodecards.push(card);
@@ -39,6 +39,9 @@ export default function DeckManager(cardFace) {
       getCard(id).setCanvasPosition(canvasPosition);
     },
     cardActivated: ({ id }) => {
+      console.log("deck-manager -> cardActivated -> id", id);
+      console.log("deck-manager -> cardActivated -> getCard(id)", getCard(id));
+
       getCard(id).inertFace.activate();
     },
     cardDeactivated: ({ id }) => {
@@ -52,7 +55,6 @@ export default function DeckManager(cardFace) {
     },
     TYPING: ({ id, text }) => {
       const card = getCard(id);
-      console.log("card and id -> ", card, id);
       card.setText(text);
       card.activeFace.updateEditor();
     },
@@ -74,7 +76,7 @@ export default function DeckManager(cardFace) {
       parentEffects[action](data);
     },
     innerEffect: (action, data) => {
-      console.log("childEffects - ", action, data);
+      console.log("innerEffect - ", action, data);
       const valid = isValid(childEffects, action);
       console.log("valid ", valid);
       if (valid) childEffects[action](data);

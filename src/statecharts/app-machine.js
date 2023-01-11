@@ -72,14 +72,14 @@ export const appMachine = (innerEffect) =>
                           actions: [
                             "createCard",
                             send({ type: "CLOSE.PROMPT" }),
-                            (context, e) => {
+                            /*(context, e) => {
                               const card = context.cards.find(
                                 (card) => e.id === card.id
                               );
                               card.ref.send({
                                 type: "activate",
                               });
-                            },
+                            },*/
                           ],
                         },
                         convertDataBeforeCreation: {},
@@ -223,18 +223,19 @@ export const appMachine = (innerEffect) =>
         hydrateCard: assign({
           cards: (context, event) => {
             const { id, label, text } = event;
-            console.log("hydrateCard -> event", event.type);
+            console.log("hydrateCard -> event.text", event.text);
             return context.cards.concat({
               id,
               ref: spawn(cardMachine({ id, label, text }), {
                 name: id,
                 sync: true,
               }).onTransition((state, event) => {
-                console.log(event.type);
+                console.log("onTransition -> event.type: ", event.type);
 
                 if (event.type !== "xstate.init") {
                   const { id, text, domPosition, canvasPosition } =
                     state.context;
+                  console.log("onTransition - state.contexxt.text ", text);
                   innerEffect(event.type, { id, text, domPosition });
                 }
               }),

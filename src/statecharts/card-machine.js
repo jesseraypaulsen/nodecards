@@ -3,7 +3,7 @@ import { send } from "xstate/lib/actions";
 
 export const cardMachine = ({
   id,
-  text = "",
+  text,
   label = id,
   canvasPosition,
   domPosition,
@@ -40,8 +40,6 @@ export const cardMachine = ({
         initial: "reading",
         entry: send(({ domPosition }) => ({
           type: "cardActivated",
-          //x: domPosition.x,
-          //y: domPosition.y,
         })),
         exit: send(() => ({
           type: "cardDeactivated",
@@ -58,7 +56,9 @@ export const cardMachine = ({
             on: {
               READ: { target: "reading" }, // this transition can occur if appMachine is in 'readOnly' or 'modifiable'.
               TYPING: {
-                actions: [assign({ text: (context, event) => event.text })],
+                actions: [
+                  assign({ text: (context, event) => event.data.text }),
+                ],
               },
             },
           },
