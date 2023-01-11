@@ -28,6 +28,7 @@ export default function DeckManager(cardFace) {
           send,
         })
       );
+      send({ type: "mediate", childType: "activate", id });
     },
   };
 
@@ -39,9 +40,6 @@ export default function DeckManager(cardFace) {
       getCard(id).setCanvasPosition(canvasPosition);
     },
     cardActivated: ({ id }) => {
-      console.log("deck-manager -> cardActivated -> id", id);
-      console.log("deck-manager -> cardActivated -> getCard(id)", getCard(id));
-
       getCard(id).inertFace.activate();
     },
     cardDeactivated: ({ id }) => {
@@ -66,17 +64,17 @@ export default function DeckManager(cardFace) {
 
   const isValid = (o, action) => Object.keys(o).find((key) => key === action);
 
-  // this function will be injected into the onTransition method for each card machine.
-  // it will also operate within the render function for creation and destruction of cards.
-  // It completely replaces renderNodecard.
-  // NOTE: you have to pass 'send' in with the data obj for hydrateCard/createCard (and not thru the factory),
-  // otherwise you've got a chicken/egg problem.
   return {
     outerEffect: (action, data) => {
+      console.log("innerEffect -> ", action, data);
+
+      const valid = isValid(childEffects, action);
+      console.log("valid ", valid);
       parentEffects[action](data);
+      //if (valid) parentEffects[action](data); TODO: why does testing for valid cause a bug here? and why does its absence NOT cause bugs?
     },
     innerEffect: (action, data) => {
-      console.log("innerEffect - ", action, data);
+      console.log("innerEffect -> ", action, data);
       const valid = isValid(childEffects, action);
       console.log("valid ", valid);
       if (valid) childEffects[action](data);

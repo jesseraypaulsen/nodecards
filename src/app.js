@@ -6,42 +6,6 @@ export default function App(
   setPhysics,
   createEdge
 ) {
-  /*
-  let deck = {
-    nodecards: [],
-    links: [],
-  };
-
-  const createCard = ({
-    id,
-    label,
-    text,
-    domPosition,
-    canvasPosition,
-    send,
-    machineRef,
-  }) => {
-    const card = cardFace({
-      id,
-      label,
-      text,
-      domPosition,
-      canvasPosition,
-      send,
-      machineRef,
-    });
-    //card.machine = machine;
-    deck.nodecards.push(card);
-    console.log("createCard -> ", deck.nodecards);
-  };
-
-  const removeCard = (id) => {
-    deck.nodecards = [...deck.nodecards.filter((card) => card.getId() !== id)];
-  };
-
-  const getCard = (id) => deck.nodecards.find((card) => card.getId() === id);
-
-  */
   /*TODO:
  const createLink = (id,label,from,to) {
    const linkId = createEdge(id,label,from,to)
@@ -64,48 +28,6 @@ export default function App(
     // disable physics engine after 1 second.
     // send("INIT.COMPLETE");
   };
-  /*
-  const renderNodecard = (childState) => {
-    const childEvent = childState.event;
-    let { id, label, text, domPosition, canvasPosition } = childState.context;
-    console.log(
-      "renderNodecard -> childEvent and childState -> ",
-      childEvent,
-      childState
-    );
-
-    if (childEvent.type === "setDOMPosition")
-      getCard(id).setDomPosition(domPosition);
-
-    if (childEvent.type === "cardActivated") {
-      //TODO: card.setDomPosition should be called immediately after the card machine is updated with a new domPosition
-      //card.setDomPosition(domPosition);
-      getCard(id).inertFace.activate();
-    }
-
-    if (childEvent.type === "cardDeactivated")
-      getCard(id).activeFace.inertify();
-
-    //if (childState.changed && childState.matches("active.reading")) -> BREAKING! called before cardActivated, precluding the creation of the dom element!
-    if (childEvent.type === "READ") {
-      getCard(id).activeFace.renderReader();
-    }
-    if (childState.changed && childState.matches("active.editing")) {
-      //if (childEvent.type === "EDIT")
-      getCard(id).activeFace.renderEditor();
-    }
-
-    if (childEvent.type === "TYPING") {
-      const card = getCard(id);
-      card.setText(childEvent.data.text);
-      card.activeFace.updateEditor();
-    }
-    if (childEvent.type === "DESTROY") {
-      getCard(id).activeFace.discard();
-      removeCard(id);
-    }
-  };
-  */
 
   const positionAfterCreation = (id, send, network) => {
     // delay until after the machine transitions from mode.intializing to mode.active, so that physics engine is turned off.

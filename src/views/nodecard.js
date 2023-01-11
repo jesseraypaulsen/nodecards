@@ -32,6 +32,8 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       //controllers(sendToCardMachine);
       controllers(sendToAppMachine);
 
+    //if (text === undefined) setText("...");
+
     const graphAdapter = graphAdapterFactory(
       getId,
       getLabel,
@@ -44,6 +46,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       editorController,
       buttonsControllers
     );
+
     const { createNode, createNodeWithKnownPosition } = graphAdapter;
     if (canvasPosition) createNodeWithKnownPosition();
     else createNode();

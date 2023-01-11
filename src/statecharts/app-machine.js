@@ -72,14 +72,6 @@ export const appMachine = (innerEffect) =>
                           actions: [
                             "createCard",
                             send({ type: "CLOSE.PROMPT" }),
-                            /*(context, e) => {
-                              const card = context.cards.find(
-                                (card) => e.id === card.id
-                              );
-                              card.ref.send({
-                                type: "activate",
-                              });
-                            },*/
                           ],
                         },
                         convertDataBeforeCreation: {},
@@ -208,6 +200,10 @@ export const appMachine = (innerEffect) =>
                 console.log("createCard -> event", event.type);
                 if (event.type !== "xstate.init") {
                   const { id, text, domPosition } = state.context;
+                  console.log(
+                    "createCard -> onTransition - state.context ",
+                    state.context
+                  );
 
                   innerEffect(event.type, {
                     id,
@@ -235,7 +231,10 @@ export const appMachine = (innerEffect) =>
                 if (event.type !== "xstate.init") {
                   const { id, text, domPosition, canvasPosition } =
                     state.context;
-                  console.log("onTransition - state.contexxt.text ", text);
+                  console.log(
+                    "hydrateCard -> onTransition - state.context.text ",
+                    text
+                  );
                   innerEffect(event.type, { id, text, domPosition });
                 }
               }),
