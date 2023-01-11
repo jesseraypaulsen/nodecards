@@ -201,14 +201,21 @@ export const appMachine = (innerEffect) =>
             const { id, label, text, domPosition, canvasPosition } = event;
             return context.cards.concat({
               id,
-              ref: spawn(
-                cardMachine({ id, label, text, domPosition, canvasPosition }),
-                {
-                  name: id,
-                  sync: true,
+              ref: spawn(cardMachine({ id, domPosition, canvasPosition }), {
+                name: id,
+                sync: true,
+              }).onTransition((state, event) => {
+                console.log("createCard -> event", event.type);
+                if (event.type !== "xstate.init") {
+                  const { id, text, domPosition } = state.context;
+
+                  innerEffect(event.type, {
+                    id,
+                    text,
+                    domPosition,
+                    canvasPosition,
+                  });
                 }
-              ).onTransition((state, event) => {
-                //TODO: call renderNodecard from here
               }),
             });
           },
@@ -216,14 +223,20 @@ export const appMachine = (innerEffect) =>
         hydrateCard: assign({
           cards: (context, event) => {
             const { id, label, text } = event;
-            console.log("hydrateCard -> event", event);
+            console.log("hydrateCard -> event", event.type);
             return context.cards.concat({
               id,
               ref: spawn(cardMachine({ id, label, text }), {
                 name: id,
                 sync: true,
               }).onTransition((state, event) => {
-                //TODO: call renderNodecard from here
+                console.log(event.type);
+
+                if (event.type !== "xstate.init") {
+                  const { id, text, domPosition, canvasPosition } =
+                    state.context;
+                  innerEffect(event.type, { id, text, domPosition });
+                }
               }),
             });
           },

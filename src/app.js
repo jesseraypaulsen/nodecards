@@ -1,12 +1,12 @@
 export default function App(
-  cardFace,
+  outerEffect,
   settingsPanelView,
   { openPrompt, closePrompt },
   synchSettingsPanel,
   setPhysics,
   createEdge
 ) {
-  // deck of nodecard VIEWS
+  /*
   let deck = {
     nodecards: [],
     links: [],
@@ -41,14 +41,14 @@ export default function App(
 
   const getCard = (id) => deck.nodecards.find((card) => card.getId() === id);
 
-  const generateId = () => Math.random().toString().substring(2, 9);
-
-  /*TODO:
-    const createLink = (id,label,from,to) {
-      const linkId = createEdge(id,label,from,to)
-      deck.links.push(linkId)   
-    }
   */
+  /*TODO:
+ const createLink = (id,label,from,to) {
+   const linkId = createEdge(id,label,from,to)
+   deck.links.push(linkId)   
+  }
+  */
+  const generateId = () => Math.random().toString().substring(2, 9);
 
   // TODO: 'invoke' data calls from XState?
   const init = (data, send, network) => {
@@ -64,8 +64,7 @@ export default function App(
     // disable physics engine after 1 second.
     // send("INIT.COMPLETE");
   };
-
-  //TODO: call this function from app-machine.js -> spawn card machine -> onTransition
+  /*
   const renderNodecard = (childState) => {
     const childEvent = childState.event;
     let { id, label, text, domPosition, canvasPosition } = childState.context;
@@ -106,6 +105,7 @@ export default function App(
       removeCard(id);
     }
   };
+  */
 
   const positionAfterCreation = (id, send, network) => {
     // delay until after the machine transitions from mode.intializing to mode.active, so that physics engine is turned off.
@@ -152,23 +152,30 @@ export default function App(
     if (event.type === "xstate.update" && event.state.changed === undefined) {
       //For the "xstate.update" event that fires when card machines are spawned, state.changed evaluates to undefined.
       //For some "xstate.update" events, state.changed evaluates to false, so testing for falsey doesn't work.
-      const { id, label, text, domPosition, canvasPosition } =
-        event.state.context;
+
       //const cardMachine = state.context.cards.find((card) => card.id === id);
-      //TODO: branch #1: deckManager("create", data)   AND branch #2: deckManager("hydrate", data)
-      createCard({
-        id,
-        label,
-        text,
-        domPosition,
-        canvasPosition,
-        send,
-        //machineRef: cardMachine.ref,
-      });
       if (state.matches("mode.initializing")) {
+        const { id, label, text } = event.state.context;
+        const data = {
+          id,
+          label,
+          text,
+          send,
+          //machineRef: cardMachine.ref,
+        };
+        outerEffect("hydrateCard", data);
         positionAfterCreation(id, send, network);
+      } else if (state.matches("mode.active")) {
+        const { id, domPosition, canvasPosition } = event.state.context;
+        const data = {
+          id,
+          domPosition,
+          canvasPosition,
+          send,
+        };
+        outerEffect("createCard", data);
       }
-    } else if (event.type === "xstate.update") renderNodecard(event.state);
+    } //else if (event.type === "xstate.update") renderNodecard(event.state);
     else if (event.type === "convertDataBeforeCreation") {
       const id = generateId();
       positionBeforeCreation(id, event.domPosition, send, network);

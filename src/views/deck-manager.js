@@ -32,31 +32,37 @@ export default function DeckManager(cardFace) {
   };
 
   const childEffects = {
-    setDOMPosition: () => {
+    setDOMPosition: ({ id, domPosition }) => {
       getCard(id).setDomPosition(domPosition);
     },
-    cardActivated: () => {
+    setCanvasPosition: ({ id, canvasPosition }) => {
+      getCard(id).setCanvasPosition(canvasPosition);
+    },
+    cardActivated: ({ id }) => {
       getCard(id).inertFace.activate();
     },
-    cardDeactivated: () => {
+    cardDeactivated: ({ id }) => {
       getCard(id).activeFace.inertify();
     },
-    READ: () => {
+    READ: ({ id }) => {
       getCard(id).activeFace.renderReader();
     },
-    EDIT: () => {
+    EDIT: ({ id }) => {
       getCard(id).activeFace.renderEditor();
     },
-    TYPING: () => {
+    TYPING: ({ id, text }) => {
       const card = getCard(id);
-      card.setText(childEvent.data.text);
+      console.log("card and id -> ", card, id);
+      card.setText(text);
       card.activeFace.updateEditor();
     },
-    DESTROY: () => {
+    DESTROY: ({ id }) => {
       getCard(id).activeFace.discard();
       removeCard(id);
     },
   };
+
+  const isValid = (o, action) => Object.keys(o).find((key) => key === action);
 
   // this function will be injected into the onTransition method for each card machine.
   // it will also operate within the render function for creation and destruction of cards.
@@ -68,7 +74,10 @@ export default function DeckManager(cardFace) {
       parentEffects[action](data);
     },
     innerEffect: (action, data) => {
-      childEffects[action](data);
+      console.log("childEffects - ", action, data);
+      const valid = isValid(childEffects, action);
+      console.log("valid ", valid);
+      if (valid) childEffects[action](data);
     },
   };
 }

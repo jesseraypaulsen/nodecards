@@ -40,7 +40,7 @@ const setPhysics = (value) => {
 };
 
 const app = App(
-  cardFace,
+  outerEffect,
   settingsPanelWithControllers,
   promptWithController,
   synchPanel,

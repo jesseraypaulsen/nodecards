@@ -24,6 +24,9 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     const setDomPosition = (nextDomPosition) => {
       domPosition = nextDomPosition;
     };
+    const setCanvasPosition = (nextCanvasPosition) => {
+      canvasPosition = nextCanvasPosition;
+    };
 
     const { editorController, buttonsControllers } =
       //controllers(sendToCardMachine);
@@ -48,6 +51,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     return {
       getId,
       setDomPosition,
+      setCanvasPosition,
       setText,
       activeFace: activeFaceFactory(domAdapter, graphAdapter),
       inertFace: inertFaceFactory(domAdapter, graphAdapter),
