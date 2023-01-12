@@ -1,19 +1,36 @@
-export default function DeckManager(cardFace) {
+import { isValid } from "../utils.js";
+
+export default function DeckManager(cardFace, createEdge) {
   let nodecards = [];
   let links = [];
 
   const addCard = (card) => {
-    nodecards.push(card);
+    nodecards = nodecards.concat(card);
   };
   const getCard = (id) => nodecards.find((card) => card.getId() === id);
 
+  const addLink = (link) => {
+    links = links.concat(link);
+  };
+
+  const removeLink = (id) => {
+    links = [...links.filter((link) => link.id !== id)];
+  };
+
+  const getLinksForCard = (id) =>
+    links.filter((link) => link.to === id || link.from === id);
+
+  const removeLinksForCard = (id) => {
+    getLinksForCard(id).map((link) => removeLink(link.id));
+  };
+
   const removeCard = (id) => {
+    removeLinksForCard(id);
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
   const parentEffects = {
-    destroy: (id) => {
-      getCard(id).activeFace.discard();
+    destroyCard: ({ id }) => {
       removeCard(id);
     },
     hydrateCard: ({ id, label, text, send }) => {
@@ -31,6 +48,12 @@ export default function DeckManager(cardFace) {
         })
       );
       send({ type: "mediate", childType: "activate", id });
+    },
+    hydrateLink: ({ id, label, from, to }) => {
+      addLink(createEdge({ id, label, from, to }));
+    },
+    createLink: ({ id, label, from, to }) => {
+      addLink(createEdge({ id, label, from, to }));
     },
   };
 
@@ -60,11 +83,8 @@ export default function DeckManager(cardFace) {
     },
     DESTROY: ({ id }) => {
       getCard(id).activeFace.discard();
-      removeCard(id);
     },
   };
-
-  const isValid = (o, action) => Object.keys(o).find((key) => key === action);
 
   return {
     runParentEffect: (action, data) => {

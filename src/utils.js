@@ -9,3 +9,6 @@ export function findEventType(params) {
     return null;
   }
 }
+
+export const isValid = (o, action) =>
+  Object.keys(o).find((key) => key === action);

@@ -23,7 +23,18 @@ const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
 const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
-const { runParentEffect, runChildEffect } = DeckManager(cardFace);
+
+const createEdge = (argsObject) => {
+  network.body.data.edges.add(argsObject);
+  return argsObject;
+};
+
+const setPhysics = (value) => {
+  const options = { physics: { enabled: value } };
+  network.setOptions(options);
+};
+
+const { runParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
 const { calculatePositionThenCreate } = wrappers;
@@ -32,18 +43,9 @@ const { panelControllers, promptController } = pControllers(
   calculatePositionThenCreate
 );
 
-//const settingsPanelWithControllers = settingsPanel(panelControllers);
 const { openPrompt, closePrompt } = promptView(promptController);
 
 network.on("click", graphController(service.send));
-
-const createEdge = (id, label, from, to) => {
-  network.body.data.edges.add({ id, label, from, to });
-};
-const setPhysics = (value) => {
-  const options = { physics: { enabled: value } };
-  network.setOptions(options);
-};
 
 const peripheralEffects = {
   turnPhysicsOff: () => setPhysics(false),
@@ -54,13 +56,7 @@ const peripheralEffects = {
 
 settingsPanel(panelControllers);
 
-const app = App(
-  runParentEffect,
-  synchPanel,
-  createEdge,
-  wrappers,
-  peripheralEffects
-);
+const app = App(runParentEffect, synchPanel, wrappers, peripheralEffects);
 
 const data = {
   cards: [

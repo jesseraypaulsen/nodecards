@@ -200,7 +200,8 @@ export const appMachine = (innerEffect) =>
                 }
               ).onTransition((state, event) => {
                 if (event.type !== "xstate.init") {
-                  const { id, text, domPosition } = state.context;
+                  const { id, text, domPosition, canvasPosition } =
+                    state.context;
 
                   innerEffect(event.type, {
                     id,

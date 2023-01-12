@@ -1,16 +1,11 @@
+import { isValid } from "./utils";
+
 export default function App(
   runParentEffect,
   synchSettingsPanel,
-  createEdge,
   wrappers,
   peripheralEffects
 ) {
-  /*TODO:
- const createLink = (id,label,from,to) {
-   const linkId = createEdge(id,label,from,to)
-   deck.links.push(linkId)   
-  }
-  */
   const { hydrateCard, hydrateLink, setPositionAfterCreation } = wrappers;
 
   // TODO: 'invoke' data calls from XState?
@@ -22,9 +17,6 @@ export default function App(
     data.links.map(({ id, label, from, to }) => {
       hydrateLink({ id, label, from, to });
     });
-
-    // disable physics engine after 1 second.
-    // send("INIT.COMPLETE");
   };
 
   const render = (state, event, send) => {
@@ -37,33 +29,18 @@ export default function App(
       //For some "xstate.update" events, state.changed evaluates to false, so testing for falsey doesn't work.
 
       if (state.matches("mode.initializing")) {
-        const { id, label, text } = event.state.context;
-        const data = {
-          id,
-          label,
-          text,
-          send,
-        };
-        runParentEffect("hydrateCard", data);
+        const data = ({ id, label, text } = event.state.context);
+        runParentEffect("hydrateCard", { ...data, send });
         setPositionAfterCreation(id, 1000);
       } else if (state.matches("mode.active")) {
-        const { id, label, text, domPosition, canvasPosition } =
-          event.state.context;
-        const data = {
-          id,
-          label,
-          text,
-          domPosition,
-          canvasPosition,
-          send,
-        };
-        runParentEffect("createCard", data);
+        const data = ({ id, label, text, domPosition, canvasPosition } =
+          event.state.context);
+        runParentEffect("createCard", { ...data, send });
       }
-    } else if (event.type === "hydrateLink") {
-      const { id, label, from, to } = event;
-
-      createEdge(id, label, from, to); //TODO: createLink
-    } else if (Object.keys(peripheralEffects).find((key) => key === event.type))
+    } else if (event.type === "hydrateLink" || event.type === "destroyCard") {
+      const data = ({ id, label, from, to } = event);
+      runParentEffect(event.type, data);
+    } else if (isValid(peripheralEffects, event.type))
       peripheralEffects[event.type](event);
   };
 
@@ -71,24 +48,10 @@ export default function App(
 }
 
 /*TODO: 
- - cards should close when app mode transitions to disabled. (DONE)
- 
- - Physics should be turned on during initialization, and then turned off when it's complete. (DONE)
  
  - remove card from state machine context on DELETE event (DONE, but partially unresolved)
    (How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
     The question remains unanswered: https://stackoverflow.com/q/61013927 )
-
- - delete button (DONE)
-
- - bug: turning physics on when a nodecard is active generates console error. Caused by a redundant "turnPhysicsOn" transition on mode.active. 
- Removing it fixes the problem. (DONE)
-
- - extract getNodeCenter call (a method that wraps vis-network api calls) from out of the dom view (DONE)
-
- - popup prompt for creating cards, along with a corresponding state (DONE)
-
- - separate business logic from DOM manipulation (DONE)
  
  - when the app mode is "active.readOnly" the button should be disabled
  
@@ -96,27 +59,10 @@ export default function App(
 
  - fix: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit
 
- - drag button
-
- - webSource button
-
- - user creation of new cards and links
-
-
- - (maybe) try to make method names correspond to state values to obviate the jungle of conditionals in app.render, 
-  eg read,edit,inert => card[state.value] 
-
-
  - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify,
    two prompts are open at once.
-
- - bug: clicking edges generates error
   
  - create function that processes state data for render function
-
- - when physics is turned on while a nodecard is active, an error related to the nodecard dom element occurs
-
- - selecting "Disabled" from the panel while a nodecard is active, results in error: "_element not undefined" (DONE)
 
  - add 'source' argument to createButtonBar
 
