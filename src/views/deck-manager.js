@@ -30,9 +30,10 @@ export default function DeckManager(cardFace, createEdge) {
   };
 
   const parentEffects = {
-    destroyCard: ({ id }) => {
+    /*destroyCard: ({ id }) => {
       removeCard(id);
-    },
+      This fails because it gets called no matter what state the parent machine is in.
+    },*/
     hydrateCard: ({ id, label, text, send }) => {
       addCard(cardFace({ id, label, text, send }));
     },
@@ -83,6 +84,7 @@ export default function DeckManager(cardFace, createEdge) {
     },
     DESTROY: ({ id }) => {
       getCard(id).activeFace.discard();
+      removeCard(id);
     },
   };
 

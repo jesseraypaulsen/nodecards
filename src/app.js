@@ -20,7 +20,7 @@ export default function App(
   };
 
   const render = (state, event, send) => {
-    console.log(event.type);
+    console.log(state.value.mode);
     synchSettingsPanel(event);
     if (isValid(peripheralEffects, event.type))
       peripheralEffects[event.type](event);
@@ -49,11 +49,11 @@ export default function App(
    (How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
     The question remains unanswered: https://stackoverflow.com/q/61013927 )
  
- - when the app mode is "active.readOnly" the button should be disabled
+ - bug: when the app mode is "active.readOnly" the button should be disabled.
  
- - fix: prevent second click on node causing duplicate nodecard elements
+ - bug: second click on node causes duplicate nodecard elements
 
- - fix: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit
+ - bug: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit
 
  - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify,
    two prompts are open at once.

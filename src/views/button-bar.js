@@ -12,10 +12,10 @@ export default (id, source, controllers) => {
   return diverge(buttons);
 };
 
-function diverge({ drag, edit, read, discard, source, inertify }) {
+function diverge({ branch, drag, edit, read, discard, source, inertify }) {
   return {
-    readerBar: () => createBar([drag, edit, discard, source, inertify]),
-    editorBar: () => createBar([drag, read, discard, source, inertify]),
+    readerBar: () => createBar([branch, drag, edit, discard, source, inertify]),
+    editorBar: () => createBar([branch, drag, read, discard, source, inertify]),
   };
 }
 

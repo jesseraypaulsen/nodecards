@@ -12,6 +12,8 @@ export default (send) => {
     read: (id) => send({ type: "mediate", childType: "READ", id }),
     delete: (id) => send({ type: "destroyCard", id }),
     inertify: (id) => send({ type: "mediate", childType: "INERTIFY", id }),
+    //branch: (id) => send({ type: "mediate", childType: "BRANCH", id }),
+    branch: (id) => send({ type: "BRANCH", from: id }),
   };
 
   return {

@@ -1,5 +1,7 @@
-import { createMachine, assign, spawn, send } from "xstate";
+import { createMachine, assign, spawn, send, actions } from "xstate";
 import { cardMachine } from "./card-machine";
+
+const { log } = actions;
 
 export const appMachine = (runChildEffect) =>
   createMachine(
@@ -31,25 +33,25 @@ export const appMachine = (runChildEffect) =>
                   initial: "regular",
                   states: {
                     linkCreation: {
-                      entry: {
+                      entry:
                         // desktop: change behavior of mouse cursor;
                         // mobile: do something else
-                      },
+                        log((_, e) => `linkCreation -> ${Object.keys(e)}`),
+
                       on: {
                         clickedBackground: {
                           actions: [
-                            // create nodecard + link;
-                            // send transition for 'persisting' state.
+                            send((_, { x, y }) => ({
+                              type: "openPrompt",
+                              x,
+                              y,
+                            })),
                           ],
                         },
                         "NODECARD.CLICK": {
                           // works for both active and inert target cards;
                           // create link between cards
-                          actions: [
-                            send((context, event) => ({
-                              type: "LINK.PERSIST",
-                            })),
-                          ],
+                          actions: [],
                         },
                       },
                     },
@@ -78,7 +80,10 @@ export const appMachine = (runChildEffect) =>
                     },
                     regular: {
                       on: {
-                        "BRANCHBUTTON.CLICK": { target: "linkCreation" },
+                        BRANCH: {
+                          target: "linkCreation",
+                          actions: log((_, { from }) => `BRANCH from ${from}`),
+                        },
                         clickedBackground: { target: "cardCreation" },
                       },
                     },
