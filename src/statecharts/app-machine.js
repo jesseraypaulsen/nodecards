@@ -1,7 +1,7 @@
 import { createMachine, assign, spawn, send } from "xstate";
 import { cardMachine } from "./card-machine";
 
-export const appMachine = (innerEffect) =>
+export const appMachine = (runChildEffect) =>
   createMachine(
     {
       predictableActionArguments: true,
@@ -68,7 +68,7 @@ export const appMachine = (innerEffect) =>
                           target: "regular",
                           actions: send({ type: "closePrompt" }),
                         },
-                        createCard: {
+                        __createCard__: {
                           actions: [
                             "createCard",
                             send({ type: "CLOSE.PROMPT" }),
@@ -120,7 +120,7 @@ export const appMachine = (innerEffect) =>
             },
             initializing: {
               on: {
-                hydrateCard: {
+                __hydrateCard__: {
                   actions: ["hydrateCard"],
                 },
                 hydrateLink: {
@@ -199,17 +199,16 @@ export const appMachine = (innerEffect) =>
                   sync: true,
                 }
               ).onTransition((state, event) => {
-                if (event.type !== "xstate.init") {
-                  const { id, text, domPosition, canvasPosition } =
-                    state.context;
+                //if (event.type !== "xstate.init") {
+                const { id, text, domPosition, canvasPosition } = state.context;
 
-                  innerEffect(event.type, {
-                    id,
-                    text,
-                    domPosition,
-                    canvasPosition,
-                  });
-                }
+                runChildEffect(event.type, {
+                  id,
+                  text,
+                  domPosition,
+                  canvasPosition,
+                });
+                //}
               }),
             });
           },
@@ -227,7 +226,7 @@ export const appMachine = (innerEffect) =>
                   const { id, text, domPosition, canvasPosition } =
                     state.context;
 
-                  innerEffect(event.type, {
+                  runChildEffect(event.type, {
                     id,
                     text,
                     canvasPosition,

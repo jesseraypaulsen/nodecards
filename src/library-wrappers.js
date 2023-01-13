@@ -15,9 +15,10 @@ export default (network, send) => {
     send({ type: "setCardDOMPosition", domPosition, ...args });
   };
 
-  const createCard = ({ ...args }) => send({ type: "createCard", ...args });
+  const createCard = ({ ...args }) => send({ type: "__createCard__", ...args });
 
-  const hydrateCard = ({ ...args }) => send({ type: "hydrateCard", ...args });
+  const hydrateCard = ({ ...args }) =>
+    send({ type: "__hydrateCard__", ...args });
 
   const hydrateLink = ({ ...args }) => send({ type: "hydrateLink", ...args });
 

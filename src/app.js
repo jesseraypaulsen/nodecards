@@ -20,28 +20,24 @@ export default function App(
   };
 
   const render = (state, event, send) => {
-    //const event = state.event;
+    console.log(event.type);
     synchSettingsPanel(event);
-
-    // child state updates enabled by {sync: true} arg to spawn()
-    if (event.type === "xstate.update" && event.state.changed === undefined) {
-      //For the "xstate.update" event that fires when card machines are spawned, state.changed evaluates to undefined.
-      //For some "xstate.update" events, state.changed evaluates to false, so testing for falsey doesn't work.
-
+    if (isValid(peripheralEffects, event.type))
+      peripheralEffects[event.type](event);
+    else if (
+      event.type === "xstate.update" &&
+      event.state.changed === undefined
+    ) {
+      // "xstate.update" is triggered when new actor machines are spawned and when they are updated. It is enabled by the {sync: true} argument.
+      //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness is inadequate.
+      const data = event.state.context;
       if (state.matches("mode.initializing")) {
-        const data = ({ id, label, text } = event.state.context);
         runParentEffect("hydrateCard", { ...data, send });
-        setPositionAfterCreation(id, 1000);
+        setPositionAfterCreation(data.id, 1000);
       } else if (state.matches("mode.active")) {
-        const data = ({ id, label, text, domPosition, canvasPosition } =
-          event.state.context);
         runParentEffect("createCard", { ...data, send });
       }
-    } else if (event.type === "hydrateLink" || event.type === "destroyCard") {
-      const data = ({ id, label, from, to } = event);
-      runParentEffect(event.type, data);
-    } else if (isValid(peripheralEffects, event.type))
-      peripheralEffects[event.type](event);
+    } else runParentEffect(event.type, event);
   };
 
   return { init, render };

@@ -88,9 +88,8 @@ export default function DeckManager(cardFace, createEdge) {
 
   return {
     runParentEffect: (action, data) => {
-      const valid = isValid(childEffects, action);
-      parentEffects[action](data);
-      //if (valid) parentEffects[action](data); TODO: why does conditioning on valid cause a bug here? and why does its absence NOT cause bugs?
+      const valid = isValid(parentEffects, action);
+      if (valid) parentEffects[action](data);
     },
     runChildEffect: (action, data) => {
       const valid = isValid(childEffects, action);
