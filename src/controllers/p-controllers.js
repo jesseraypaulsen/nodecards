@@ -1,3 +1,5 @@
+import { generateId } from "../utils";
+
 export default (send, calculatePositionThenCreate) => {
   const panelControllers = {
     userEvent: (type) => ({ type, sentByUser: true }),
@@ -23,7 +25,7 @@ export default (send, calculatePositionThenCreate) => {
     // "open" is triggered by the graph controller
     close: () => send({ type: "CLOSE.PROMPT" }),
     create: (domPosition) => {
-      const generateId = () => Math.random().toString().substring(2, 9);
+      //const generateId = () => Math.random().toString().substring(2, 9);
 
       const id = generateId();
       const label = id;

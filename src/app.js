@@ -21,6 +21,7 @@ export default function App(
 
   const render = (state, event, send) => {
     console.log(state.value.mode);
+    console.log(state.context);
     synchSettingsPanel(event);
     if (isValid(peripheralEffects, event.type))
       peripheralEffects[event.type](event);
@@ -36,6 +37,7 @@ export default function App(
         setPositionAfterCreation(data.id, 1000);
       } else if (state.matches("mode.active")) {
         runParentEffect("createCard", { ...data, send });
+        //send({ type: "createLinkIfLinkCreationIsOn", to: data.id });
       }
     } else runParentEffect(event.type, event);
   };

@@ -60,7 +60,7 @@ export function settingsPanel(controllers) {
   
         <select class="${classes[4]}">
           <option value="APP.READONLY">Read Only</option>
-          <option value="APP.MODIFIABLE">Modify</option>
+          <option value="APP.MODIFIABLE" selected>Modify</option>
           <option value="APP.DISABLE">Disable</option>
         </select>
   

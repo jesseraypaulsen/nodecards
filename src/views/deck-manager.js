@@ -1,4 +1,4 @@
-import { isValid } from "../utils.js";
+import { isValid, generateId } from "../utils.js";
 
 export default function DeckManager(cardFace, createEdge) {
   let nodecards = [];
@@ -53,7 +53,11 @@ export default function DeckManager(cardFace, createEdge) {
     hydrateLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
     },
-    createLink: ({ id, label, from, to }) => {
+    createLink: ({ from, to }) => {
+      console.log("createLink -> from: ", from);
+      console.log("createLink -> to: ", to);
+      const id = generateId();
+      const label = "link";
       addLink(createEdge({ id, label, from, to }));
     },
   };
@@ -90,6 +94,7 @@ export default function DeckManager(cardFace, createEdge) {
 
   return {
     runParentEffect: (action, data) => {
+      console.log("runParentEffect -> ", action);
       const valid = isValid(parentEffects, action);
       if (valid) parentEffects[action](data);
     },

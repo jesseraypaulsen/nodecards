@@ -11,7 +11,6 @@ export default (network, send) => {
     send({ type: "setCardCanvasPosition", canvasPosition, ...args });
 
   const setDOMPosition = ({ domPosition, ...args }) => {
-    console.log("setDOMPosition -> args", args);
     send({ type: "setCardDOMPosition", domPosition, ...args });
   };
 

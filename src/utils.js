@@ -12,3 +12,5 @@ export function findEventType(params) {
 
 export const isValid = (o, action) =>
   Object.keys(o).find((key) => key === action);
+
+export const generateId = () => Math.random().toString().substring(2, 12);

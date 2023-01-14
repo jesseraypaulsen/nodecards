@@ -12,6 +12,7 @@ export const appMachine = (runChildEffect) =>
       context: {
         cards: [],
         links: [],
+        linkCreation: { active: false, from: null, to: null },
       },
       states: {
         mode: {
@@ -30,61 +31,127 @@ export const appMachine = (runChildEffect) =>
               states: {
                 readOnly: {},
                 modifiable: {
-                  initial: "regular",
+                  type: "parallel",
                   states: {
                     linkCreation: {
-                      entry:
-                        // desktop: change behavior of mouse cursor;
-                        // mobile: do something else
-                        log((_, e) => `linkCreation -> ${Object.keys(e)}`),
+                      initial: "OFF",
 
                       on: {
-                        clickedBackground: {
-                          actions: [
-                            send((_, { x, y }) => ({
-                              type: "openPrompt",
-                              x,
-                              y,
-                            })),
-                          ],
-                        },
                         "NODECARD.CLICK": {
                           // works for both active and inert target cards;
                           // create link between cards
                           actions: [],
                         },
                       },
-                    },
-                    cardCreation: {
-                      entry: send((_, { x, y }) => ({
-                        type: "openPrompt",
-                        x,
-                        y,
-                      })),
-                      on: {
-                        clickedBackground: {
-                          target: "regular",
-                          actions: send({ type: "closePrompt" }),
-                        },
-                        "CLOSE.PROMPT": {
-                          target: "regular",
-                          actions: send({ type: "closePrompt" }),
-                        },
-                        __createCard__: {
-                          actions: [
-                            "createCard",
-                            send({ type: "CLOSE.PROMPT" }),
+                      states: {
+                        ON: {
+                          entry: [
+                            // desktop: change behavior of mouse cursor;
+                            // mobile: do something else
+                            log(
+                              (context, e) =>
+                                `linkCreation -> ${Object.keys(e)}`
+                            ),
+                            assign({
+                              linkCreation: (context, event) => ({
+                                active: true,
+                                from: event.from,
+                                to: null,
+                              }),
+                            }),
                           ],
+                          exit: [
+                            log(
+                              (context) =>
+                                `linkCreation: self-transition (event: createLink) ${context.linkCreation.from}`
+                            ),
+                            assign({
+                              linkCreation: () => ({
+                                active: false,
+                                from: null,
+                                to: null,
+                              }),
+                            }),
+                          ],
+                          on: {
+                            //event triggered from within cardCreation.ON after card is created
+                            createLinkIfLinkCreationIsOn: {
+                              actions: [
+                                log(
+                                  (context, e) =>
+                                    `createLinkIfLinkCreationIsOn!!!!! ${Object.keys(
+                                      e
+                                    )}`
+                                ),
+                                assign({
+                                  linkCreation: (context, event) => ({
+                                    ...context.linkCreation,
+                                    to: event.to,
+                                  }),
+                                }),
+                                send(({ linkCreation }) => ({
+                                  type: "createLink",
+                                  from: linkCreation.from,
+                                  to: linkCreation.to,
+                                })),
+                              ],
+                            },
+                            // the "createLink" event is both sent and received from within the same state
+                            createLink: {
+                              target: "OFF",
+                            },
+                          },
+                        },
+                        OFF: {
+                          on: {
+                            BRANCH: {
+                              target: "ON",
+                              actions: log(
+                                (_, { from }) => `BRANCH from ${from}`
+                              ),
+                            },
+                          },
                         },
                       },
                     },
-                    regular: {
-                      on: {
-                        BRANCH: {
-                          target: "linkCreation",
-                          actions: log((_, { from }) => `BRANCH from ${from}`),
+                    cardCreation: {
+                      initial: "OFF",
+                      states: {
+                        ON: {
+                          entry: send((_, { x, y }) => ({
+                            type: "openPrompt",
+                            x,
+                            y,
+                          })),
+                          on: {
+                            clickedBackground: {
+                              target: "OFF",
+                              actions: send({ type: "closePrompt" }),
+                            },
+                            "CLOSE.PROMPT": {
+                              target: "OFF",
+                              actions: send({ type: "closePrompt" }),
+                            },
+                            __createCard__: {
+                              actions: [
+                                "createCard",
+                                send({ type: "CLOSE.PROMPT" }),
+                                send((_, e) => ({
+                                  type: "createLinkIfLinkCreationIsOn",
+                                  //type: "__setDataForLinkCreation__",
+                                  to: e.id,
+                                })),
+                              ],
+                            },
+                          },
                         },
-                        clickedBackground: { target: "cardCreation" },
+                        OFF: {
+                          on: {
+                            clickedBackground: {
+                              target: "ON",
+                            },
+                          },
+                        },
                       },
                     },
                   },
@@ -134,7 +201,7 @@ export const appMachine = (runChildEffect) =>
                 //"INIT.COMPLETE": { target: "active.readOnly" },
               },
               after: {
-                1000: { target: "active.readOnly" },
+                1000: { target: "active.modifiable" },
               },
             },
             disabled: {
@@ -204,7 +271,6 @@ export const appMachine = (runChildEffect) =>
                   sync: true,
                 }
               ).onTransition((state, event) => {
-                //if (event.type !== "xstate.init") {
                 const { id, text, domPosition, canvasPosition } = state.context;
 
                 runChildEffect(event.type, {
@@ -213,7 +279,6 @@ export const appMachine = (runChildEffect) =>
                   domPosition,
                   canvasPosition,
                 });
-                //}
               }),
             });
           },
