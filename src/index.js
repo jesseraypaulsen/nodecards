@@ -46,6 +46,9 @@ const { panelControllers, promptController } = pControllers(
 const { openPrompt, closePrompt } = promptView(promptController);
 
 network.on("click", graphController(service.send));
+network.on("resize", (e) => console.log("resize: ", e));
+network.on("dragEnd", (e) => console.log("dragEnd: ", e));
+network.on("hold", (e) => console.log("hold: ", e));
 
 const peripheralEffects = {
   turnPhysicsOff: () => setPhysics(false),

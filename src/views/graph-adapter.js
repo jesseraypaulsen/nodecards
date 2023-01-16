@@ -22,8 +22,9 @@ export default function graphAdapterFactoryFactory(network) {
       network.body.data.nodes.remove(getId());
     };
 
-    const moveNode = (canvasX, canvasY) => {
-      network.moveNode(id, canvasX, canvasY);
+    const moveNode = () => {
+      const { x, y } = getCanvasPosition();
+      network.moveNode(getId(), x, y);
     };
 
     // TODO: find out if this is necessary or not

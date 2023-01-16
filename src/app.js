@@ -21,7 +21,7 @@ export default function App(
   };
 
   const render = (state, event, send) => {
-    console.log("context: ", state.context);
+    console.log(state.context);
     synchSettingsPanel(event);
     if (isValid(peripheralEffects, event.type))
       peripheralEffects[event.type](event);
@@ -30,7 +30,7 @@ export default function App(
       event.state.changed === undefined
     ) {
       // "xstate.update" is triggered when new actor machines are spawned and when they are updated. It is enabled by the {sync: true} argument.
-      //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness is inadequate.
+      //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness doesn't work here.
       const data = event.state.context;
       if (state.matches("mode.initializing")) {
         runParentEffect("hydrateCard", { ...data, send });
@@ -58,13 +58,20 @@ export default function App(
 
  - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify,
    two prompts are open at once.
-  
- - create function that processes state data for render function
+
+ - bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. 
+ mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead, 
+ dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
+ https://visjs.github.io/vis-network/docs/network/index.html#Events
 
  - add 'source' argument to createButtonBar
 
  - bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
  but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch.
+
+ - create alternative positions for nodecard elements -- currently the only position is to map an element's center onto the node's center. but this
+ means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
+ i deal with this by restricting the size of the canvas. note that different positioning types require different css animations.
 
  - investigate vis-network methods for various uses, including startSimulation, stopSimulation, unselectAll, setSelection, releaseNode, moveTo, etc 
  (eg, startSimulation might be easier than the current way I'm turning physics on). https://visjs.github.io/vis-network/docs/network/index.html
@@ -75,9 +82,6 @@ export default function App(
  /network/modules/components/Node.js
  /network/NetworkUtil.js
 
- - create alternative positions for nodecard elements -- currently the only position is to map an element's center onto the node's center. but this
- means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
- i deal with this by restricting the size of the canvas. note that different positioning types require different css animations.
 
  - we need several different ways of dealing with card collisions. each way should have a corresponding state. eg, when opening a card collides with a 
  previously opened card -- in one state the previously opened card might shrink somewhat, while in another state the newly opened card might overlap

@@ -19,7 +19,7 @@ export default (send, getLinksForCard) => {
     inertify: (id) => send({ type: "mediate", childType: "INERTIFY", id }),
     branch: (id) => {
       const linkId = generateId();
-      const label = "*";
+      const label = linkId;
       send({ type: "BRANCH", linkId, label, from: id });
     },
   };

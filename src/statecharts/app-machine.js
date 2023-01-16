@@ -186,7 +186,6 @@ export const appMachine = (runChildEffect) =>
                                 }
                               }
                             }
-                            console.log("destroyCard: ", linksToKeep);
                             return linksToKeep;
                           },
                         }),
@@ -206,14 +205,12 @@ export const appMachine = (runChildEffect) =>
                 hydrateLink: {
                   actions: "hydrateLink",
                 },
-                //"INIT.COMPLETE": { target: "active.readOnly" },
               },
               after: {
                 1000: { target: "active.modifiable" },
               },
             },
             disabled: {
-              // in this state, all Nodecards functionality is disabled, leaving just the naked graph renderer.
               entry: (context, event) => {
                 context.cards.forEach((card) => {
                   card.ref.send("INERTIFY");
@@ -267,7 +264,6 @@ export const appMachine = (runChildEffect) =>
     {
       actions: {
         createCard: assign({
-          //TODO: remove position, change name to createCard
           cards: (context, event) => {
             const { id, label, text, domPosition, canvasPosition } = event;
             return context.cards.concat({

@@ -48,7 +48,7 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
           },
           editing: {
             on: {
-              READ: { target: "reading" }, // this transition can occur if appMachine is in 'readOnly' or 'modifiable'.
+              READ: { target: "reading" },
               TYPING: {
                 actions: [
                   assign({ text: (context, event) => event.data.text }),
@@ -65,10 +65,6 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
         },
       },
       inert: {
-        // a nodecard can be inert when the app is in any of the modes. if the app is disabled, then all nodecard's become inert.
-        /*entry: send(() => ({
-          type: "cardDeactivated",
-        })),*/
         on: {
           activate: { target: "active" },
         },

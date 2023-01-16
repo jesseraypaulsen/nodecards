@@ -26,7 +26,6 @@ export default function DeckManager(cardFace, createEdge) {
 
   const removeCard = (id) => {
     removeLinksForCard(id);
-    console.log("removeCard -> links ", links);
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
