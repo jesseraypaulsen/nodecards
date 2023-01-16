@@ -9,7 +9,7 @@ import controllers from "../controllers/nodecard.controllers";
   @returns {object}
 */
 export default (graphAdapterFactory, domAdapterFactory) =>
-  ({ id, label, text, domPosition, canvasPosition, send }) => {
+  ({ id, label, text, domPosition, canvasPosition, getLinksForCard, send }) => {
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;
@@ -27,8 +27,10 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       canvasPosition = nextCanvasPosition;
     };
 
-    const { editorController, buttonsControllers } =
-      controllers(sendToAppMachine);
+    const { editorController, buttonsControllers } = controllers(
+      sendToAppMachine,
+      getLinksForCard
+    );
 
     const graphAdapter = graphAdapterFactory(
       getId,

@@ -21,6 +21,8 @@ export default (network, send) => {
 
   const hydrateLink = ({ ...args }) => send({ type: "hydrateLink", ...args });
 
+  const removeLink = ({ ...args }) => send({ type: "removeLink", ...args });
+
   // facades
 
   const setPositionAfterCreation = (id, delay) => {
@@ -55,6 +57,7 @@ export default (network, send) => {
   return {
     hydrateCard,
     hydrateLink,
+    removeLink,
     setPositionAfterCreation,
     calculatePositionThenCreate,
   };

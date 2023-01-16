@@ -1,4 +1,6 @@
-export default (send) => {
+import { generateId } from "../utils.js";
+
+export default (send, getLinksForCard) => {
   const editorController = (e, id) => {
     send({
       type: "mediateToModify",
@@ -10,10 +12,16 @@ export default (send) => {
     edit: (id) =>
       send({ type: "mediateToModify", childType: "EDIT", data: { id } }),
     read: (id) => send({ type: "mediate", childType: "READ", id }),
-    delete: (id) => send({ type: "destroyCard", id }),
+    delete: (id) => {
+      const links = getLinksForCard(id);
+      send({ type: "destroyCard", id, links });
+    },
     inertify: (id) => send({ type: "mediate", childType: "INERTIFY", id }),
-    //branch: (id) => send({ type: "mediate", childType: "BRANCH", id }),
-    branch: (id) => send({ type: "BRANCH", from: id }),
+    branch: (id) => {
+      const linkId = generateId();
+      const label = "*";
+      send({ type: "BRANCH", linkId, label, from: id });
+    },
   };
 
   return {

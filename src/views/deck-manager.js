@@ -1,4 +1,4 @@
-import { isValid, generateId } from "../utils.js";
+import { isValid } from "../utils.js";
 
 export default function DeckManager(cardFace, createEdge) {
   let nodecards = [];
@@ -26,6 +26,7 @@ export default function DeckManager(cardFace, createEdge) {
 
   const removeCard = (id) => {
     removeLinksForCard(id);
+    console.log("removeCard -> links ", links);
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
@@ -35,7 +36,7 @@ export default function DeckManager(cardFace, createEdge) {
       This fails because it gets called no matter what state the parent machine is in.
     },*/
     hydrateCard: ({ id, label, text, send }) => {
-      addCard(cardFace({ id, label, text, send }));
+      addCard(cardFace({ id, label, text, getLinksForCard, send }));
     },
     createCard: ({ id, label, text, domPosition, canvasPosition, send }) => {
       addCard(
@@ -45,6 +46,7 @@ export default function DeckManager(cardFace, createEdge) {
           text,
           domPosition,
           canvasPosition,
+          getLinksForCard,
           send,
         })
       );
@@ -53,11 +55,7 @@ export default function DeckManager(cardFace, createEdge) {
     hydrateLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
     },
-    createLink: ({ from, to }) => {
-      console.log("createLink -> from: ", from);
-      console.log("createLink -> to: ", to);
-      const id = generateId();
-      const label = "link";
+    createLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
     },
   };
@@ -94,7 +92,6 @@ export default function DeckManager(cardFace, createEdge) {
 
   return {
     runParentEffect: (action, data) => {
-      console.log("runParentEffect -> ", action);
       const valid = isValid(parentEffects, action);
       if (valid) parentEffects[action](data);
     },

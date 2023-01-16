@@ -12,7 +12,7 @@ export const appMachine = (runChildEffect) =>
       context: {
         cards: [],
         links: [],
-        linkCreation: { active: false, from: null, to: null },
+        linkCreation: { id: null, label: null, from: null },
       },
       states: {
         mode: {
@@ -48,28 +48,20 @@ export const appMachine = (runChildEffect) =>
                           entry: [
                             // desktop: change behavior of mouse cursor;
                             // mobile: do something else
-                            log(
-                              (context, e) =>
-                                `linkCreation -> ${Object.keys(e)}`
-                            ),
                             assign({
-                              linkCreation: (context, event) => ({
-                                active: true,
-                                from: event.from,
-                                to: null,
+                              linkCreation: (_, { linkId, label, from }) => ({
+                                id: linkId,
+                                label,
+                                from,
                               }),
                             }),
                           ],
                           exit: [
-                            log(
-                              (context) =>
-                                `linkCreation: self-transition (event: createLink) ${context.linkCreation.from}`
-                            ),
                             assign({
                               linkCreation: () => ({
-                                active: false,
+                                id: null,
+                                label: null,
                                 from: null,
-                                to: null,
                               }),
                             }),
                           ],
@@ -77,22 +69,26 @@ export const appMachine = (runChildEffect) =>
                             //event triggered from within cardCreation.ON after card is created
                             createLinkIfLinkCreationIsOn: {
                               actions: [
-                                log(
-                                  (context, e) =>
-                                    `createLinkIfLinkCreationIsOn!!!!! ${Object.keys(
-                                      e
-                                    )}`
-                                ),
                                 assign({
-                                  linkCreation: (context, event) => ({
-                                    ...context.linkCreation,
-                                    to: event.to,
-                                  }),
+                                  links: ({ links, linkCreation }, { to }) => {
+                                    const { id, label, from } = linkCreation;
+                                    return [
+                                      ...links,
+                                      {
+                                        id,
+                                        label,
+                                        from,
+                                        to,
+                                      },
+                                    ];
+                                  },
                                 }),
-                                send(({ linkCreation }) => ({
+                                send(({ linkCreation }, { to }) => ({
                                   type: "createLink",
+                                  id: linkCreation.id,
+                                  label: linkCreation.label,
                                   from: linkCreation.from,
-                                  to: linkCreation.to,
+                                  to,
                                 })),
                               ],
                             },
@@ -106,9 +102,6 @@ export const appMachine = (runChildEffect) =>
                           on: {
                             BRANCH: {
                               target: "ON",
-                              actions: log(
-                                (_, { from }) => `BRANCH from ${from}`
-                              ),
                             },
                           },
                         },
@@ -138,7 +131,6 @@ export const appMachine = (runChildEffect) =>
                                 send({ type: "CLOSE.PROMPT" }),
                                 send((_, e) => ({
                                   type: "createLinkIfLinkCreationIsOn",
-                                  //type: "__setDataForLinkCreation__",
                                   to: e.id,
                                 })),
                               ],
@@ -181,6 +173,22 @@ export const appMachine = (runChildEffect) =>
                             context.cards.filter(
                               (card) => event.id !== card.id
                             ),
+                        }),
+                        assign({
+                          links: (context, event) => {
+                            let linksToKeep = [...context.links];
+                            for (let i = 0; i < context.links.length; i++) {
+                              for (let j = 0; j < event.links.length; j++) {
+                                if (context.links[i].id === event.links[j].id) {
+                                  linksToKeep = linksToKeep.filter(
+                                    (link) => context.links[i].id !== link.id
+                                  );
+                                }
+                              }
+                            }
+                            console.log("destroyCard: ", linksToKeep);
+                            return linksToKeep;
+                          },
                         }),
                       ],
                       //How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?

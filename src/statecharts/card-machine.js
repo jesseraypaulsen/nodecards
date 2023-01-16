@@ -58,12 +58,6 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
           },
         },
         on: {
-          BRANCH: {
-            actions: sendParent((context, event) => ({
-              type: "BRANCHBUTTON.CLICK",
-              load: context,
-            })),
-          },
           INERTIFY: {
             target: "inert",
           },
