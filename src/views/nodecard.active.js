@@ -23,12 +23,9 @@ export default (domFace, graphFace) => {
     updateEditor() {
       domFace.updateEditor();
     },
+    move() {
+      domFace.setElementPosition();
+      graphFace.moveNode();
+    },
   };
-
-  /*TODO
-    const move = (id) => {
-      moveNode(id);
-      setPosition(qs("#" + id));
-    };
-  */
 };

@@ -31,10 +31,7 @@ function drag(e, card) {
         y: canvasPosition.y + dy,
         id,
       });
-      //new method:
       card.activeFace.move();
-      // card.moveNode(); //graph-adapter
-      // setPosition(element, domPosition.x + dx, domPosition.y + dy); //dom-adapter
     } else {
       container.removeEventListener("mousemove", moveHandler);
     }

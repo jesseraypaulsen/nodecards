@@ -11,6 +11,7 @@ export const domAdapterFactory =
 
     return {
       ...elementRemover(_private),
+      ...elementPositioner(_private, getDomPosition),
       ...expander(_private, getDomPosition),
       ...elementFiller(_private),
       ...editorUpdater(_private, getText),
@@ -46,6 +47,13 @@ export const elementRemover = (_) => ({
   },
 });
 
+const elementPositioner = (_, getDomPosition) => ({
+  setElementPosition() {
+    const { x, y } = getDomPosition();
+    setPosition(_.el, x, y);
+  },
+});
+
 const createReader =
   (getId, getText, buttonsControllers, editorController) => () => ({
     main: activeTemplates(getId(), getText(), editorController).reader(),
@@ -63,8 +71,8 @@ const expander = (_, getDomPosition) => ({
     _.el = div("nodecard", "expand");
     this.renderReader();
     render(_.el); // MUST RENDER BEFORE setPosition is called!!!
-    const { x, y } = getDomPosition();
-    setPosition(_.el, x, y);
+    //const { x, y } = getDomPosition();
+    this.setElementPosition();
   },
 });
 
