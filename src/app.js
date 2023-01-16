@@ -21,7 +21,9 @@ export default function App(
   };
 
   const render = (state, event, send) => {
-    console.log(state.context);
+    console.log("state ", state);
+    console.log("event ", event);
+
     synchSettingsPanel(event);
     if (isValid(peripheralEffects, event.type))
       peripheralEffects[event.type](event);
@@ -32,11 +34,12 @@ export default function App(
       // "xstate.update" is triggered when new actor machines are spawned and when they are updated. It is enabled by the {sync: true} argument.
       //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness doesn't work here.
       const data = event.state.context;
+      const { ref } = state.context.cards.find((item) => item.id === data.id);
       if (state.matches("mode.initializing")) {
-        runParentEffect("hydrateCard", { ...data, send });
+        runParentEffect("hydrateCard", { ...data, send, cardMachine: ref });
         setPositionAfterCreation(data.id, 1000);
       } else if (state.matches("mode.active")) {
-        runParentEffect("createCard", { ...data, send });
+        runParentEffect("createCard", { ...data, send, cardMachine: ref });
       }
     } else runParentEffect(event.type, event);
   };

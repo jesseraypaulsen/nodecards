@@ -49,6 +49,7 @@ export const elementRemover = (_) => ({
 
 const elementPositioner = (_, getDomPosition) => ({
   setElementPosition() {
+    console.log("setElementPosition -> getDomPosition ", getDomPosition);
     const { x, y } = getDomPosition();
     setPosition(_.el, x, y);
   },

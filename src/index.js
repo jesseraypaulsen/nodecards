@@ -12,6 +12,7 @@ import graphAdapterFactoryFactory from "./views/graph-adapter";
 import pControllers from "./controllers/p-controllers";
 import { graphController } from "./controllers/graph.controllers";
 import Wrappers from "./library-wrappers";
+import drag from "./views/drag";
 import "../assets/styles/main.css";
 import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
@@ -34,7 +35,11 @@ const setPhysics = (value) => {
   network.setOptions(options);
 };
 
-const { runParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
+const { runParentEffect, runChildEffect } = DeckManager(
+  cardFace,
+  createEdge,
+  drag(container)
+);
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
 const { calculatePositionThenCreate } = wrappers;

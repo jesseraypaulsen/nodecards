@@ -24,6 +24,7 @@ export default (domFace, graphFace) => {
       domFace.updateEditor();
     },
     move() {
+      console.log("move ", this);
       domFace.setElementPosition();
       graphFace.moveNode();
     },

@@ -16,14 +16,14 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
     on: {
       setDOMPosition: {
         actions: assign({
-          domPosition: ({ id }, { domPosition }) => {
+          domPosition: (_, { domPosition }) => {
             return domPosition;
           },
         }),
       },
       setCanvasPosition: {
         actions: assign({
-          canvasPosition: ({ id }, { canvasPosition }) => {
+          canvasPosition: (_, { canvasPosition }) => {
             return canvasPosition;
           },
         }),
@@ -32,7 +32,7 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
     states: {
       active: {
         initial: "reading",
-        entry: send(({ domPosition }) => ({
+        entry: send(() => ({
           type: "cardActivated",
         })),
         exit: send(() => ({
@@ -50,9 +50,7 @@ export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
             on: {
               READ: { target: "reading" },
               TYPING: {
-                actions: [
-                  assign({ text: (context, event) => event.data.text }),
-                ],
+                actions: [assign({ text: (_, event) => event.data.text })],
               },
             },
           },

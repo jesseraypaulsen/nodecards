@@ -9,13 +9,26 @@ import controllers from "../controllers/nodecard.controllers";
   @returns {object}
 */
 export default (graphAdapterFactory, domAdapterFactory) =>
-  ({ id, label, text, domPosition, canvasPosition, getLinksForCard, send }) => {
+  ({
+    id,
+    label,
+    text,
+    domPosition,
+    canvasPosition,
+    getLinksForCard,
+    send,
+    cardMachine,
+  }) => {
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;
     const getCanvasPosition = () => canvasPosition;
-    const getDomPosition = () => domPosition;
+    const getDomPosition = () => {
+      console.log("getDomPosition ", domPosition);
+      return domPosition;
+    };
     const sendToAppMachine = (msg) => send(msg);
+    const sendToCardMachine = (msg) => cardMachine.send(msg);
 
     const setText = (nextText) => {
       text = nextText;
@@ -29,6 +42,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
 
     const { editorController, buttonsControllers } = controllers(
       sendToAppMachine,
+      sendToCardMachine,
       getLinksForCard
     );
 
@@ -53,8 +67,11 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       getId,
       setDomPosition,
       setCanvasPosition,
+      getDomPosition,
+      getCanvasPosition,
       setText,
       activeFace: activeFaceFactory(domAdapter, graphAdapter),
       inertFace: inertFaceFactory(domAdapter, graphAdapter),
+      sendToCardMachine,
     };
   };

@@ -28,7 +28,7 @@ export default (controllers, id, source) => {
     },
     drag: {
       icon: dragIcon,
-      handler: (e) => drag(e),
+      handler: (e) => controllers.drag(e),
       eventType: "mousedown",
       classNames: [...classNames, "drag"],
       active: true,
