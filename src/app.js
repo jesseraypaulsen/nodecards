@@ -34,10 +34,11 @@ export default function App(
       //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness doesn't work here.
       const data = event.state.context;
       if (state.matches("mode.initializing")) {
-        runParentEffect("hydrateCard", { ...data, send });
+        runParentEffect("hydrateCard", { ...data /*send*/ });
+        console.log("render -> data.id -> ", data.id);
         setPositionAfterCreation(data.id, 1000);
       } else if (state.matches("mode.active")) {
-        runParentEffect("createCard", { ...data, send });
+        runParentEffect("createCard", { ...data /*send*/ });
       }
     } else runParentEffect(event.type, event);
   };

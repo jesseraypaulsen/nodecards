@@ -2,7 +2,8 @@ import { generateId } from "../utils.js";
 import drag from "../views/drag";
 
 export default (container) =>
-  (send, getLinksForCard, getCanvasPosition, getDomPosition, getId) => {
+  (send) =>
+  (getLinksForCard, getCanvasPosition, getDomPosition) => {
     const editorController = (e, id) => {
       send({
         type: "mediateToModify",

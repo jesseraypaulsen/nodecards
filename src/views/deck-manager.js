@@ -1,6 +1,6 @@
 import { isValid } from "../utils.js";
 
-export default function DeckManager(cardFace, createEdge) {
+export default function DeckManager(cardFace, createEdge, controllers) {
   let nodecards = [];
   let links = [];
 
@@ -29,15 +29,23 @@ export default function DeckManager(cardFace, createEdge) {
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
-  const parentEffects = {
+  const parentEffects = (send) => ({
     /*destroyCard: ({ id }) => {
       removeCard(id);
       This fails because it gets called no matter what state the parent machine is in.
     },*/
-    hydrateCard: ({ id, label, text, send }) => {
-      addCard(cardFace({ id, label, text, getLinksForCard, send }));
+    hydrateCard: ({ id, label, text }) => {
+      addCard(
+        cardFace({
+          id,
+          label,
+          text,
+          getLinksForCard,
+          controllers: controllers(send),
+        })
+      );
     },
-    createCard: ({ id, label, text, domPosition, canvasPosition, send }) => {
+    createCard: ({ id, label, text, domPosition, canvasPosition }) => {
       addCard(
         cardFace({
           id,
@@ -46,7 +54,7 @@ export default function DeckManager(cardFace, createEdge) {
           domPosition,
           canvasPosition,
           getLinksForCard,
-          send,
+          controllers: controllers(send),
         })
       );
       send({ type: "mediate", childType: "activate", id });
@@ -57,7 +65,7 @@ export default function DeckManager(cardFace, createEdge) {
     createLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
     },
-  };
+  });
 
   const childEffects = {
     setDOMPosition: ({ id, domPosition }) => {
@@ -93,9 +101,12 @@ export default function DeckManager(cardFace, createEdge) {
   };
 
   return {
-    runParentEffect: (action, data) => {
-      const valid = isValid(parentEffects, action);
-      if (valid) parentEffects[action](data);
+    setupParentEffect: (send) => (action, data) => {
+      const _parentEffects = parentEffects(send);
+      const valid = isValid(_parentEffects, action);
+      if (valid) {
+        _parentEffects[action](data);
+      }
     },
     runChildEffect: (action, data) => {
       const valid = isValid(childEffects, action);

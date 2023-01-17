@@ -9,10 +9,10 @@ import { domAdapterFactory } from "./views/nodecard.dom-adapter";
 import { settingsPanel, synchPanel } from "./views/settings-panel";
 import promptView from "./views/prompt";
 import graphAdapterFactoryFactory from "./views/graph-adapter";
-import pControllers from "./controllers/p-controllers";
+import peripheralControllers from "./controllers/peripheral-controllers";
 import nodecardControllers from "./controllers/nodecard.controllers";
 import { graphController } from "./controllers/graph.controllers";
-import Wrappers from "./library-wrappers";
+import Wrappers from "./controllers/library-wrappers";
 import "../assets/styles/main.css";
 import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
@@ -24,12 +24,8 @@ const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
 
-const cardFace = nodecard(
-  graphAdapterFactory,
-  domAdapterFactory,
-  nodecardControllers(container)
-);
-
+const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
+const _nodecardControllers = nodecardControllers(container);
 const createEdge = (argsObject) => {
   network.body.data.edges.add(argsObject);
   return argsObject;
@@ -40,11 +36,15 @@ const setPhysics = (value) => {
   network.setOptions(options);
 };
 
-const { runParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
+const { setupParentEffect, runChildEffect } = DeckManager(
+  cardFace,
+  createEdge,
+  _nodecardControllers
+);
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
 const { calculatePositionThenCreate } = wrappers;
-const { panelControllers, promptController } = pControllers(
+const { panelControllers, promptController } = peripheralControllers(
   service.send,
   calculatePositionThenCreate
 );
@@ -64,7 +64,7 @@ const peripheralEffects = {
 };
 
 settingsPanel(panelControllers);
-
+const runParentEffect = setupParentEffect(service.send);
 const app = App(runParentEffect, synchPanel, wrappers, peripheralEffects);
 
 const data = {
