@@ -17,18 +17,16 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     canvasPosition,
     getLinksForCard,
     send,
-    cardMachine,
+    cardMachine, //TODO: remove
+    //TODO: dragger
   }) => {
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;
     const getCanvasPosition = () => canvasPosition;
-    const getDomPosition = () => {
-      console.log("getDomPosition ", domPosition);
-      return domPosition;
-    };
+    const getDomPosition = () => domPosition;
     const sendToAppMachine = (msg) => send(msg);
-    const sendToCardMachine = (msg) => cardMachine.send(msg);
+    const sendToCardMachine = (msg) => cardMachine.send(msg); //TODO: remove
 
     const setText = (nextText) => {
       text = nextText;
@@ -42,7 +40,6 @@ export default (graphAdapterFactory, domAdapterFactory) =>
 
     const { editorController, buttonsControllers } = controllers(
       sendToAppMachine,
-      sendToCardMachine,
       getLinksForCard
     );
 
@@ -70,8 +67,8 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       getDomPosition,
       getCanvasPosition,
       setText,
-      activeFace: activeFaceFactory(domAdapter, graphAdapter),
+      activeFace: activeFaceFactory(domAdapter, graphAdapter), //TODO: pass in dragger
       inertFace: inertFaceFactory(domAdapter, graphAdapter),
-      sendToCardMachine,
+      sendToCardMachine, //TODO: remove
     };
   };

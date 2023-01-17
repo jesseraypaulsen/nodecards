@@ -1,50 +1,50 @@
 export default (container) => (card) => {
   let move = true;
+  const disableMoving = () => (move = false);
+  const onlyRunOnce = { once: true };
+  container.addEventListener("mouseup", disableMoving, onlyRunOnce);
+  container.addEventListener("mousemove", dragHandler);
+  const selfDestruct = () =>
+    container.removeEventListener("mousemove", dragHandler);
 
-  container.addEventListener(
-    "mouseup",
-    (e) => {
-      move = false;
-    },
-    { once: true } // remove listener after it runs once
-  );
-  const addDeltas = (get, dx, dy) => {
-    let { x, y } = get();
-    return { x: x + dx, y: y + dy };
-  };
-  container.addEventListener("mousemove", moveHandler);
-  function moveHandler(e) {
-    let dx = e.movementX * 1.6; //the 1.6 factor is a crude hack that compensates for a delay between mouse and element position.
-    let dy = e.movementY * 1.6; //the movementX/movementY properties on the event object return the difference between successive mouse positions.
+  function dragHandler(e) {
     if (move) {
-      // nodecard.js
-      const domPosition = addDeltas(card.getDomPosition, dx, dy);
-      console.log("drag -> domPosition: ", domPosition);
-      const canvasPosition = addDeltas(card.getCanvasPosition, dx, dy);
-      // library-wrappers.js
-      // setDOMPosition({
-      //   x: domPosition.x + dx,
-      //   y: domPosition.y + dy,
-      //   id,
-      // });
-      // setCanvasPosition({
-      //   x: canvasPosition.x + dx,
-      //   y: canvasPosition.y + dy,
-      //   id,
-      // });
-      card.sendToCardMachine({
-        type: "setDOMPosition",
-        id: card.getId(),
-        domPosition,
-      });
-      card.sendToCardMachine({
-        type: "setCanvasPosition",
-        id: card.getId(),
-        canvasPosition,
-      });
-      card.activeFace.move();
+      moveCard(card, e);
     } else {
-      container.removeEventListener("mousemove", moveHandler);
+      selfDestruct();
     }
   }
 };
+
+const addDeltas = (getPos, { dx, dy }) => {
+  let { x, y } = getPos();
+  return { x: x + dx, y: y + dy };
+};
+
+const getDeltas = (e) => {
+  let dx = e.movementX * 1.6; //the 1.6 factor is a crude hack that compensates for a delay between mouse and element position.
+  let dy = e.movementY * 1.6; //the movementX/movementY properties on the event object return the difference between successive mouse positions.
+  return { dx, dy };
+};
+
+function moveCard(card, e) {
+  //TODO: pass getDomPosition/getCanvasPosition from nodecard.js
+
+  const domPosition = addDeltas(card.getDomPosition, getDeltas(e));
+  const canvasPosition = addDeltas(card.getCanvasPosition, getDeltas(e));
+
+  //TODO: send({type:"setCardDOMPosition", id}) and pass down id
+  card.sendToCardMachine({
+    type: "setDOMPosition",
+    id: card.getId(),
+    domPosition,
+  });
+  card.sendToCardMachine({
+    type: "setCanvasPosition",
+    id: card.getId(),
+    canvasPosition,
+  });
+
+  //but what about this?
+  card.activeFace.move();
+}

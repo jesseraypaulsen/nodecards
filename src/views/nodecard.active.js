@@ -8,11 +8,9 @@ export default (domFace, graphFace) => {
     discard() {
       graphFace.removeNode();
       domFace.removeElement();
-      //TODO: should delete entire Nodecard instance
     },
     inertify() {
-      domFace.collapse(); // TODO: should delete domView instance
-      //updateNode(id)
+      domFace.collapse();
     },
     renderReader() {
       domFace.renderReader();
@@ -24,9 +22,11 @@ export default (domFace, graphFace) => {
       domFace.updateEditor();
     },
     move() {
-      console.log("move ", this);
       domFace.setElementPosition();
       graphFace.moveNode();
+    },
+    drag(getId, getDomPosition) {
+      //pass this.move to dragger
     },
   };
 };

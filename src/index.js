@@ -23,6 +23,7 @@ import "../assets/styles/prompt.css";
 const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
+//TODO: pass drag(container) to cardFace
 const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
 
 const createEdge = (argsObject) => {

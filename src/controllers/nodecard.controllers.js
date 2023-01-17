@@ -1,6 +1,6 @@
 import { generateId } from "../utils.js";
 
-export default (send, sendToCardMachine, getLinksForCard) => {
+export default (send, getLinksForCard) => {
   const editorController = (e, id) => {
     send({
       type: "mediateToModify",
@@ -22,11 +22,10 @@ export default (send, sendToCardMachine, getLinksForCard) => {
       const label = linkId;
       send({ type: "BRANCH", linkId, label, from: id });
     },
-    drag: (e) => {
-      console.log("drag!!");
+    drag: (e, id) => {
       e.preventDefault();
       send("turnPhysicsOff");
-      sendToCardMachine("DRAG");
+      send({ type: "mediate", childType: "DRAG", id });
     },
   };
 

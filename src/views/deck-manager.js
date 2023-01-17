@@ -99,8 +99,8 @@ export default function DeckManager(cardFace, createEdge, drag) {
       removeCard(id);
     },
     DRAG: ({ id }) => {
-      const card = getCard(id);
-      drag(card);
+      drag(getCard(id));
+      //getCard(id).activeFace.drag() or getCard(id).activeFace.move()
     },
   };
 
