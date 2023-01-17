@@ -19,10 +19,7 @@ export default function App(
     });
   };
 
-  const render = (state, event, send) => {
-    console.log("state ", state);
-    console.log("event ", event);
-
+  const render = (state, event) => {
     synchSettingsPanel(event);
     if (isValid(peripheralEffects, event.type))
       peripheralEffects[event.type](event);
@@ -34,11 +31,10 @@ export default function App(
       //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness doesn't work here.
       const data = event.state.context;
       if (state.matches("mode.initializing")) {
-        runParentEffect("hydrateCard", { ...data /*send*/ });
-        console.log("render -> data.id -> ", data.id);
+        runParentEffect("hydrateCard", { ...data });
         setPositionAfterCreation(data.id, 1000);
       } else if (state.matches("mode.active")) {
-        runParentEffect("createCard", { ...data /*send*/ });
+        runParentEffect("createCard", { ...data });
       }
     } else runParentEffect(event.type, event);
   };
@@ -51,8 +47,6 @@ export default function App(
  - remove card from state machine context on DELETE event (DONE, but partially unresolved)
    (How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
     The question remains unanswered: https://stackoverflow.com/q/61013927 )
-
- - the views should not have access to XState's send function. this violates MVC. only controllers should send to XState.
  
  - bug: when the app mode is "active.readOnly" the button should be disabled.
  

@@ -7,7 +7,7 @@ import inertFaceFactory from "./nodecard.inert";
   @param {object} domAdapter
   @returns {object}
 */
-export default (graphAdapterFactory, domAdapterFactory /*controllers*/) =>
+export default (graphAdapterFactory, domAdapterFactory) =>
   ({
     id,
     label,
@@ -15,14 +15,13 @@ export default (graphAdapterFactory, domAdapterFactory /*controllers*/) =>
     domPosition,
     canvasPosition,
     getLinksForCard,
-    controllers /*send*/,
+    controllers,
   }) => {
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;
     const getCanvasPosition = () => canvasPosition;
     const getDomPosition = () => domPosition;
-    //const sendToAppMachine = (msg) => send(msg);
 
     const setText = (nextText) => {
       text = nextText;
@@ -35,7 +34,6 @@ export default (graphAdapterFactory, domAdapterFactory /*controllers*/) =>
     };
 
     const { editorController, buttonsControllers } = controllers(
-      /*sendToAppMachine,*/
       getLinksForCard,
       getCanvasPosition,
       getDomPosition

@@ -1,8 +1,8 @@
 import { generateId } from "../utils.js";
 import drag from "../views/drag";
 
-export default (container) =>
-  (send) =>
+export default (container, send) =>
+  //(send) =>
   (getLinksForCard, getCanvasPosition, getDomPosition) => {
     const editorController = (e, id) => {
       send({

@@ -1,6 +1,6 @@
 import { isValid } from "../utils.js";
 
-export default function DeckManager(cardFace, createEdge, controllers) {
+export default function DeckManager(cardFace, createEdge) {
   let nodecards = [];
   let links = [];
 
@@ -29,7 +29,7 @@ export default function DeckManager(cardFace, createEdge, controllers) {
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
-  const parentEffects = (send) => ({
+  const parentEffects = (controllers, activateCard) => ({
     /*destroyCard: ({ id }) => {
       removeCard(id);
       This fails because it gets called no matter what state the parent machine is in.
@@ -41,7 +41,7 @@ export default function DeckManager(cardFace, createEdge, controllers) {
           label,
           text,
           getLinksForCard,
-          controllers: controllers(send),
+          controllers,
         })
       );
     },
@@ -54,10 +54,10 @@ export default function DeckManager(cardFace, createEdge, controllers) {
           domPosition,
           canvasPosition,
           getLinksForCard,
-          controllers: controllers(send),
+          controllers,
         })
       );
-      send({ type: "mediate", childType: "activate", id });
+      activateCard(id);
     },
     hydrateLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
@@ -101,8 +101,8 @@ export default function DeckManager(cardFace, createEdge, controllers) {
   };
 
   return {
-    setupParentEffect: (send) => (action, data) => {
-      const _parentEffects = parentEffects(send);
+    setupParentEffect: (controllers, activateCard) => (action, data) => {
+      const _parentEffects = parentEffects(controllers, activateCard);
       const valid = isValid(_parentEffects, action);
       if (valid) {
         _parentEffects[action](data);

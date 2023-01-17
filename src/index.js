@@ -25,7 +25,6 @@ const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
 
 const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
-const _nodecardControllers = nodecardControllers(container);
 const createEdge = (argsObject) => {
   network.body.data.edges.add(argsObject);
   return argsObject;
@@ -36,11 +35,7 @@ const setPhysics = (value) => {
   network.setOptions(options);
 };
 
-const { setupParentEffect, runChildEffect } = DeckManager(
-  cardFace,
-  createEdge,
-  _nodecardControllers
-);
+const { setupParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
 const { calculatePositionThenCreate } = wrappers;
@@ -64,7 +59,12 @@ const peripheralEffects = {
 };
 
 settingsPanel(panelControllers);
-const runParentEffect = setupParentEffect(service.send);
+const _nodecardControllers = nodecardControllers(container, service.send);
+const activateCard = (id) =>
+  service.send({ type: "mediate", childType: "activate", id });
+
+const runParentEffect = setupParentEffect(_nodecardControllers, activateCard);
+
 const app = App(runParentEffect, synchPanel, wrappers, peripheralEffects);
 
 const data = {
@@ -88,7 +88,7 @@ const data = {
 // subscribe views
 service.onTransition((state, event) => {
   if (state.event.type === "xstate.init") app.init(data);
-  else app.render(state, event, service.send);
+  else app.render(state, event);
 });
 
 service.start();
