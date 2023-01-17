@@ -1,4 +1,4 @@
-export default (container) => (card) => {
+export default (container, cardFuncs) => {
   let move = true;
   const disableMoving = () => (move = false);
   const onlyRunOnce = { once: true };
@@ -9,15 +9,14 @@ export default (container) => (card) => {
 
   function dragHandler(e) {
     if (move) {
-      moveCard(card, e);
+      moveCard(cardFuncs, e);
     } else {
       selfDestruct();
     }
   }
 };
 
-const addDeltas = (getPos, { dx, dy }) => {
-  let { x, y } = getPos();
+const addDeltas = ({ x, y }, { dx, dy }) => {
   return { x: x + dx, y: y + dy };
 };
 
@@ -27,24 +26,11 @@ const getDeltas = (e) => {
   return { dx, dy };
 };
 
-function moveCard(card, e) {
-  //TODO: pass getDomPosition/getCanvasPosition from nodecard.js
+function moveCard({ getDomPosition, getCanvasPosition, id, send }, e) {
+  const domPosition = addDeltas(getDomPosition(), getDeltas(e));
+  const canvasPosition = addDeltas(getCanvasPosition(), getDeltas(e));
 
-  const domPosition = addDeltas(card.getDomPosition, getDeltas(e));
-  const canvasPosition = addDeltas(card.getCanvasPosition, getDeltas(e));
-
-  //TODO: send({type:"setCardDOMPosition", id}) and pass down id
-  card.sendToCardMachine({
-    type: "setDOMPosition",
-    id: card.getId(),
-    domPosition,
-  });
-  card.sendToCardMachine({
-    type: "setCanvasPosition",
-    id: card.getId(),
-    canvasPosition,
-  });
-
-  //but what about this?
-  card.activeFace.move();
+  send({ type: "setCardDOMPosition", id, domPosition });
+  send({ type: "setCardCanvasPosition", id, canvasPosition });
+  send({ type: "mediate", childType: "MOVE", id });
 }

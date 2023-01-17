@@ -1,6 +1,6 @@
 import { isValid } from "../utils.js";
 
-export default function DeckManager(cardFace, createEdge, drag) {
+export default function DeckManager(cardFace, createEdge) {
   let nodecards = [];
   let links = [];
 
@@ -34,20 +34,10 @@ export default function DeckManager(cardFace, createEdge, drag) {
       removeCard(id);
       This fails because it gets called no matter what state the parent machine is in.
     },*/
-    hydrateCard: ({ id, label, text, send, cardMachine }) => {
-      addCard(
-        cardFace({ id, label, text, getLinksForCard, send, cardMachine })
-      );
+    hydrateCard: ({ id, label, text, send }) => {
+      addCard(cardFace({ id, label, text, getLinksForCard, send }));
     },
-    createCard: ({
-      id,
-      label,
-      text,
-      domPosition,
-      canvasPosition,
-      send,
-      cardMachine,
-    }) => {
+    createCard: ({ id, label, text, domPosition, canvasPosition, send }) => {
       addCard(
         cardFace({
           id,
@@ -57,7 +47,6 @@ export default function DeckManager(cardFace, createEdge, drag) {
           canvasPosition,
           getLinksForCard,
           send,
-          cardMachine,
         })
       );
       send({ type: "mediate", childType: "activate", id });
@@ -98,9 +87,8 @@ export default function DeckManager(cardFace, createEdge, drag) {
       getCard(id).activeFace.discard();
       removeCard(id);
     },
-    DRAG: ({ id }) => {
-      drag(getCard(id));
-      //getCard(id).activeFace.drag() or getCard(id).activeFace.move()
+    MOVE: ({ id }) => {
+      getCard(id).activeFace.move();
     },
   };
 

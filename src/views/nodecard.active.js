@@ -25,8 +25,5 @@ export default (domFace, graphFace) => {
       domFace.setElementPosition();
       graphFace.moveNode();
     },
-    drag(getId, getDomPosition) {
-      //pass this.move to dragger
-    },
   };
 };

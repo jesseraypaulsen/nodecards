@@ -10,9 +10,9 @@ import { settingsPanel, synchPanel } from "./views/settings-panel";
 import promptView from "./views/prompt";
 import graphAdapterFactoryFactory from "./views/graph-adapter";
 import pControllers from "./controllers/p-controllers";
+import nodecardControllers from "./controllers/nodecard.controllers";
 import { graphController } from "./controllers/graph.controllers";
 import Wrappers from "./library-wrappers";
-import drag from "./views/drag";
 import "../assets/styles/main.css";
 import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
@@ -23,8 +23,12 @@ import "../assets/styles/prompt.css";
 const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
-//TODO: pass drag(container) to cardFace
-const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
+
+const cardFace = nodecard(
+  graphAdapterFactory,
+  domAdapterFactory,
+  nodecardControllers(container)
+);
 
 const createEdge = (argsObject) => {
   network.body.data.edges.add(argsObject);
@@ -36,11 +40,7 @@ const setPhysics = (value) => {
   network.setOptions(options);
 };
 
-const { runParentEffect, runChildEffect } = DeckManager(
-  cardFace,
-  createEdge,
-  drag(container)
-);
+const { runParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
 const { calculatePositionThenCreate } = wrappers;

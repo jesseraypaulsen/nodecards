@@ -6,8 +6,7 @@ export default function App(
   wrappers,
   peripheralEffects
 ) {
-  const { hydrateCard, hydrateLink, removeLink, setPositionAfterCreation } =
-    wrappers;
+  const { hydrateCard, hydrateLink, setPositionAfterCreation } = wrappers;
 
   // TODO: 'invoke' data calls from XState?
   const init = (data) => {
@@ -34,12 +33,11 @@ export default function App(
       // "xstate.update" is triggered when new actor machines are spawned and when they are updated. It is enabled by the {sync: true} argument.
       //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness doesn't work here.
       const data = event.state.context;
-      const { ref } = state.context.cards.find((item) => item.id === data.id);
       if (state.matches("mode.initializing")) {
-        runParentEffect("hydrateCard", { ...data, send, cardMachine: ref });
+        runParentEffect("hydrateCard", { ...data, send });
         setPositionAfterCreation(data.id, 1000);
       } else if (state.matches("mode.active")) {
-        runParentEffect("createCard", { ...data, send, cardMachine: ref });
+        runParentEffect("createCard", { ...data, send });
       }
     } else runParentEffect(event.type, event);
   };
@@ -52,6 +50,8 @@ export default function App(
  - remove card from state machine context on DELETE event (DONE, but partially unresolved)
    (How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
     The question remains unanswered: https://stackoverflow.com/q/61013927 )
+
+ - the views should not have access to XState's send function. this violates MVC. only controllers should send to XState.
  
  - bug: when the app mode is "active.readOnly" the button should be disabled.
  

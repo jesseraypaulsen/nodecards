@@ -8,20 +8,13 @@ import inertifyIcon from "../../assets/icons/swipe_down_alt_FILL0_wght200_GRAD0_
 import branchIcon from "../../assets/icons/fork_right_FILL0_wght200_GRAD0_opsz24.png";
 
 export default (controllers, id, source) => {
-  // pass id into controller
-  const wrapController = (e, controller) => {
-    //const parent = e.target.parentElement.parentElement.parentElement;
-    //controller(parent.id);
-    controller(id);
-  };
-
   const eventType = "click";
   const classNames = ["button"];
 
   return {
     branch: {
       icon: branchIcon,
-      handler: (e) => wrapController(e, controllers.branch),
+      handler: (e) => controllers.branch(id),
       eventType,
       classNames,
       active: true,
@@ -35,21 +28,21 @@ export default (controllers, id, source) => {
     },
     edit: {
       icon: editIcon,
-      handler: (e) => wrapController(e, controllers.edit),
+      handler: (e) => controllers.edit(id),
       eventType,
       classNames,
       active: true,
     },
     read: {
       icon: editOffIcon,
-      handler: (e) => wrapController(e, controllers.read),
+      handler: (e) => controllers.read(id),
       eventType,
       classNames,
       active: true,
     },
     discard: {
       icon: deleteIcon,
-      handler: (e) => wrapController(e, controllers.delete),
+      handler: (e) => controllers.delete(id),
       eventType,
       classNames,
       active: true,
@@ -63,7 +56,7 @@ export default (controllers, id, source) => {
     },
     inertify: {
       icon: inertifyIcon,
-      handler: (e) => wrapController(e, controllers.inertify),
+      handler: (e) => controllers.inertify(id),
       eventType,
       classNames,
       active: true,

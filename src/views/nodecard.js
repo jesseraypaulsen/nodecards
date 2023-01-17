@@ -1,6 +1,5 @@
 import activeFaceFactory from "./nodecard.active";
 import inertFaceFactory from "./nodecard.inert";
-import controllers from "../controllers/nodecard.controllers";
 
 /*
   Bridges together two different rendering environments, to produce a single indivisible UI entity called a Nodecard.
@@ -8,25 +7,14 @@ import controllers from "../controllers/nodecard.controllers";
   @param {object} domAdapter
   @returns {object}
 */
-export default (graphAdapterFactory, domAdapterFactory) =>
-  ({
-    id,
-    label,
-    text,
-    domPosition,
-    canvasPosition,
-    getLinksForCard,
-    send,
-    cardMachine, //TODO: remove
-    //TODO: dragger
-  }) => {
+export default (graphAdapterFactory, domAdapterFactory, controllers) =>
+  ({ id, label, text, domPosition, canvasPosition, getLinksForCard, send }) => {
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;
     const getCanvasPosition = () => canvasPosition;
     const getDomPosition = () => domPosition;
     const sendToAppMachine = (msg) => send(msg);
-    const sendToCardMachine = (msg) => cardMachine.send(msg); //TODO: remove
 
     const setText = (nextText) => {
       text = nextText;
@@ -40,7 +28,10 @@ export default (graphAdapterFactory, domAdapterFactory) =>
 
     const { editorController, buttonsControllers } = controllers(
       sendToAppMachine,
-      getLinksForCard
+      getLinksForCard,
+      getCanvasPosition,
+      getDomPosition,
+      getId
     );
 
     const graphAdapter = graphAdapterFactory(
@@ -67,8 +58,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       getDomPosition,
       getCanvasPosition,
       setText,
-      activeFace: activeFaceFactory(domAdapter, graphAdapter), //TODO: pass in dragger
+      activeFace: activeFaceFactory(domAdapter, graphAdapter),
       inertFace: inertFaceFactory(domAdapter, graphAdapter),
-      sendToCardMachine, //TODO: remove
     };
   };
