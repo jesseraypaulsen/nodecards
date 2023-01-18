@@ -5,8 +5,8 @@
   border-radius: 2px;
   display: flex;
   flex-direction: column;
-  height: 20em;
-  width: 30em;
+  height: 13em;
+  width: 20em;
   font-size: 1em;
   background-color: #e9e6ed;
   color: #2d2c2e;
@@ -22,8 +22,8 @@
   background-color: #f4f4f4;
   line-height: 1.6;
   padding: 1em;
-  height: 17em;
-  width: 28.75em;
+  height: 12em;
+  width: 18.75em;
 }
 
 /* .reader only */

@@ -3,6 +3,22 @@ import { cardMachine } from "./card-machine";
 
 const { log } = actions;
 
+const runRunChildEffect = (runChildEffect, state, event) => {
+  const { id, text, domPosition, canvasPosition } = state.context;
+  // When the appMachine transitions to the mode.active.readOnly state, the "READ" event is sent to each card machine.
+  // If the receiving card machine is in the active.editing state, it will transition to active.reading. If it's in the inert
+  // state nothing will happen to card machine, but the event still gets passed into the runChildEffect,
+  // which invokes the READ function, which causes an error. So the following conditional prevents that from happening.
+  if (event.type === "READ" && state.historyValue.current === "inert") return;
+
+  runChildEffect(event.type, {
+    id,
+    text,
+    canvasPosition,
+    domPosition,
+  });
+};
+
 export const appMachine = (runChildEffect) =>
   createMachine(
     {
@@ -29,7 +45,13 @@ export const appMachine = (runChildEffect) =>
               },
               entry: send({ type: "turnPhysicsOff", sentByUser: false }), // switch physics off when app is active
               states: {
-                readOnly: {},
+                readOnly: {
+                  entry: (context, event) => {
+                    context.cards.map((card) => {
+                      card.ref.send("READ");
+                    });
+                  },
+                },
                 modifiable: {
                   type: "parallel",
                   states: {
@@ -275,14 +297,7 @@ export const appMachine = (runChildEffect) =>
                   sync: true,
                 }
               ).onTransition((state, event) => {
-                const { id, text, domPosition, canvasPosition } = state.context;
-
-                runChildEffect(event.type, {
-                  id,
-                  text,
-                  domPosition,
-                  canvasPosition,
-                });
+                runRunChildEffect(runChildEffect, state, event);
               }),
             });
           },
@@ -296,17 +311,7 @@ export const appMachine = (runChildEffect) =>
                 name: id,
                 sync: true,
               }).onTransition((state, event) => {
-                if (event.type !== "xstate.init") {
-                  const { id, text, domPosition, canvasPosition } =
-                    state.context;
-
-                  runChildEffect(event.type, {
-                    id,
-                    text,
-                    canvasPosition,
-                    domPosition,
-                  });
-                }
+                runRunChildEffect(runChildEffect, state, event);
               }),
             });
           },

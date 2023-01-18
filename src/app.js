@@ -19,6 +19,7 @@ import "../assets/styles/nodecard.css";
 import "../assets/styles/icon-button.scss";
 import "../assets/styles/tooltip.scss";
 import "../assets/styles/prompt.css";
+import data from "../data/abc123.json";
 
 const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
@@ -38,7 +39,12 @@ const setPhysics = (value) => {
 const { setupParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
-const { calculatePositionThenCreate, setPositionAfterCreation } = wrappers;
+const {
+  calculatePositionThenCreate,
+  setPositionAfterCreation,
+  hydrateCard,
+  hydrateLink,
+} = wrappers;
 const { panelControllers, promptController } = peripheralControllers(
   service.send,
   calculatePositionThenCreate
@@ -72,27 +78,10 @@ const runParentEffect = setupParentEffect({
 const { init, render } = Render(
   runParentEffect,
   synchPanel,
-  wrappers,
+  hydrateCard,
+  hydrateLink,
   peripheralEffects
 );
-
-const data = {
-  cards: [
-    { id: "one", label: "1", text: "the first card" },
-    { id: "two", label: "2", text: "the second card" },
-    {
-      id: "three",
-      label: "3",
-      text: "the third card",
-      position: { x: -350, y: -300 },
-    },
-  ],
-  links: [
-    { id: "a", label: "a", from: "one", to: "two" },
-    { id: "b", label: "b", from: "two", to: "three" },
-    { id: "c", label: "c", from: "three", to: "one" },
-  ],
-};
 
 // subscribe views
 service.onTransition((state, event) => {

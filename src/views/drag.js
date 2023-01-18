@@ -1,8 +1,8 @@
 export default (container, cardFuncs) => {
   let move = true;
-  const disableMoving = () => (move = false);
+  const stopMoving = () => (move = false);
   const onlyRunOnce = { once: true };
-  container.addEventListener("mouseup", disableMoving, onlyRunOnce);
+  container.addEventListener("mouseup", stopMoving, onlyRunOnce);
   container.addEventListener("mousemove", dragHandler);
   const selfDestruct = () =>
     container.removeEventListener("mousemove", dragHandler);
@@ -21,8 +21,8 @@ const addDeltas = ({ x, y }, { dx, dy }) => {
 };
 
 const getDeltas = (e) => {
-  let dx = e.movementX * 1.6; //the 1.6 factor is a crude hack that compensates for a delay between mouse and element position.
-  let dy = e.movementY * 1.6; //the movementX/movementY properties on the event object return the difference between successive mouse positions.
+  let dx = e.movementX;
+  let dy = e.movementY;
   return { dx, dy };
 };
 
