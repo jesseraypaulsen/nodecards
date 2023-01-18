@@ -1,88 +1,103 @@
-import { isValid } from "./utils";
+import { options } from "./options";
+import * as vis from "vis-network";
+import { interpret } from "xstate";
+import { appMachine } from "./statecharts/app-machine";
+import Render from "./render";
+import DeckManager from "./views/deck-manager";
+import nodecard from "./views/nodecard";
+import { domAdapterFactory } from "./views/nodecard.dom-adapter";
+import { settingsPanel, synchPanel } from "./views/settings-panel";
+import promptView from "./views/prompt";
+import graphAdapterFactoryFactory from "./views/graph-adapter";
+import peripheralControllers from "./controllers/peripheral-controllers";
+import nodecardControllers from "./controllers/nodecard.controllers";
+import { graphController } from "./controllers/graph.controllers";
+import Wrappers from "./controllers/library-wrappers";
+import "../assets/styles/main.css";
+import "../assets/styles/settings-panel.css";
+import "../assets/styles/nodecard.css";
+import "../assets/styles/icon-button.scss";
+import "../assets/styles/tooltip.scss";
+import "../assets/styles/prompt.css";
 
-export default function App(
+const container = document.querySelector("#container");
+const network = new vis.Network(container, {}, options);
+const graphAdapterFactory = graphAdapterFactoryFactory(network);
+
+const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
+const createEdge = (argsObject) => {
+  network.body.data.edges.add(argsObject);
+  return argsObject;
+};
+
+const setPhysics = (value) => {
+  const options = { physics: { enabled: value } };
+  network.setOptions(options);
+};
+
+const { setupParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
+const service = interpret(appMachine(runChildEffect));
+const wrappers = Wrappers(network, service.send);
+const { calculatePositionThenCreate, setPositionAfterCreation } = wrappers;
+const { panelControllers, promptController } = peripheralControllers(
+  service.send,
+  calculatePositionThenCreate
+);
+
+const { openPrompt, closePrompt } = promptView(promptController);
+
+network.on("click", graphController(service.send));
+network.on("resize", (e) => console.log("resize: ", e));
+network.on("dragEnd", (e) => console.log("dragEnd: ", e));
+network.on("hold", (e) => console.log("hold: ", e));
+
+const peripheralEffects = {
+  turnPhysicsOff: () => setPhysics(false),
+  turnPhysicsOn: () => setPhysics(true),
+  openPrompt: (eventData) => openPrompt(eventData),
+  closePrompt: () => closePrompt(),
+};
+
+settingsPanel(panelControllers);
+const _nodecardControllers = nodecardControllers(container, service.send);
+const activateCard = (id) =>
+  service.send({ type: "mediate", childType: "activate", id });
+
+const runParentEffect = setupParentEffect({
+  controllers: _nodecardControllers,
+  activateCard,
+  setPositionAfterCreation,
+});
+
+const { init, render } = Render(
   runParentEffect,
-  synchSettingsPanel,
+  synchPanel,
   wrappers,
   peripheralEffects
-) {
-  const { hydrateCard, hydrateLink, setPositionAfterCreation } = wrappers;
+);
 
-  // TODO: 'invoke' data calls from XState?
-  const init = (data) => {
-    data.cards.map(({ id, label, text, position }) => {
-      hydrateCard({ id, label, text });
-    });
+const data = {
+  cards: [
+    { id: "one", label: "1", text: "the first card" },
+    { id: "two", label: "2", text: "the second card" },
+    {
+      id: "three",
+      label: "3",
+      text: "the third card",
+      position: { x: -350, y: -300 },
+    },
+  ],
+  links: [
+    { id: "a", label: "a", from: "one", to: "two" },
+    { id: "b", label: "b", from: "two", to: "three" },
+    { id: "c", label: "c", from: "three", to: "one" },
+  ],
+};
 
-    data.links.map(({ id, label, from, to }) => {
-      hydrateLink({ id, label, from, to });
-    });
-  };
+// subscribe views
+service.onTransition((state, event) => {
+  if (state.event.type === "xstate.init") init(data);
+  else render(state, event);
+});
 
-  const render = (state, event) => {
-    synchSettingsPanel(event);
-    if (isValid(peripheralEffects, event.type))
-      peripheralEffects[event.type](event);
-    else if (
-      event.type === "xstate.update" &&
-      event.state.changed === undefined
-    ) {
-      // "xstate.update" is triggered when new actor machines are spawned and when they are updated. It is enabled by the {sync: true} argument.
-      //For spawning, state.changed evaluates to undefined. For some updates it evaluates to false, so testing for falsiness doesn't work here.
-      const data = event.state.context;
-      if (state.matches("mode.initializing")) {
-        runParentEffect("hydrateCard", { ...data });
-        setPositionAfterCreation(data.id, 1000);
-      } else if (state.matches("mode.active")) {
-        runParentEffect("createCard", { ...data });
-      }
-    } else runParentEffect(event.type, event);
-  };
-
-  return { init, render };
-}
-
-/*TODO: 
- 
- - remove card from state machine context on DELETE event (DONE, but partially unresolved)
-   (How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
-    The question remains unanswered: https://stackoverflow.com/q/61013927 )
- 
- - bug: when the app mode is "active.readOnly" the button should be disabled.
- 
- - bug: second click on node causes duplicate nodecard elements
-
- - bug: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit
-
- - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify,
-   two prompts are open at once.
-
- - bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. 
- mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead, 
- dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
- https://visjs.github.io/vis-network/docs/network/index.html#Events
-
- - add 'source' argument to createButtonBar
-
- - bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
- but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch.
-
- - create alternative positions for nodecard elements -- currently the only position is to map an element's center onto the node's center. but this
- means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
- i deal with this by restricting the size of the canvas. note that different positioning types require different css animations.
-
- - investigate vis-network methods for various uses, including startSimulation, stopSimulation, unselectAll, setSelection, releaseNode, moveTo, etc 
- (eg, startSimulation might be easier than the current way I'm turning physics on). https://visjs.github.io/vis-network/docs/network/index.html
-
- - investigate getBoundingBox among the methods above, but also investigate the vis-network source code to see  how the bounding box works and interacts 
- with edges. These files look promising for further investigation:
- /network/modules/components/nodes/NodeBase.js
- /network/modules/components/Node.js
- /network/NetworkUtil.js
-
-
- - we need several different ways of dealing with card collisions. each way should have a corresponding state. eg, when opening a card collides with a 
- previously opened card -- in one state the previously opened card might shrink somewhat, while in another state the newly opened card might overlap
- the previously opened one.
-
-*/
+service.start();
