@@ -1,4 +1,4 @@
-import { isValid, processState } from "./utils";
+import { isValid } from "./utils";
 
 export default function Render(
   runParentEffect,
@@ -20,13 +20,30 @@ export default function Render(
 
   const render = (state, event) => {
     synchSettingsPanel(event);
-
-    const { eventType, data } = processState(state, event);
-
+    const { eventType, data } = processParentState(state, event);
     if (isValid(peripheralEffects, eventType))
       peripheralEffects[eventType](data);
     else runParentEffect(eventType, data);
   };
 
   return { init, render };
+}
+
+function processParentState(state, event) {
+  let eventType, data;
+  if (
+    event.type === "xstate.update" &&
+    event.state.event.type === "xstate.init"
+  ) {
+    data = event.state.context;
+    if (state.matches("mode.initializing")) {
+      eventType = "hydrateCard";
+    } else if (state.matches("mode.enabled")) {
+      eventType = "createCard";
+    }
+  } else {
+    eventType = event.type;
+    data = event;
+  }
+  return { eventType, data };
 }

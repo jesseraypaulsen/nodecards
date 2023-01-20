@@ -1,29 +1,32 @@
-- feature: link creation between two pre-existing nodecards
+- feat: link creation between two pre-existing nodecards
+
+- bug: when the card is in "active.locked" some of the buttons should be disabled.
+
+- synchronize position changes across UI and XState
+
+- bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
+  but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch.
+- bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
+  dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
+  https://visjs.github.io/vis-network/docs/network/index.html#Events
+
+- feat: clicking a link invokes a prompt for deleting the link.
+
+- change lock/unlock buttons.
+
+- create alternative positions for nodecard elements -- currently the element's center corresponds to the node's center. but this
+  means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
+  i deal with this by restricting the size of the canvas. note that different positioning types will require different css animations.
 
 - create a better dataset.
 
 - deploy on a cloud service.
 
-- bug: when the app mode is "active.readOnly" the button should be disabled.
-
-- bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
-  dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
-  https://visjs.github.io/vis-network/docs/network/index.html#Events
-
-- add 'source' argument to createButtonBar
-
-- nodecards always activate in read mode. they should activate in write mode when they are user created.
-
-- bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
-  but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch.
-
-- create alternative positions for nodecard elements -- currently the only position is to map an element's center onto the node's center. but this
-  means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
-  i deal with this by restricting the size of the canvas. note that different positioning types require different css animations.
-
 - adapt to mobile
 
 - create README.md
+
+- tests
 
 ---
 
@@ -34,6 +37,16 @@ DONE
 - bug: second click on node causes duplicate nodecard elements. (update: I think I inadvertently fixed this problem, because I can't replicate it at the moment.) <span style="font-size: 1.2em; color:red">✔</span>
 
 - bug: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit <span style="font-size: 1.2em; color:red">✔</span>
+
+- state processing functions for parentEffects and childEffects <span style="font-size: 1.2em; color:red">✔</span>
+
+- eliminated superfluous states and transitions <span style="font-size: 1.2em; color:red">✔</span>
+
+- nodecards should always start in active.unlocked <span style="font-size: 1.2em; color:red">✔</span>
+
+- <s>add 'source' argument to createButtonBar</s>
+
+- <s>nodecards always activate in read mode. they should activate in write mode when they are user created.</s>
 
 ---
 

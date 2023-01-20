@@ -18,10 +18,10 @@ export function settingsPanel(controllers) {
         e.target.parentNode.style.display = "none";
       },
     ],
-    persist: [
+    appMode: [
       "change",
       (e) => {
-        controllers.persist(e);
+        controllers.appMode(e);
       },
       true,
     ],
@@ -31,12 +31,6 @@ export function settingsPanel(controllers) {
         controllers.physics(e);
       },
       true,
-    ],
-    "app-modes": [
-      "change",
-      (e) => {
-        controllers.select(e);
-      },
     ],
   };
 
@@ -49,23 +43,17 @@ export function settingsPanel(controllers) {
         <span class="${classes[1]}">x</span>
   
         <label class="switch ${classes[2]}">
-          <input type="checkbox" />
-          <span class="toggler-switch">Persist</span>
+          <input type="checkbox" checked/>
+          <span class="toggler-switch">App Mode</span>
         </label>
   
         <label class="switch ${classes[3]}">
           <input type="checkbox" />
           <span class="toggler-switch">Physics</span>
         </label>
-  
-        <select class="${classes[4]}">
-          <option value="APP.READONLY">Read Only</option>
-          <option value="APP.MODIFIABLE" selected>Modify</option>
-          <option value="APP.DISABLE">Disable</option>
-        </select>
-  
+        
       </div>
-    `;
+        `;
 
   cp.innerHTML = template;
 
@@ -91,6 +79,6 @@ export const synchPanel = (event) => {
 
   if (event.type === "APP.DISABLE" && !event.sentByUser) {
     //not sent by user! change value of select element to reflect the state!
-    qs(".app-modes").value = "APP.DISABLE";
+    qs(".appMode").firstElementChild.checked = false;
   }
 };

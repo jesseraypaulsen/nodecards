@@ -1,71 +1,88 @@
-import { createMachine, assign, sendParent } from "xstate";
-import { send } from "xstate/lib/actions";
+import { createMachine, assign } from "xstate";
 
-export const cardMachine = ({ id, text, label, canvasPosition, domPosition }) =>
-  createMachine({
-    predictableActionArguments: true,
-    id: "nodecard",
-    initial: "inert",
-    context: {
-      id,
-      label,
-      text,
-      canvasPosition,
-      domPosition,
-    },
-    on: {
-      setDOMPosition: {
-        actions: assign({
-          domPosition: (_, { domPosition }) => {
-            return domPosition;
-          },
-        }),
+export const cardMachine = ({
+  id,
+  text,
+  label,
+  canvasPosition,
+  domPosition,
+  startInert,
+}) =>
+  createMachine(
+    {
+      predictableActionArguments: true,
+      id: "nodecard",
+      initial: "deciding",
+      context: {
+        id,
+        label,
+        text,
+        canvasPosition,
+        domPosition,
+        startInert,
       },
-      setCanvasPosition: {
-        actions: assign({
-          canvasPosition: (_, { canvasPosition }) => {
-            return canvasPosition;
-          },
-        }),
+      on: {
+        setDOMPosition: {
+          actions: assign({
+            domPosition: (_, { domPosition }) => {
+              return domPosition;
+            },
+          }),
+        },
+        setCanvasPosition: {
+          actions: assign({
+            canvasPosition: (_, { canvasPosition }) => {
+              return canvasPosition;
+            },
+          }),
+        },
       },
-    },
-    states: {
-      active: {
-        initial: "reading",
-        entry: send(() => ({
-          type: "cardActivated",
-        })),
-        exit: send(() => ({
-          type: "cardDeactivated",
-        })),
-        states: {
-          reading: {
-            on: {
-              EDIT: {
-                target: "editing",
+      states: {
+        deciding: {
+          always: [
+            { target: "inert", cond: "startInert" },
+            { target: "active", cond: "startActive" },
+          ],
+        },
+        inert: {
+          on: {
+            activate: { target: "active" },
+          },
+        },
+        active: {
+          initial: "unlocked",
+          states: {
+            locked: {
+              on: {
+                UNLOCK: {
+                  target: "unlocked",
+                },
+              },
+            },
+            unlocked: {
+              on: {
+                LOCK: {
+                  target: "locked",
+                },
+                TYPING: {
+                  actions: [assign({ text: (_, event) => event.data.text })],
+                },
               },
             },
           },
-          editing: {
-            on: {
-              READ: { target: "reading" },
-              TYPING: {
-                actions: [assign({ text: (_, event) => event.data.text })],
-              },
+          on: {
+            INERTIFY: {
+              target: "inert",
             },
+            DESTROY: {},
           },
-        },
-        on: {
-          INERTIFY: {
-            target: "inert",
-          },
-          DESTROY: {},
-        },
-      },
-      inert: {
-        on: {
-          activate: { target: "active" },
         },
       },
     },
-  });
+    {
+      guards: {
+        startInert: (context) => context.startInert,
+        startActive: (context) => !context.startInert,
+      },
+    }
+  );

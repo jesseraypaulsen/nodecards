@@ -13,7 +13,7 @@ export const graphController = (send) => {
       send({
         type: "mediate",
         childType: "activate",
-        id: e.nodes[0],
+        data: { id: e.nodes[0] },
       });
     },
     link: (e) => {

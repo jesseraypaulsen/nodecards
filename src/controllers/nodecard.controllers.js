@@ -5,20 +5,21 @@ export default (container, send) =>
   (getLinksForCard, getCanvasPosition, getDomPosition) => {
     const editorController = (e, id) => {
       send({
-        type: "mediateToModify",
+        type: "mediate",
         childType: "TYPING",
         data: { text: e.target.value, id },
       });
     };
     const buttonsControllers = {
-      edit: (id) =>
-        send({ type: "mediateToModify", childType: "EDIT", data: { id } }),
-      read: (id) => send({ type: "mediate", childType: "READ", id }),
+      unlock: (id) =>
+        send({ type: "mediate", childType: "UNLOCK", data: { id } }),
+      lock: (id) => send({ type: "mediate", childType: "LOCK", data: { id } }),
       delete: (id) => {
         const links = getLinksForCard(id);
         send({ type: "destroyCard", id, links });
       },
-      inertify: (id) => send({ type: "mediate", childType: "INERTIFY", id }),
+      inertify: (id) =>
+        send({ type: "mediate", childType: "INERTIFY", data: { id } }),
       branch: (id) => {
         const linkId = generateId();
         const label = linkId;

@@ -29,11 +29,7 @@ export default function DeckManager(cardFace, createEdge) {
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
-  const parentEffects = ({
-    controllers,
-    activateCard,
-    setPositionAfterCreation,
-  }) => ({
+  const parentEffects = ({ controllers, setPositionAfterCreation }) => ({
     /*destroyCard: ({ id }) => {
       removeCard(id);
       This fails because it gets called no matter what state the parent machine is in.
@@ -62,7 +58,7 @@ export default function DeckManager(cardFace, createEdge) {
           controllers,
         })
       );
-      activateCard(id);
+      getCard(id).inertFace.expandUnlocked();
     },
     hydrateLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
@@ -79,16 +75,16 @@ export default function DeckManager(cardFace, createEdge) {
     setCanvasPosition: ({ id, canvasPosition }) => {
       getCard(id).setCanvasPosition(canvasPosition);
     },
-    cardActivated: ({ id }) => {
-      getCard(id).inertFace.activate();
+    activate: ({ id }) => {
+      getCard(id).inertFace.expandUnlocked();
     },
-    cardDeactivated: ({ id }) => {
+    INERTIFY: ({ id }) => {
       getCard(id).activeFace.inertify();
     },
-    READ: ({ id }) => {
+    LOCK: ({ id }) => {
       getCard(id).activeFace.renderReader();
     },
-    EDIT: ({ id }) => {
+    UNLOCK: ({ id }) => {
       getCard(id).activeFace.renderEditor();
     },
     TYPING: ({ id, text }) => {

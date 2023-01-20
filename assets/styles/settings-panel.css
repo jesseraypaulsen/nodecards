@@ -24,7 +24,8 @@
   padding: 1em;
   flex-direction: column;
   justify-content: space-between;
-  height: 200px;
+  /* height: 200px; */
+  height: 150px;
   box-shadow: 0.5em 0.5em;
 }
 
@@ -34,7 +35,7 @@
   background-color: var(--main-color);
   color: white;
   padding: 0.3em;
-  border: .5px solid black;
+  border: 0.5px solid black;
 }
 
 /*

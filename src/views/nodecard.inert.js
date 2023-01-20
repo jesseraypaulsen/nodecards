@@ -1,7 +1,10 @@
 export default function inertFaceFactory(domFace, graphFace) {
   return {
-    activate() {
-      domFace.expand();
+    expandLocked() {
+      domFace.openReader();
+    },
+    expandUnlocked() {
+      domFace.openEditor();
     },
   };
 }

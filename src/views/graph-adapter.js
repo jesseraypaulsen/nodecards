@@ -8,15 +8,6 @@ export default function graphAdapterFactoryFactory(network) {
       const { x, y } = getCanvasPosition();
       network.body.data.nodes.add({ id: getId(), label: getLabel(), x, y });
     };
-    /*
-    const createEdge = (id, label, from, to) => {
-      network.body.data.edges.add({ id, label, from, to });
-    };
-    const setPhysics = (value) => {
-      const options = { physics: { enabled: value } };
-      network.setOptions(options);
-    };
-    */
 
     const removeNode = () => {
       network.body.data.nodes.remove(getId());
@@ -44,11 +35,9 @@ export default function graphAdapterFactoryFactory(network) {
     return {
       createNode,
       createNodeWithKnownPosition,
-      //createEdge,
       removeNode,
       moveNode,
       updateNode,
-      //setPhysics,
     };
   };
 }

@@ -32,5 +32,5 @@ function moveCard({ getDomPosition, getCanvasPosition, id, send }, e) {
 
   send({ type: "setCardDOMPosition", id, domPosition });
   send({ type: "setCardCanvasPosition", id, canvasPosition });
-  send({ type: "mediate", childType: "MOVE", id });
+  send({ type: "mediate", childType: "MOVE", data: { id } });
 }

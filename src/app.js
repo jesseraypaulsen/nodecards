@@ -66,12 +66,9 @@ const peripheralEffects = {
 
 settingsPanel(panelControllers);
 const _nodecardControllers = nodecardControllers(container, service.send);
-const activateCard = (id) =>
-  service.send({ type: "mediate", childType: "activate", id });
 
 const runParentEffect = setupParentEffect({
   controllers: _nodecardControllers,
-  activateCard,
   setPositionAfterCreation,
 });
 
