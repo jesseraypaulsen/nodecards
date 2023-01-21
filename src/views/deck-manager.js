@@ -1,6 +1,6 @@
 import { isValid } from "../utils.js";
 
-export default function DeckManager(cardFace, createEdge) {
+export default function DeckManager(cardFace, createEdge, removeEdge) {
   let nodecards = [];
   let links = [];
 
@@ -72,6 +72,11 @@ export default function DeckManager(cardFace, createEdge) {
     },
     catchActiveCardEvent: ({ id }) => {
       catchActiveCardEvent(id);
+    },
+    destroyLink: ({ id }) => {
+      removeLink(id);
+      removeEdge(id);
+      console.log("destroyLink: ", id, links);
     },
   });
 

@@ -1,11 +1,15 @@
-- bug: drag delay
+- bug: drag delay (consider: data from the originating click event and its relation to the drag handler)
 
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
+
+- styles for link creation
+
+- intervening modal for destroying card
 
 - synchronize position changes across UI and XState, using the "stabilized" and "dragEnd" events from vis.network
 
 - bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
-  but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch.
+  but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch. (see "resize" event in vis.network)
 
 - bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
   dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).

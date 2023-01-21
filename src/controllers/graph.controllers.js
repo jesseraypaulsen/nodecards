@@ -13,7 +13,7 @@ export const graphController = (send) => {
       send({ type: "decidePath", id: e.nodes[0] });
     },
     link: (e) => {
-      send({ type: "clickedLink", e });
+      send({ type: "openLinkPrompt", id: e.edges[0], pointer: e.pointer });
     },
   };
 

@@ -20,3 +20,26 @@
   border: 1px solid white;
   cursor: pointer;
 }
+
+.link-deletion-prompt {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: var(--main-color);
+  padding: 1em;
+  color: white;
+}
+
+.link-deletion-prompt > :first-child {
+  align-self: flex-end;
+  border: 1px solid white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.link-deletion-prompt > :last-child {
+  border: 1px solid white;
+  cursor: pointer;
+}

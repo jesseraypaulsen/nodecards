@@ -29,8 +29,17 @@ export default (send, calculatePositionThenCreate) => {
     },
   };
 
+  const linkPromptController = {
+    // see graph controller for "open"
+    // close: () => send({ type: "closeLinkPrompt" }),
+    confirm: (id) => {
+      send({ type: "destroyLink", id });
+    },
+  };
+
   return {
     panelControllers,
     promptController,
+    linkPromptController,
   };
 };

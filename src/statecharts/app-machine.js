@@ -25,13 +25,6 @@ export const appMachine = (runChildEffect) =>
               states: {
                 linkCreation: {
                   initial: "OFF",
-                  on: {
-                    "NODECARD.CLICK": {
-                      // works for both active and inert target cards;
-                      // create link between cards
-                      actions: [],
-                    },
-                  },
                   states: {
                     ON: {
                       entry: [
@@ -59,7 +52,7 @@ export const appMachine = (runChildEffect) =>
                         }),
                       ],
                       on: {
-                        //event triggered from within cardCreation.ON after card is created
+                        //"creatLink" event fired from cardCreation.ON after card is created
                         createLinkIfLinkCreationIsOn: {
                           actions: [
                             assign({
@@ -202,6 +195,16 @@ export const appMachine = (runChildEffect) =>
                   //How to remove the spawned machine from the parent's children property? Maybe it's unnecessary?
                   // The question remains unanswered: https://stackoverflow.com/q/61013927
                 },
+                destroyLink: {
+                  actions: [
+                    assign((context, { id }) => ({
+                      links: [
+                        ...context.links.filter((link) => link.id !== id),
+                      ],
+                    })),
+                  ],
+                },
+                openLinkPrompt: {},
               },
             },
             initializing: {

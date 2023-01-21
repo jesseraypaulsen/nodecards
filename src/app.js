@@ -7,7 +7,7 @@ import DeckManager from "./views/deck-manager";
 import nodecard from "./views/nodecard";
 import { domAdapterFactory } from "./views/nodecard.dom-adapter";
 import { settingsPanel, synchPanel } from "./views/settings-panel";
-import promptView from "./views/prompt";
+import promptViews from "./views/prompt";
 import graphAdapterFactoryFactory from "./views/graph-adapter";
 import peripheralControllers from "./controllers/peripheral-controllers";
 import nodecardControllers from "./controllers/nodecard.controllers";
@@ -30,13 +30,20 @@ const createEdge = (argsObject) => {
   network.body.data.edges.add(argsObject);
   return argsObject;
 };
+const removeEdge = (id) => {
+  network.body.data.edges.remove(id);
+};
 
 const setPhysics = (value) => {
   const options = { physics: { enabled: value } };
   network.setOptions(options);
 };
 
-const { setupParentEffect, runChildEffect } = DeckManager(cardFace, createEdge);
+const { setupParentEffect, runChildEffect } = DeckManager(
+  cardFace,
+  createEdge,
+  removeEdge
+);
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
 const {
@@ -45,12 +52,11 @@ const {
   hydrateCard,
   hydrateLink,
 } = wrappers;
-const { panelControllers, promptController } = peripheralControllers(
-  service.send,
-  calculatePositionThenCreate
-);
+const { panelControllers, promptController, linkPromptController } =
+  peripheralControllers(service.send, calculatePositionThenCreate);
 
-const { openPrompt, closePrompt } = promptView(promptController);
+const { openPrompt, closePrompt, openLinkPrompt /*closeLinkPrompt*/ } =
+  promptViews(promptController, linkPromptController);
 const _graphController = graphController(service.send);
 network.on("click", _graphController);
 network.on("resize", (e) => console.log("resize: ", e));
@@ -63,6 +69,7 @@ const peripheralEffects = {
   turnPhysicsOn: () => setPhysics(true),
   openPrompt: (eventData) => openPrompt(eventData),
   closePrompt: () => closePrompt(),
+  openLinkPrompt: (e) => openLinkPrompt(e),
 };
 
 settingsPanel(panelControllers);
@@ -102,7 +109,7 @@ const { init, render } = Render(
 
 // subscribe views
 service.onTransition((state, event) => {
-  console.log(event);
+  console.log(state, event);
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });
