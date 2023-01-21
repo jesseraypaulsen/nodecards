@@ -92,6 +92,15 @@ export const appMachine = (runChildEffect) =>
                         BRANCH: {
                           target: "ON",
                         },
+                        activateCardIfLinkCreationIsOff: {
+                          actions: [
+                            (context, event) => {
+                              context.cards
+                                .find((card) => card.id === event.id)
+                                .ref.send("activate");
+                            },
+                          ],
+                        },
                       },
                     },
                   },
@@ -144,6 +153,19 @@ export const appMachine = (runChildEffect) =>
                     );
                     card.ref.send({ type: childType, data });
                   },
+                },
+                decidePath: {
+                  // when clicking on a node -> createLinkIfLinkCreationIsOn vs activateCardIfLinkCreationIsOff
+                  actions: [
+                    send((_, { id }) => ({
+                      type: "activateCardIfLinkCreationIsOff",
+                      id,
+                    })),
+                    send((_, { id }) => ({
+                      type: "createLinkIfLinkCreationIsOn",
+                      to: id,
+                    })),
+                  ],
                 },
                 destroyCard: {
                   actions: [

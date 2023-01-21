@@ -51,11 +51,12 @@ const { panelControllers, promptController } = peripheralControllers(
 );
 
 const { openPrompt, closePrompt } = promptView(promptController);
-
-network.on("click", graphController(service.send));
+const _graphController = graphController(service.send);
+network.on("click", _graphController);
 network.on("resize", (e) => console.log("resize: ", e));
 network.on("dragEnd", (e) => console.log("dragEnd: ", e));
 network.on("hold", (e) => console.log("hold: ", e));
+network.on("stabilized", (e) => console.log("stabilized: ", e));
 
 const peripheralEffects = {
   turnPhysicsOff: () => setPhysics(false),

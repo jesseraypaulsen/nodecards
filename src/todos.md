@@ -2,17 +2,16 @@
 
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
 
-- synchronize position changes across UI and XState
+- synchronize position changes across UI and XState, using the "stabilized" and "dragEnd" events from vis.network
 
 - bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
   but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch.
+
 - bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
   dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
   https://visjs.github.io/vis-network/docs/network/index.html#Events
 
 - feat: clicking a link invokes a prompt for deleting the link.
-
-- change lock/unlock buttons.
 
 - create alternative positions for nodecard elements -- currently the element's center corresponds to the node's center. but this
   means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
@@ -26,11 +25,17 @@
 
 - create README.md
 
+- guided tour
+
+- screencast
+
 - tests
 
 ---
 
 DONE
+
+- change lock/unlock buttons. <span style="font-size: 1.2em; color:red">✔</span>
 
 - bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify, two prompts are open at once. <span style="font-size: 1.2em; color:red">✔</span>
 

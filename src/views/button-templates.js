@@ -1,10 +1,10 @@
 // http://fonts.google.com/icons
 import dragIcon from "../../assets/icons/drag_indicator_FILL0_wght200_GRAD0_opsz24.png";
-import editIcon from "../../assets/icons/edit_FILL0_wght200_GRAD0_opsz24.png";
-import editOffIcon from "../../assets/icons/edit_off_FILL0_wght200_GRAD0_opsz24.png";
 import deleteIcon from "../../assets/icons/delete_forever_FILL0_wght200_GRAD0_opsz24.png";
 import inertifyIcon from "../../assets/icons/swipe_down_alt_FILL0_wght200_GRAD0_opsz24.png";
 import branchIcon from "../../assets/icons/fork_right_FILL0_wght200_GRAD0_opsz24.png";
+import lockIcon from "../../assets/icons/lock_FILL1_wght200_GRAD0_opsz24.png";
+import lockOpenIcon from "../../assets/icons/lock_open_FILL0_wght200_GRAD0_opsz24.png";
 
 export default (controllers, id) => {
   const eventType = "click";
@@ -26,14 +26,14 @@ export default (controllers, id) => {
       active: true,
     },
     unlock: {
-      icon: editIcon,
+      icon: lockIcon,
       handler: (e) => controllers.unlock(id),
       eventType,
       classNames,
       active: true,
     },
     lock: {
-      icon: editOffIcon,
+      icon: lockOpenIcon,
       handler: (e) => controllers.lock(id),
       eventType,
       classNames,
