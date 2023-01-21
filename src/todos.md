@@ -1,5 +1,8 @@
 - bug: drag delay (consider: data from the originating click event and its relation to the drag handler)
 
+- bug: if linkCreation button is clicked and then the user clicks on another active card, the link only gets rendered if the click is not on the buttons or
+  the textarea -- though, a link is created in DeckManager but with the "to" property left undefined.
+
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
 
 - styles for link creation
@@ -14,8 +17,6 @@
 - bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
   dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
   https://visjs.github.io/vis-network/docs/network/index.html#Events
-
-- feat: clicking a link invokes a prompt for deleting the link.
 
 - create alternative positions for nodecard elements -- currently the element's center corresponds to the node's center. but this
   means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
@@ -39,23 +40,25 @@
 
 DONE
 
-- feat: link creation between two pre-existing nodecards when the target card is active <span style="font-size: 1.2em; color:red">✔</span>
+- feat: clicking a link invokes a prompt for deleting the link. <span style="font-size: 1.2em; color:green">✔</span>
 
-- feat: link creation between two pre-existing nodecards when the target card is inert <span style="font-size: 1.2em; color:red">✔</span>
+- feat: link creation between two pre-existing nodecards when the target card is active <span style="font-size: 1.2em; color:green">✔</span>
 
-- change lock/unlock buttons. <span style="font-size: 1.2em; color:red">✔</span>
+- feat: link creation between two pre-existing nodecards when the target card is inert <span style="font-size: 1.2em; color:green">✔</span>
 
-- bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify, two prompts are open at once. <span style="font-size: 1.2em; color:red">✔</span>
+- change lock/unlock buttons. <span style="font-size: 1.2em; color:green">✔</span>
 
-- bug: second click on node causes duplicate nodecard elements. (update: I think I inadvertently fixed this problem, because I can't replicate it at the moment.) <span style="font-size: 1.2em; color:red">✔</span>
+- bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify, two prompts are open at once. <span style="font-size: 1.2em; color:green">✔</span>
 
-- bug: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit <span style="font-size: 1.2em; color:red">✔</span>
+- bug: second click on node causes duplicate nodecard elements. (update: I think I inadvertently fixed this problem, because I can't replicate it at the moment.) <span style="font-size: 1.2em; color:green">✔</span>
 
-- state processing functions for parentEffects and childEffects <span style="font-size: 1.2em; color:red">✔</span>
+- bug: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit <span style="font-size: 1.2em; color:green">✔</span>
 
-- eliminated superfluous states and transitions <span style="font-size: 1.2em; color:red">✔</span>
+- state processing functions for parentEffects and childEffects <span style="font-size: 1.2em; color:green">✔</span>
 
-- nodecards should always start in active.unlocked <span style="font-size: 1.2em; color:red">✔</span>
+- eliminated superfluous states and transitions <span style="font-size: 1.2em; color:green">✔</span>
+
+- nodecards should always start in active.unlocked <span style="font-size: 1.2em; color:green">✔</span>
 
 - <s>add 'source' argument to createButtonBar</s>
 

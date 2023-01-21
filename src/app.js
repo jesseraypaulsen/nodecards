@@ -55,8 +55,10 @@ const {
 const { panelControllers, promptController, linkPromptController } =
   peripheralControllers(service.send, calculatePositionThenCreate);
 
-const { openPrompt, closePrompt, openLinkPrompt /*closeLinkPrompt*/ } =
-  promptViews(promptController, linkPromptController);
+const { openPrompt, closePrompt, openLinkPrompt } = promptViews(
+  promptController,
+  linkPromptController
+);
 const _graphController = graphController(service.send);
 network.on("click", _graphController);
 network.on("resize", (e) => console.log("resize: ", e));
@@ -80,9 +82,15 @@ const catchActiveCardEvent = (id) => {
     (el) => el.dataset.id !== id
   );
   const handler = (e) => {
+    const re = /delete/;
+    const isDelete = re.test(e.target.outerHTML);
+    if (isDelete) {
+      service.send("cancelLinkCreation");
+      return;
+    }
     service.send({
       type: "createLinkIfLinkCreationIsOn",
-      to: e.target.dataset.id,
+      to: e.target.closest(".nodecard").dataset.id,
     });
     domCards.forEach((el) => {
       el.removeEventListener("click", handler);

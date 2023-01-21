@@ -82,6 +82,9 @@ export const appMachine = (runChildEffect) =>
                         createLink: {
                           target: "OFF",
                         },
+                        cancelLinkCreation: {
+                          target: "OFF",
+                        },
                       },
                     },
                     OFF: {
