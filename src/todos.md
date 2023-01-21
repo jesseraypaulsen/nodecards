@@ -1,4 +1,4 @@
-- feat: link creation between two pre-existing nodecards
+- bug: drag delay
 
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
 
@@ -15,17 +15,17 @@
 
 - create alternative positions for nodecard elements -- currently the element's center corresponds to the node's center. but this
   means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
-  i deal with this by restricting the size of the canvas. note that different positioning types will require different css animations.
+  i deal with this by restricting the size of the canvas, but this doesn't work on mobile. note that different positioning types will require different css animations.
+
+- adapt to mobile (see "create alternative positions..." above)
+
+- guided tour
 
 - create a better dataset.
 
 - deploy on a cloud service.
 
-- adapt to mobile
-
 - create README.md
-
-- guided tour
 
 - screencast
 
@@ -34,6 +34,10 @@
 ---
 
 DONE
+
+- feat: link creation between two pre-existing nodecards when the target card is active <span style="font-size: 1.2em; color:red">✔</span>
+
+- feat: link creation between two pre-existing nodecards when the target card is inert <span style="font-size: 1.2em; color:red">✔</span>
 
 - change lock/unlock buttons. <span style="font-size: 1.2em; color:red">✔</span>
 

@@ -12,8 +12,8 @@ export const domAdapterFactory =
     return {
       ...elementRemover(_private),
       ...elementPositioner(_private, getDomPosition),
-      ...editorOpener(_private),
-      ...readerOpener(_private),
+      ...editorOpener(_private, getId),
+      ...readerOpener(_private, getId),
       ...elementFiller(_private),
       ...editorUpdater(_private, getText),
       ...collapser(_private),
@@ -67,18 +67,20 @@ const createEditor =
     bar: createButtonBar(getId(), null, buttonsControllers).editorBar(),
   });
 
-const editorOpener = (_) => ({
+const editorOpener = (_, getId) => ({
   openEditor() {
     _.el = div("nodecard", "expand");
+    _.el.dataset.id = getId();
     this.renderEditor();
     render(_.el); // MUST RENDER BEFORE setPosition is called!!!
     this.setElementPosition();
   },
 });
 
-const readerOpener = (_) => ({
+const readerOpener = (_, getId) => ({
   openReader() {
     _.el = div("nodecard", "expand");
+    _.el.dataset.id = getId();
     this.renderReader();
     render(_.el); // MUST RENDER BEFORE setPosition is called!!!
     this.setElementPosition();

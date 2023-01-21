@@ -68,9 +68,28 @@ const peripheralEffects = {
 settingsPanel(panelControllers);
 const _nodecardControllers = nodecardControllers(container, service.send);
 
+const catchActiveCardEvent = (id) => {
+  const domCards = Array.from(container.querySelectorAll(".nodecard")).filter(
+    (el) => el.dataset.id !== id
+  );
+  const handler = (e) => {
+    service.send({
+      type: "createLinkIfLinkCreationIsOn",
+      to: e.target.dataset.id,
+    });
+    domCards.forEach((el) => {
+      el.removeEventListener("click", handler);
+    });
+  };
+  domCards.forEach((el) => {
+    el.addEventListener("click", handler);
+  });
+};
+
 const runParentEffect = setupParentEffect({
   controllers: _nodecardControllers,
   setPositionAfterCreation,
+  catchActiveCardEvent,
 });
 
 const { init, render } = Render(
@@ -83,6 +102,7 @@ const { init, render } = Render(
 
 // subscribe views
 service.onTransition((state, event) => {
+  console.log(event);
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

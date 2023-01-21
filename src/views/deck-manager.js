@@ -29,7 +29,11 @@ export default function DeckManager(cardFace, createEdge) {
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
-  const parentEffects = ({ controllers, setPositionAfterCreation }) => ({
+  const parentEffects = ({
+    controllers,
+    setPositionAfterCreation,
+    catchActiveCardEvent,
+  }) => ({
     /*destroyCard: ({ id }) => {
       removeCard(id);
       This fails because it gets called no matter what state the parent machine is in.
@@ -65,6 +69,9 @@ export default function DeckManager(cardFace, createEdge) {
     },
     createLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
+    },
+    catchActiveCardEvent: ({ id }) => {
+      catchActiveCardEvent(id);
     },
   });
 

@@ -44,6 +44,10 @@ export const appMachine = (runChildEffect) =>
                             from,
                           }),
                         }),
+                        send((_, { from }) => ({
+                          type: "catchActiveCardEvent",
+                          id: from,
+                        })),
                       ],
                       exit: [
                         assign({
@@ -155,7 +159,6 @@ export const appMachine = (runChildEffect) =>
                   },
                 },
                 decidePath: {
-                  // when clicking on a node -> createLinkIfLinkCreationIsOn vs activateCardIfLinkCreationIsOff
                   actions: [
                     send((_, { id }) => ({
                       type: "activateCardIfLinkCreationIsOff",

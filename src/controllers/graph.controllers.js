@@ -10,11 +10,6 @@ export const graphController = (send) => {
       });
     },
     nodecard: (e) => {
-      // send({
-      //   type: "mediate",
-      //   childType: "activate",
-      //   data: { id: e.nodes[0] },
-      // });
       send({ type: "decidePath", id: e.nodes[0] });
     },
     link: (e) => {
