@@ -1,8 +1,5 @@
 - bug: drag delay (consider: data from the originating click event and its relation to the drag handler)
 
-- bug: if linkCreation button is clicked and then the user clicks on another active card, the link only gets rendered if the click is not on the buttons or
-  the textarea -- though, a link is created in DeckManager but with the "to" property left undefined.
-
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
 
 - styles for link creation
@@ -39,6 +36,10 @@
 ---
 
 DONE
+
+- feat: the active state in card machines has a history node, so it can remember whether is was locked/unlocked before it was inertified <span style="font-size: 1.2em; color:green">✔</span>
+- bug: if linkCreation button is clicked and then the user clicks on another active card, the link only gets rendered if the click is not on the buttons or
+  the textarea -- though, a link is created in DeckManager but with the "to" property left undefined. <span style="font-size: 1.2em; color:green">✔</span>
 
 - feat: clicking a link invokes a prompt for deleting the link. <span style="font-size: 1.2em; color:green">✔</span>
 

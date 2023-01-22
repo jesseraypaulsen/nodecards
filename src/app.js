@@ -83,8 +83,8 @@ const catchActiveCardEvent = (id) => {
   );
   const handler = (e) => {
     const re = /delete/;
-    const isDelete = re.test(e.target.outerHTML);
-    if (isDelete) {
+    const isDeleteButton = re.test(e.target.outerHTML);
+    if (isDeleteButton) {
       service.send("cancelLinkCreation");
       return;
     }
@@ -117,7 +117,7 @@ const { init, render } = Render(
 
 // subscribe views
 service.onTransition((state, event) => {
-  console.log(state, event);
+  //console.log(state, event);
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

@@ -46,7 +46,7 @@ export const cardMachine = ({
         },
         inert: {
           on: {
-            activate: { target: "active" },
+            activate: { target: "active.hist" },
           },
         },
         active: {
@@ -68,6 +68,9 @@ export const cardMachine = ({
                   actions: [assign({ text: (_, event) => event.data.text })],
                 },
               },
+            },
+            hist: {
+              type: "history",
             },
           },
           on: {

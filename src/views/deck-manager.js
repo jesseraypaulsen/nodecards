@@ -76,7 +76,6 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
     destroyLink: ({ id }) => {
       removeLink(id);
       removeEdge(id);
-      console.log("destroyLink: ", id, links);
     },
   });
 
@@ -87,8 +86,11 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
     setCanvasPosition: ({ id, canvasPosition }) => {
       getCard(id).setCanvasPosition(canvasPosition);
     },
-    activate: ({ id }) => {
+    activateUnlocked: ({ id }) => {
       getCard(id).inertFace.expandUnlocked();
+    },
+    activateLocked: ({ id }) => {
+      getCard(id).inertFace.expandLocked();
     },
     INERTIFY: ({ id }) => {
       getCard(id).activeFace.inertify();

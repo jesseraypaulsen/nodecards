@@ -341,6 +341,7 @@ export const appMachine = (runChildEffect) =>
 
 // for the onTransition method for cards spawned by the hydrateCard and createCard actions
 function runRunChildEffect(runChildEffect, state, event) {
+  console.log("runRunChildEffect", state, event);
   const eventType = processChildState(state, event);
   const { id, text, domPosition, canvasPosition } = state.context;
   runChildEffect(eventType, {
@@ -353,6 +354,7 @@ function runRunChildEffect(runChildEffect, state, event) {
 
 function processChildState(state, event) {
   // when the parent machine transitions to 'mode.disabled', prevent the inertify effect for cards that are already inert
+  console.log("processChildState???", event.type);
   if (
     state.history &&
     state.history.value === "inert" &&
@@ -360,5 +362,12 @@ function processChildState(state, event) {
     event.type === "INERTIFY"
   )
     return;
-  else return event.type;
+  else if (event.type === "activate") {
+    if (state.matches("active.unlocked")) {
+      return "activateUnlocked";
+    } else if (state.matches("active.locked")) {
+      return "activateLocked";
+    }
+  }
+  return event.type;
 }
