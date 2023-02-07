@@ -19,128 +19,83 @@ export const appMachine = (runChildEffect) =>
           initial: "initializing",
           states: {
             enabled: {
+              initial: "linkCreation_OFF",
               entry: send({ type: "turnPhysicsOff", sentByUser: false }),
-              type: "parallel",
-              exit: send("closePrompt"),
               states: {
-                linkCreation: {
-                  initial: "OFF",
-                  states: {
-                    ON: {
-                      entry: [
-                        // desktop: change behavior of mouse cursor;
-                        // mobile: do something else
+                linkCreation_ON: {
+                  entry: [
+                    // desktop: change behavior of mouse cursor;
+                    // mobile: do something else
+                    assign({
+                      linkCreation: (_, { linkId, label, from }) => ({
+                        id: linkId,
+                        label,
+                        from,
+                      }),
+                    }),
+                    send((_, { from }) => ({
+                      type: "catchActiveCardEvent",
+                      id: from,
+                    })),
+                  ],
+                  exit: [
+                    assign({
+                      linkCreation: () => ({
+                        id: null,
+                        label: null,
+                        from: null,
+                      }),
+                    }),
+                  ],
+                  on: {
+                    //"createLink" event fired from cardCreation.ON after card is created
+                    createLinkIfLinkCreationIsOn: {
+                      actions: [
                         assign({
-                          linkCreation: (_, { linkId, label, from }) => ({
-                            id: linkId,
-                            label,
-                            from,
-                          }),
+                          links: ({ links, linkCreation }, { to }) => {
+                            const { id, label, from } = linkCreation;
+                            return [
+                              ...links,
+                              {
+                                id,
+                                label,
+                                from,
+                                to,
+                              },
+                            ];
+                          },
                         }),
-                        send((_, { from }) => ({
-                          type: "catchActiveCardEvent",
-                          id: from,
+                        send(({ linkCreation }, { to }) => ({
+                          type: "createLink",
+                          id: linkCreation.id,
+                          label: linkCreation.label,
+                          from: linkCreation.from,
+                          to,
                         })),
                       ],
-                      exit: [
-                        assign({
-                          linkCreation: () => ({
-                            id: null,
-                            label: null,
-                            from: null,
-                          }),
-                        }),
-                      ],
-                      on: {
-                        //"creatLink" event fired from cardCreation.ON after card is created
-                        createLinkIfLinkCreationIsOn: {
-                          actions: [
-                            assign({
-                              links: ({ links, linkCreation }, { to }) => {
-                                const { id, label, from } = linkCreation;
-                                return [
-                                  ...links,
-                                  {
-                                    id,
-                                    label,
-                                    from,
-                                    to,
-                                  },
-                                ];
-                              },
-                            }),
-                            send(({ linkCreation }, { to }) => ({
-                              type: "createLink",
-                              id: linkCreation.id,
-                              label: linkCreation.label,
-                              from: linkCreation.from,
-                              to,
-                            })),
-                          ],
-                        },
-                        // the "createLink" event is both sent and received from within the same state
-                        createLink: {
-                          target: "OFF",
-                        },
-                        cancelLinkCreation: {
-                          target: "OFF",
-                        },
-                      },
                     },
-                    OFF: {
-                      on: {
-                        BRANCH: {
-                          target: "ON",
-                        },
-                        activateCardIfLinkCreationIsOff: {
-                          actions: [
-                            (context, event) => {
-                              context.cards
-                                .find((card) => card.id === event.id)
-                                .ref.send("activate");
-                            },
-                          ],
-                        },
-                      },
+                    // the "createLink" event is both sent and received from within the same state
+                    createLink: {
+                      target: "linkCreation_OFF",
+                    },
+                    cancelLinkCreation: {
+                      target: "linkCreation_OFF",
                     },
                   },
                 },
-                cardCreation: {
-                  initial: "OFF",
-                  states: {
-                    ON: {
-                      entry: send((_, { x, y }) => ({
-                        type: "openPrompt",
-                        x,
-                        y,
-                      })),
-                      on: {
-                        clickedBackground: {
-                          target: "OFF",
-                          actions: send({ type: "closePrompt" }),
-                        },
-                        "CLOSE.PROMPT": {
-                          target: "OFF",
-                          actions: send({ type: "closePrompt" }),
-                        },
-                        __createCard__: {
-                          actions: [
-                            "createCard",
-                            send({ type: "CLOSE.PROMPT" }),
-                            send((_, e) => ({
-                              type: "createLinkIfLinkCreationIsOn",
-                              to: e.id,
-                            })),
-                          ],
-                        },
-                      },
+                linkCreation_OFF: {
+                  on: {
+                    BRANCH: {
+                      target: "linkCreation_ON",
                     },
-                    OFF: {
-                      on: {
-                        clickedBackground: {
-                          target: "ON",
+                    activateCardIfLinkCreationIsOff: {
+                      actions: [
+                        (context, event) => {
+                          context.cards
+                            .find((card) => card.id === event.id)
+                            .ref.send("__activate__");
                         },
-                      },
+                      ],
                     },
                   },
                 },
@@ -153,6 +108,15 @@ export const appMachine = (runChildEffect) =>
                     );
                     card.ref.send({ type: childType, data });
                   },
+                },
+                __createCard__: {
+                  actions: [
+                    "createCard",
+                    send((_, e) => ({
+                      type: "createLinkIfLinkCreationIsOn",
+                      to: e.id,
+                    })),
+                  ],
                 },
                 decidePath: {
                   actions: [
@@ -354,7 +318,6 @@ function runRunChildEffect(runChildEffect, state, event) {
 
 function processChildState(state, event) {
   // when the parent machine transitions to 'mode.disabled', prevent the inertify effect for cards that are already inert
-  console.log("processChildState???", event.type);
   if (
     state.history &&
     state.history.value === "inert" &&

@@ -1,4 +1,4 @@
-import { createMachine, assign } from "xstate";
+import { createMachine, assign, send } from "xstate";
 
 export const cardMachine = ({
   id,
@@ -46,10 +46,13 @@ export const cardMachine = ({
         },
         inert: {
           on: {
-            activate: { target: "active.hist" },
+            __activate__: { target: "active.hist" },
           },
         },
         active: {
+          //the delay is required for user-created cards because the card machine is created before the nodecard instance,
+          //and unlike hydrated cards, user-created cards are active right away.
+          entry: send({ type: "activate" }, { delay: 10 }),
           initial: "unlocked",
           states: {
             locked: {

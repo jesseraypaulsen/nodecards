@@ -4,20 +4,16 @@
 
 - styles for link creation
 
-- intervening modal for destroying card
+- bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
+  dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
+  https://visjs.github.io/vis-network/docs/network/index.html#Events
 
 - synchronize position changes across UI and XState, using the "stabilized" and "dragEnd" events from vis.network
 
 - bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
   but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch. (see "resize" event in vis.network)
 
-- bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
-  dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
-  https://visjs.github.io/vis-network/docs/network/index.html#Events
-
-- create alternative positions for nodecard elements -- currently the element's center corresponds to the node's center. but this
-  means that when a node is located close to the edges of the canvas the corresponding element is rendered partly outside of the viewport. currently
-  i deal with this by restricting the size of the canvas, but this doesn't work on mobile. note that different positioning types will require different css animations.
+- feature: dragView and requisite changes
 
 - adapt to mobile (see "create alternative positions..." above)
 
@@ -36,6 +32,13 @@
 ---
 
 DONE
+
+- bug: when the app machine is in mode.enabled.linkCreation_ON, clicking on a nodecard's lock/unlock button causes exception because the catchActiveCardEvent
+  handler retrieves the nodecard id from the target element (button bar), but the lock/unlock causes the button bar to be re-created
+
+- bug: upon card creation, if user clicks a third time then two divs are opened
+
+- create card on doubleClick event; eliminate intervening prompt
 
 - feat: the active state in card machines has a history node, so it can remember whether is was locked/unlocked before it was inertified <span style="font-size: 1.2em; color:green">✔</span>
 - bug: if linkCreation button is clicked and then the user clicks on another active card, the link only gets rendered if the click is not on the buttons or

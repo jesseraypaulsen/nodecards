@@ -13,6 +13,7 @@ import peripheralControllers from "./controllers/peripheral-controllers";
 import nodecardControllers from "./controllers/nodecard.controllers";
 import { graphController } from "./controllers/graph.controllers";
 import Wrappers from "./controllers/library-wrappers";
+import { generateId, findEventType } from "./utils";
 import "../assets/styles/main.css";
 import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
@@ -52,25 +53,31 @@ const {
   hydrateCard,
   hydrateLink,
 } = wrappers;
-const { panelControllers, promptController, linkPromptController } =
-  peripheralControllers(service.send, calculatePositionThenCreate);
-
-const { openPrompt, closePrompt, openLinkPrompt } = promptViews(
-  promptController,
-  linkPromptController
+const { panelControllers, linkPromptController } = peripheralControllers(
+  service.send
 );
+
+const openLinkPrompt = promptViews(linkPromptController);
 const _graphController = graphController(service.send);
 network.on("click", _graphController);
 network.on("resize", (e) => console.log("resize: ", e));
 network.on("dragEnd", (e) => console.log("dragEnd: ", e));
+network.on("dragging", (e) => console.log("dragging: ", e));
 network.on("hold", (e) => console.log("hold: ", e));
 network.on("stabilized", (e) => console.log("stabilized: ", e));
+network.on("doubleClick", (e) => {
+  if (findEventType(e) === "background") {
+    const id = generateId();
+    const label = id;
+    const text = "";
+    const domPosition = e.pointer.DOM;
+    calculatePositionThenCreate(id, label, text, domPosition);
+  }
+});
 
 const peripheralEffects = {
   turnPhysicsOff: () => setPhysics(false),
   turnPhysicsOn: () => setPhysics(true),
-  openPrompt: (eventData) => openPrompt(eventData),
-  closePrompt: () => closePrompt(),
   openLinkPrompt: (e) => openLinkPrompt(e),
 };
 
@@ -81,23 +88,27 @@ const catchActiveCardEvent = (id) => {
   const domCards = Array.from(container.querySelectorAll(".nodecard")).filter(
     (el) => el.dataset.id !== id
   );
-  const handler = (e) => {
-    const re = /delete/;
-    const isDeleteButton = re.test(e.target.outerHTML);
+  const handler = (e, id) => {
+    /*const re = /delete/;
+    const isDeleteButton = re.test(e.target);
+
     if (isDeleteButton) {
+      console.log("delete button pressed");
       service.send("cancelLinkCreation");
       return;
-    }
+    }*/
     service.send({
       type: "createLinkIfLinkCreationIsOn",
-      to: e.target.closest(".nodecard").dataset.id,
+      //to: e.target.closest(".nodecard").dataset.id,
+      to: id,
     });
     domCards.forEach((el) => {
       el.removeEventListener("click", handler);
     });
   };
   domCards.forEach((el) => {
-    el.addEventListener("click", handler);
+    const id = el.dataset.id;
+    el.addEventListener("click", (e) => handler(e, id));
   });
 };
 
@@ -117,7 +128,7 @@ const { init, render } = Render(
 
 // subscribe views
 service.onTransition((state, event) => {
-  //console.log(state, event);
+  console.log("app.js -> onTransition -> event and state: ", event, state);
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

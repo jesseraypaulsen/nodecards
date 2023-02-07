@@ -62,7 +62,6 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
           controllers,
         })
       );
-      getCard(id).inertFace.expandUnlocked();
     },
     hydrateLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));

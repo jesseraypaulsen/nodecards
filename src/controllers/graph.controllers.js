@@ -19,6 +19,7 @@ export const graphController = (send) => {
 
   return (e) => {
     const eventType = findEventType(e);
-    handlers[eventType](e);
+    if (eventType === "nodecard" || eventType === "link")
+      handlers[eventType](e);
   };
 };

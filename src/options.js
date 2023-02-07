@@ -5,15 +5,15 @@ export const options = {
     },
     shape: "box",
     shadow: true,
-    color: "#b3a5f7"
+    color: "#b3a5f7",
   },
   physics: {
-    enabled: true
+    enabled: true,
   },
   interaction: {
-    dragView: false, //!!important for keeping nodecards in sync with canvas nodes!!
+    dragView: true, //!!important for keeping nodecards in sync with canvas nodes!!
     zoomView: false, //!!important for the same reason above!!
-  }
+  },
 };
 
 /*const options = { 
