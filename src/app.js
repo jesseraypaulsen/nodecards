@@ -60,9 +60,42 @@ const { panelControllers, linkPromptController } = peripheralControllers(
 const openLinkPrompt = promptViews(linkPromptController);
 const _graphController = graphController(service.send);
 network.on("click", _graphController);
-network.on("resize", (e) => console.log("resize: ", e));
+
+const synchDOMWithGraph = () => {
+  const canvasPositions = network.getPositions();
+  const keys = Object.keys(canvasPositions);
+  keys.forEach((key) => {
+    const x = canvasPositions[key].x;
+    const y = canvasPositions[key].y;
+    const domPosition = network.canvasToDOM({ x, y });
+    service.send({ type: "setCardDOMPosition", id: key, domPosition });
+  });
+};
+
+network.on("resize", (e) => {
+  console.log("resize: ", e);
+  synchDOMWithGraph();
+});
+network.on("dragging", (e) => {
+  if (e.nodes[0]) {
+    // dragging node
+    service.send({
+      type: "setCardDOMPosition",
+      id: e.nodes[0],
+      domPosition: e.pointer.DOM,
+    });
+    service.send({
+      type: "setCardCanvasPosition",
+      id: e.nodes[0],
+      domPosition: e.pointer.canvas,
+    });
+  } else {
+    // dragging view
+    synchDOMWithGraph();
+  }
+});
+
 network.on("dragEnd", (e) => console.log("dragEnd: ", e));
-network.on("dragging", (e) => console.log("dragging: ", e));
 network.on("hold", (e) => console.log("hold: ", e));
 network.on("stabilized", (e) => console.log("stabilized: ", e));
 network.on("doubleClick", (e) => {

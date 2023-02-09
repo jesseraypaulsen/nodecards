@@ -7,6 +7,9 @@
 - bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
   dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
   https://visjs.github.io/vis-network/docs/network/index.html#Events
+  ANOTHER THING TO CONSIDER: the vis-network events have an event property that holds the original DOM event.
+
+---
 
 - synchronize position changes across UI and XState, using the "stabilized" and "dragEnd" events from vis.network
 
@@ -15,7 +18,9 @@
 
 - feature: dragView and requisite changes
 
-- adapt to mobile (see "create alternative positions..." above)
+---
+
+- adapt to mobile
 
 - guided tour
 
@@ -23,7 +28,7 @@
 
 - deploy on a cloud service.
 
-- create README.md
+- create README.md (definition: extension for graph renderer that turns it into a PKM system)
 
 - screencast
 
@@ -81,6 +86,6 @@ SOMEDAY/MAYBE
   /network/modules/components/Node.js
   /network/NetworkUtil.js
 
-- we need several different ways of dealing with card collisions. each way should have a corresponding state. eg, when opening a card collides with a
-  previously opened card -- in one state the previously opened card might shrink somewhat, while in another state the newly opened card might overlap
-  the previously opened one.
+- different ways of dealing with card collisions. each way would have a corresponding state. eg, when opening a card collides with a
+  previously opened card -- in one state the previously opened card might shrink somewhat, while in the default state the newly opened card overlaps
+  the previously opened one (which is how it currently works by default).
