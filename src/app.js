@@ -64,13 +64,14 @@ const synchDOMWithGraph = (canvasToo) => {
     const domPosition = network.canvasToDOM(canvasPosition);
 
     service.send({ type: "setCardDOMPosition", id, domPosition });
-    if (canvasToo)
+    if (canvasToo) {
       // for the 'stabilized' and 'resize' events
       service.send({
         type: "setCardCanvasPosition",
         id,
         canvasPosition,
       });
+    }
   });
 };
 

@@ -23,11 +23,14 @@ export const cardMachine = ({
       },
       on: {
         setDOMPosition: {
-          actions: assign({
-            domPosition: (_, { domPosition }) => {
-              return domPosition;
-            },
-          }),
+          actions: [
+            assign({
+              domPosition: (_, { domPosition }) => {
+                return domPosition;
+              },
+            }),
+            send("__move__"),
+          ],
         },
         setCanvasPosition: {
           actions: assign({
@@ -81,6 +84,9 @@ export const cardMachine = ({
               target: "inert",
             },
             DESTROY: {},
+            __move__: {
+              actions: send("MOVE"),
+            },
           },
         },
       },

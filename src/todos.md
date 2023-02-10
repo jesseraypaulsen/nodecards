@@ -11,7 +11,7 @@
 ---
 
 - bug: dragging or resizing the view when a nodecard is active throws the dom element and the graph node out of synch. the element position needs
-  to be updated whenever setDomPosition is called on the nodecard instance.
+  to be updated whenever setDomPosition is called on the nodecard instance. conditioned over card machines in the active state.
 
 ---
 
