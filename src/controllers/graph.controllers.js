@@ -10,7 +10,7 @@ export const graphController = (send) => {
     //   });
     // },
     nodecard: (e) => {
-      console.log("nodecard clicked: ", e.pointer);
+      console.log("nodecard clicked: ", e.nodes[0]);
       send({ type: "decidePath", id: e.nodes[0] });
     },
     link: (e) => {

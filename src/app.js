@@ -82,6 +82,7 @@ network.on("resize", (e) => {
 network.on("dragging", (e) => {
   if (e.nodes[0]) {
     // dragging node
+    console.log("e.pointer.canvas: ", e.pointer.canvas);
     service.send({
       type: "setCardDOMPosition",
       id: e.nodes[0],
@@ -90,7 +91,7 @@ network.on("dragging", (e) => {
     service.send({
       type: "setCardCanvasPosition",
       id: e.nodes[0],
-      domPosition: e.pointer.canvas,
+      canvasPosition: e.pointer.canvas,
     });
   } else {
     // dragging view
