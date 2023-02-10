@@ -4,19 +4,14 @@
 
 - styles for link creation
 
-- bug: the nodecard opens when the node is dragged. mouseup should open the nodecard instead of click, but there is no mouseup event for vis-network. mouseup should only open the nodecard if it hasn't been dragged. the hold event only gets fired when the node is not dragged -- instead,
-  dragEnd gets fired. we need a mouseup event that operates like this (ie, it should not fire when dragging occurs).
+- bug: sometimes the nodecard opens when the node is dragged.
   https://visjs.github.io/vis-network/docs/network/index.html#Events
-  ANOTHER THING TO CONSIDER: the vis-network events have an event property that holds the original DOM event.
+  NOTE: the vis-network events have an event property that holds the original DOM event -- this might be useful for a condition.
 
 ---
 
-- synchronize position changes across UI and XState, using the "stabilized" and "dragEnd" events from vis.network
-
-- bug: when browser content window resizes (such as by opening browser console) the graph renderer adjusts its rendering,
-  but the nodecard dom elements do not adjust -- throwing the graph and DOM out of synch. (see "resize" event in vis.network)
-
-- feature: dragView and requisite changes
+- bug: dragging or resizing the view when a nodecard is active throws the dom element and the graph node out of synch. the element position needs
+  to be updated whenever setDomPosition is called on the nodecard instance.
 
 ---
 
@@ -37,6 +32,8 @@
 ---
 
 DONE
+
+- synchronize position changes across UI and XState, using "stabilized", "dragging", and "resize" events from vis.network
 
 - bug: when the app machine is in mode.enabled.linkCreation_ON, clicking on a nodecard's lock/unlock button causes exception because the catchActiveCardEvent
   handler retrieves the nodecard id from the target element (button bar), but the lock/unlock causes the button bar to be re-created

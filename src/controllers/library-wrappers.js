@@ -27,6 +27,8 @@ export default (network, send) => {
 
   // facades
 
+  /*
+  No longer necessary. The 'stabilized' event is used instead.
   const setPositionAfterCreation = (id, delay) => {
     // delay until after the machine transitions from mode.intializing to mode.active, so that physics engine is turned off.
     // otherwise the position data will not be accurate.
@@ -40,6 +42,7 @@ export default (network, send) => {
       setCanvasPosition({ canvasPosition, id });
     }, delay);
   };
+  */
 
   const calculatePositionThenCreate = (id, label, text, domPosition) => {
     const canvasPosition = DOMtoCanvas({
@@ -59,7 +62,6 @@ export default (network, send) => {
     hydrateCard,
     hydrateLink,
     //removeLink,
-    setPositionAfterCreation,
     calculatePositionThenCreate,
   };
 };

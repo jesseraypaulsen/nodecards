@@ -6,7 +6,7 @@
 
 body {
   height: 100vh;
-  padding: 7em;
+  /* padding: 7em; */
 }
 
 #container {
@@ -16,7 +16,6 @@ body {
 
 #graph-container {
   height: 100%;
-  /* border: 1px solid blue; */
 }
 
 /* see settings-panel.css for use */

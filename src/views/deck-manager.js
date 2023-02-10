@@ -31,7 +31,7 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
 
   const parentEffects = ({
     controllers,
-    setPositionAfterCreation,
+    //setPositionAfterCreation,
     catchActiveCardEvent,
   }) => ({
     /*destroyCard: ({ id }) => {
@@ -48,7 +48,7 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
           controllers,
         })
       );
-      setPositionAfterCreation(id, 1000);
+      //setPositionAfterCreation(id, 1000);
     },
     createCard: ({ id, label, text, domPosition, canvasPosition }) => {
       addCard(

@@ -47,12 +47,7 @@ const { setupParentEffect, runChildEffect } = DeckManager(
 );
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
-const {
-  calculatePositionThenCreate,
-  setPositionAfterCreation,
-  hydrateCard,
-  hydrateLink,
-} = wrappers;
+const { calculatePositionThenCreate, hydrateCard, hydrateLink } = wrappers;
 const { panelControllers, linkPromptController } = peripheralControllers(
   service.send
 );
@@ -61,21 +56,28 @@ const openLinkPrompt = promptViews(linkPromptController);
 const _graphController = graphController(service.send);
 network.on("click", _graphController);
 
-const synchDOMWithGraph = () => {
+const synchDOMWithGraph = (canvasToo) => {
   const canvasPositions = network.getPositions();
-  const keys = Object.keys(canvasPositions);
-  keys.forEach((key) => {
-    const x = canvasPositions[key].x;
-    const y = canvasPositions[key].y;
-    const domPosition = network.canvasToDOM({ x, y });
-    service.send({ type: "setCardDOMPosition", id: key, domPosition });
+  const ids = Object.keys(canvasPositions);
+  ids.forEach((id) => {
+    const canvasPosition = canvasPositions[id];
+    const domPosition = network.canvasToDOM(canvasPosition);
+
+    service.send({ type: "setCardDOMPosition", id, domPosition });
+    if (canvasToo)
+      // for the 'stabilized' and 'resize' events
+      service.send({
+        type: "setCardCanvasPosition",
+        id,
+        canvasPosition,
+      });
   });
 };
 
 network.on("resize", (e) => {
-  console.log("resize: ", e);
-  synchDOMWithGraph();
+  setTimeout(() => synchDOMWithGraph(true), 100);
 });
+
 network.on("dragging", (e) => {
   if (e.nodes[0]) {
     // dragging node
@@ -95,9 +97,11 @@ network.on("dragging", (e) => {
   }
 });
 
-network.on("dragEnd", (e) => console.log("dragEnd: ", e));
-network.on("hold", (e) => console.log("hold: ", e));
-network.on("stabilized", (e) => console.log("stabilized: ", e));
+network.on("stabilized", (e) => {
+  console.log("stabilized: ", e);
+  synchDOMWithGraph(true);
+});
+
 network.on("doubleClick", (e) => {
   if (findEventType(e) === "background") {
     const id = generateId();
@@ -147,7 +151,6 @@ const catchActiveCardEvent = (id) => {
 
 const runParentEffect = setupParentEffect({
   controllers: _nodecardControllers,
-  setPositionAfterCreation,
   catchActiveCardEvent,
 });
 
@@ -161,7 +164,6 @@ const { init, render } = Render(
 
 // subscribe views
 service.onTransition((state, event) => {
-  console.log("app.js -> onTransition -> event and state: ", event, state);
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

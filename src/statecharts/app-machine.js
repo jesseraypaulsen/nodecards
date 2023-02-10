@@ -305,7 +305,6 @@ export const appMachine = (runChildEffect) =>
 
 // for the onTransition method for cards spawned by the hydrateCard and createCard actions
 function runRunChildEffect(runChildEffect, state, event) {
-  console.log("runRunChildEffect", state, event);
   const eventType = processChildState(state, event);
   const { id, text, domPosition, canvasPosition } = state.context;
   runChildEffect(eventType, {
