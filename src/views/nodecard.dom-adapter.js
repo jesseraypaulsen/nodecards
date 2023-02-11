@@ -70,6 +70,9 @@ const containerOpener = (_, getId) => ({
   openContainer() {
     _.el = div("nodecard", "expand");
     _.el.dataset.id = getId();
+    const rootStyle = getComputedStyle(document.querySelector(":root"));
+    const zs = rootStyle.getPropertyValue("--zoom-scale");
+    _.el.style.transform = `scale(${zs})`;
     render(_.el); // MUST RENDER BEFORE setPosition is called!!!
     this.setElementPosition();
   },

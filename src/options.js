@@ -11,8 +11,8 @@ export const options = {
     enabled: true,
   },
   interaction: {
-    dragView: true, //!!important for keeping nodecards in sync with canvas nodes!!
-    zoomView: false, //!!important for the same reason above!!
+    dragView: true,
+    zoomView: true,
   },
 };
 

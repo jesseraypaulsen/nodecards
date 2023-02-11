@@ -1,5 +1,7 @@
 - bug: drag delay (consider: data from the originating click event and its relation to the drag handler)
 
+- bug: after you zoom out, when you drag the active card the element and the node fall out of synch
+
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
 
 - styles for link creation
@@ -7,10 +9,6 @@
 - bug: sometimes the nodecard opens when the node is dragged.
   https://visjs.github.io/vis-network/docs/network/index.html#Events
   NOTE: the vis-network events have an event property that holds the original DOM event -- this might be useful for a condition.
-
----
-
-- feat: scale a nodecard's dom element when zooming the graph
 
 ---
 
@@ -31,6 +29,8 @@
 ---
 
 DONE
+
+- feat: scale a nodecard's dom element when zooming the graph
 
 - bug: sometimes dom element becomes decoupled somehow from graph node when double-click and drag happen in immediate succession on an inert node, followed by the exception "getCanvasPosition is undefined"
 

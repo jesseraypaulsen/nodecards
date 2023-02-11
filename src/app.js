@@ -56,7 +56,7 @@ const openLinkPrompt = promptViews(linkPromptController);
 const _graphController = graphController(service.send);
 network.on("click", _graphController);
 
-const synchDOMWithGraph = (canvasToo) => {
+const synchDOMWithGraph = () => {
   const canvasPositions = network.getPositions();
   const ids = Object.keys(canvasPositions);
   ids.forEach((id) => {
@@ -64,25 +64,34 @@ const synchDOMWithGraph = (canvasToo) => {
     const domPosition = network.canvasToDOM(canvasPosition);
 
     service.send({ type: "setCardDOMPosition", id, domPosition });
-    if (canvasToo) {
-      // for the 'stabilized' and 'resize' events
-      service.send({
-        type: "setCardCanvasPosition",
-        id,
-        canvasPosition,
-      });
-    }
+    service.send({
+      type: "setCardCanvasPosition",
+      id,
+      canvasPosition,
+    });
   });
 };
 
+const scaleActiveCards = (e) => {
+  const rootStyle = document.querySelector(":root");
+  rootStyle.style.setProperty("--zoom-scale", e.scale);
+  document.querySelectorAll(".nodecard").forEach((el) => {
+    el.style.transform = `scale(${e.scale})`;
+  });
+};
+
+network.on("zoom", (e) => {
+  synchDOMWithGraph();
+  scaleActiveCards(e);
+});
+
 network.on("resize", (e) => {
-  setTimeout(() => synchDOMWithGraph(true), 100);
+  setTimeout(() => synchDOMWithGraph(), 100);
 });
 
 network.on("dragging", (e) => {
   if (e.nodes[0]) {
     // dragging node
-    console.log("e.pointer.canvas: ", e.pointer.canvas);
     service.send({
       type: "setCardDOMPosition",
       id: e.nodes[0],
@@ -100,8 +109,7 @@ network.on("dragging", (e) => {
 });
 
 network.on("stabilized", (e) => {
-  console.log("stabilized: ", e);
-  synchDOMWithGraph(true);
+  synchDOMWithGraph();
 });
 
 network.on("doubleClick", (e) => {
@@ -128,17 +136,8 @@ const catchActiveCardEvent = (id) => {
     (el) => el.dataset.id !== id
   );
   const handler = (e, id) => {
-    /*const re = /delete/;
-    const isDeleteButton = re.test(e.target);
-
-    if (isDeleteButton) {
-      console.log("delete button pressed");
-      service.send("cancelLinkCreation");
-      return;
-    }*/
     service.send({
       type: "createLinkIfLinkCreationIsOn",
-      //to: e.target.closest(".nodecard").dataset.id,
       to: id,
     });
     domCards.forEach((el) => {

@@ -28,7 +28,6 @@ export default (container, send) =>
       drag: (e, id) => {
         e.preventDefault();
         send("turnPhysicsOff");
-        console.log("drag!!");
         drag(container, { getDomPosition, getCanvasPosition, id, send });
       },
     };

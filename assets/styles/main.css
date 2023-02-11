@@ -18,7 +18,7 @@ body {
   height: 100%;
 }
 
-/* see settings-panel.css for use */
 :root {
   --main-color: #b3a5f7;
+  --zoom-scale: 1;
 }

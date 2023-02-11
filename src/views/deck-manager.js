@@ -3,6 +3,7 @@ import { isValid } from "../utils.js";
 export default function DeckManager(cardFace, createEdge, removeEdge) {
   let nodecards = [];
   let links = [];
+  //let zoomScale = 1;
 
   const addCard = (card) => {
     nodecards = nodecards.concat(card);

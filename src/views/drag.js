@@ -17,25 +17,19 @@ export default (container, cardFuncs) => {
 };
 
 const addDeltas = ({ x, y }, { dx, dy }) => {
-  console.log("addDeltas x: ", x, "y: ", y, "dx: ", dx, "dy: ", dy);
   return { x: x + dx, y: y + dy };
 };
 
 const getDeltas = (e) => {
-  console.log("getDeltas: ", e);
   let dx = e.movementX;
   let dy = e.movementY;
   return { dx, dy };
 };
 
 function moveCard({ getDomPosition, getCanvasPosition, id, send }, e) {
-  console.log("getDomPosition: ", getDomPosition());
-  console.log("getCanvasPosition: ", getCanvasPosition()); //undefined
-
   const domPosition = addDeltas(getDomPosition(), getDeltas(e));
   const canvasPosition = addDeltas(getCanvasPosition(), getDeltas(e));
 
   send({ type: "setCardDOMPosition", id, domPosition });
   send({ type: "setCardCanvasPosition", id, canvasPosition });
-  //send({ type: "mediate", childType: "MOVE", data: { id } });
 }
