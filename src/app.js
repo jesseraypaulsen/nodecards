@@ -56,6 +56,14 @@ const openLinkPrompt = promptViews(linkPromptController);
 const _graphController = graphController(service.send);
 network.on("click", _graphController);
 
+const sendPositions = (id, canvasPosition, domPosition) => {
+  service.send({ type: "setCardDOMPosition", id, domPosition });
+  service.send({
+    type: "setCardCanvasPosition",
+    id,
+    canvasPosition,
+  });
+};
 const synchDOMWithGraph = () => {
   const canvasPositions = network.getPositions();
   const ids = Object.keys(canvasPositions);
@@ -63,12 +71,7 @@ const synchDOMWithGraph = () => {
     const canvasPosition = canvasPositions[id];
     const domPosition = network.canvasToDOM(canvasPosition);
 
-    service.send({ type: "setCardDOMPosition", id, domPosition });
-    service.send({
-      type: "setCardCanvasPosition",
-      id,
-      canvasPosition,
-    });
+    sendPositions(id, canvasPosition, domPosition);
   });
 };
 
@@ -92,16 +95,17 @@ network.on("resize", (e) => {
 network.on("dragging", (e) => {
   if (e.nodes[0]) {
     // dragging node
-    service.send({
-      type: "setCardDOMPosition",
-      id: e.nodes[0],
-      domPosition: e.pointer.DOM,
-    });
-    service.send({
-      type: "setCardCanvasPosition",
-      id: e.nodes[0],
-      canvasPosition: e.pointer.canvas,
-    });
+    // service.send({
+    //   type: "setCardDOMPosition",
+    //   id: e.nodes[0],
+    //   domPosition: e.pointer.DOM,
+    // });
+    // service.send({
+    //   type: "setCardCanvasPosition",
+    //   id: e.nodes[0],
+    //   canvasPosition: e.pointer.canvas,
+    // });
+    sendPositions(e.nodes[0], e.pointer.canvas, e.pointer.DOM);
   } else {
     // dragging view
     synchDOMWithGraph();

@@ -1,3 +1,5 @@
+## Todos
+
 - bug: drag delay (consider: data from the originating click event and its relation to the drag handler)
 
 - bug: after you zoom out, when you drag the active card the element and the node fall out of synch
