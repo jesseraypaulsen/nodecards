@@ -1,3 +1,9 @@
+# Nodecards
+
+Extends a graph rendering library and adapts it into a personal knowledge management system. An exaptation. Using vis-network and XState.
+
+---
+
 ## Todos
 
 - bug: drag delay (consider: data from the originating click event and its relation to the drag handler)
@@ -12,8 +18,6 @@
   https://visjs.github.io/vis-network/docs/network/index.html#Events
   NOTE: the vis-network events have an event property that holds the original DOM event -- this might be useful for a condition.
 
----
-
 - adapt to mobile
 
 - guided tour
@@ -22,9 +26,7 @@
 
 - deploy on a cloud service.
 
-- create README.md (definition: extension for graph renderer that turns it into a PKM system)
-
-- screencast
+- screencasts and/or snapshots (desktop)
 
 - tests
 
@@ -32,50 +34,15 @@
 
 DONE
 
-- feat: scale a nodecard's dom element when zooming the graph
+- feat: scale a nodecard's dom element when zooming the graph <span style="font-size: 1.2em; color:green">✔</span>
 
-- bug: sometimes dom element becomes decoupled somehow from graph node when double-click and drag happen in immediate succession on an inert node, followed by the exception "getCanvasPosition is undefined"
+- bug: sometimes dom element becomes decoupled somehow from graph node when double-click and drag happen in immediate succession on an inert node, followed by the exception "getCanvasPosition is undefined" <span style="font-size: 1.2em; color:green">✔</span>
 
-- bug: if you drag the inert node first, and then open the card and attempt to drag the card then you "Uncaught TypeError: destructured parameter is undefined". But then if you inertify the card, and re-open it, then drag works fine. The error points to drag.js and the addDeltas function.
+- bug: if you drag the inert node first, and then open the card and attempt to drag the card then you "Uncaught TypeError: destructured parameter is undefined". But then if you inertify the card, and re-open it, then drag works fine. The error points to drag.js and the addDeltas function. <span style="font-size: 1.2em; color:green">✔</span>
 
-- bug: dragging or resizing the view when a nodecard is active throws the dom element and the graph node out of synch. the element position needs
-  to be updated whenever setDomPosition is called on the nodecard instance, conditioned on the card machine being in the active state.
-- synchronize position changes across UI and XState, using "stabilized", "dragging", and "resize" events from vis.network
+- bug: dragging or resizing the view when a nodecard is active throws the dom element and the graph node out of synch. the element position needs to be updated whenever setDomPosition is called on the nodecard instance, conditioned on the card machine being in the active state. <span style="font-size: 1.2em; color:green">✔</span>
 
-- bug: when the app machine is in mode.enabled.linkCreation_ON, clicking on a nodecard's lock/unlock button causes exception because the catchActiveCardEvent
-  handler retrieves the nodecard id from the target element (button bar), but the lock/unlock causes the button bar to be re-created
-
-- bug: upon card creation, if user clicks a third time then two divs are opened
-
-- create card on doubleClick event; eliminate intervening prompt
-
-- feat: the active state in card machines has a history node, so it can remember whether is was locked/unlocked before it was inertified <span style="font-size: 1.2em; color:green">✔</span>
-- bug: if linkCreation button is clicked and then the user clicks on another active card, the link only gets rendered if the click is not on the buttons or
-  the textarea -- though, a link is created in DeckManager but with the "to" property left undefined. <span style="font-size: 1.2em; color:green">✔</span>
-
-- feat: clicking a link invokes a prompt for deleting the link. <span style="font-size: 1.2em; color:green">✔</span>
-
-- feat: link creation between two pre-existing nodecards when the target card is active <span style="font-size: 1.2em; color:green">✔</span>
-
-- feat: link creation between two pre-existing nodecards when the target card is inert <span style="font-size: 1.2em; color:green">✔</span>
-
-- change lock/unlock buttons. <span style="font-size: 1.2em; color:green">✔</span>
-
-- bug: when prompt is opened, if we switch app mode to read only or disabled, prompt gets stuck. if you switch back to modify, two prompts are open at once. <span style="font-size: 1.2em; color:green">✔</span>
-
-- bug: second click on node causes duplicate nodecard elements. (update: I think I inadvertently fixed this problem, because I can't replicate it at the moment.) <span style="font-size: 1.2em; color:green">✔</span>
-
-- bug: when app is in mode.modify, and card is in active.edit, if app is switched to mode.read then card is still in active.edit <span style="font-size: 1.2em; color:green">✔</span>
-
-- state processing functions for parentEffects and childEffects <span style="font-size: 1.2em; color:green">✔</span>
-
-- eliminated superfluous states and transitions <span style="font-size: 1.2em; color:green">✔</span>
-
-- nodecards should always start in active.unlocked <span style="font-size: 1.2em; color:green">✔</span>
-
-- <s>add 'source' argument to createButtonBar</s>
-
-- <s>nodecards always activate in read mode. they should activate in write mode when they are user created.</s>
+- synchronize position changes across UI and XState, using "stabilized", "dragging", and "resize" events from vis.network <span style="font-size: 1.2em; color:green">✔</span>
 
 ---
 
