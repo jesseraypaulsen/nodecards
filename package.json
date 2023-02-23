@@ -3,13 +3,12 @@
   "scripts": {
     "clean": "rm -rf dist && rm -rf .parcel-cache",
     "start": "npx parcel src/index.html",
-    "build": "parcel build",
+    "build": "parcel build src/index.html",
     "test": "jest --watchAll --coverage"
   },
   "dependencies": {
     "@material/icon-button": "^13.0.0",
     "@material/tooltip": "^13.0.0",
-    "cuid": "^2.1.8",
     "express": "^4.18.1",
     "vis-network": "^9.1.0",
     "xstate": "^4.33.6"

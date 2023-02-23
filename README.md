@@ -14,6 +14,8 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - styles for link creation
 
+- refactor to improve structure, see app.js
+
 - bug: sometimes the nodecard opens when the node is dragged.
   https://visjs.github.io/vis-network/docs/network/index.html#Events
   NOTE: the vis-network events have an event property that holds the original DOM event -- this might be useful for a condition.
