@@ -26,8 +26,6 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - create a better dataset.
 
-- deploy on a cloud service.
-
 - screencasts and/or snapshots (desktop)
 
 - tests
@@ -36,6 +34,8 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 DONE
 
+- deploy on <s>a cloud service</s> Vercel.<span style="font-size: 1.2em; color:green">✔</span>
+- chore: package.json > build script for Vercel, could not find index.html because the path was not specified. The fulfillment of this task allowed the app to be deployed on Vercel, effortlessly. It was shocking.<span style="font-size: 1.2em; color:green">✔</span>
 - feat: scale a nodecard's dom element when zooming the graph <span style="font-size: 1.2em; color:green">✔</span>
 
 - bug: sometimes dom element becomes decoupled somehow from graph node when double-click and drag happen in immediate succession on an inert node, followed by the exception "getCanvasPosition is undefined" <span style="font-size: 1.2em; color:green">✔</span>
