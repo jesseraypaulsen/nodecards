@@ -8,7 +8,7 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - bug: drag delay (consider: data from the originating click event and its relation to the drag handler)
 
-- bug: after you zoom out, when you drag the active card the element and the node fall out of synch
+- bug: after you zoom out, when you drag the active card the element and the node fall out of synch. likewise if you open the console (or close it if it was open when the app first loaded), or change the browser vieport size in any other way.
 
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
 
@@ -20,7 +20,7 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
   https://visjs.github.io/vis-network/docs/network/index.html#Events
   NOTE: the vis-network events have an event property that holds the original DOM event -- this might be useful for a condition.
 
-- adapt to mobile
+- adapt to mobile.. the drag event
 
 - guided tour
 
@@ -28,15 +28,9 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - screencasts and/or snapshots (desktop)
 
-- tests
-
 ---
 
 DONE
-
-- deploy on <s>a cloud service</s> Vercel.<span style="font-size: 1.2em; color:green">✔</span>
-- chore: package.json > build script for Vercel, could not find index.html because the path was not specified. The fulfillment of this task allowed the app to be deployed on Vercel, effortlessly. It was shocking.<span style="font-size: 1.2em; color:green">✔</span>
-- feat: scale a nodecard's dom element when zooming the graph <span style="font-size: 1.2em; color:green">✔</span>
 
 - bug: sometimes dom element becomes decoupled somehow from graph node when double-click and drag happen in immediate succession on an inert node, followed by the exception "getCanvasPosition is undefined" <span style="font-size: 1.2em; color:green">✔</span>
 

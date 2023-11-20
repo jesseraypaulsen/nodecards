@@ -22,7 +22,8 @@ export default (container, send) =>
         send({ type: "mediate", childType: "INERTIFY", data: { id } }),
       branch: (id) => {
         const linkId = generateId();
-        const label = linkId;
+        const label = '';
+        console.log('branching from card with id: ', id)
         send({ type: "BRANCH", linkId, label, from: id });
       },
       drag: (e, id) => {
