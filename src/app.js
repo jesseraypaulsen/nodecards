@@ -21,6 +21,7 @@ import "../assets/styles/icon-button.scss";
 import "../assets/styles/tooltip.scss";
 import "../assets/styles/prompt.css";
 import data from "../data/abc123.json";
+import { guidedTour } from "./guided-tour";
 
 const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
@@ -74,6 +75,13 @@ const synchDOMWithGraph = () => {
     sendPositions(id, canvasPosition, domPosition);
   });
 };
+
+//TODO, not working
+//https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport
+// visualViewport.onresize = e => {
+//   synchDOMWithGraph()
+//   console.log('synchDOMWithGraph called')
+// }
 
 const scaleActiveCards = (e) => {
   const rootStyle = document.querySelector(":root");
@@ -174,3 +182,5 @@ service.onTransition((state, event) => {
 });
 
 service.start();
+
+guidedTour(service.send)

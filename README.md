@@ -20,7 +20,7 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
   https://visjs.github.io/vis-network/docs/network/index.html#Events
   NOTE: the vis-network events have an event property that holds the original DOM event -- this might be useful for a condition.
 
-- adapt to mobile.. the drag event
+- adapt to mobile.. the drag event doesn't seem to work in mobile
 
 - guided tour
 
