@@ -1,142 +1,94 @@
-import Shepherd from 'shepherd.js';
-import '../node_modules/shepherd.js/dist/css/shepherd.css';
-
-const tour = new Shepherd.Tour({
-  useModalOverlay: true,
-  defaultStepOptions: {
-    cancelIcon: { enabled: true },
-    classes: 'shadow-md bg-purple-dark class-1 class-2',
-    // scrollTo: true
-    // scrollTo: { behavior: 'smooth', block: 'center' }
-  }
-});
+const driver = window.driver.js.driver;
 
 
-export const guidedTour = (send) => { 
-  tour.addStep({
-    id: 'first-step',
-    text: 'First step',
-    // classes: 'example-step-extra-class',
-    buttons: [
-      {
-        text: 'Next',
-        //action: tour.next
-        action() {
-          tour.next()
-        } 
+const driverObj = driver({
+  showProgress: true,
+  onPopoverRender: (popover, { config, state }) => console.log('onPopoverRender'), // doesn't execute
+  onPopoverRender: () => console.log('onPopoverRender'),
+  steps: [
+    {
+      popover: {
+        description: "Are you ready for the Guided Tour?"
+      }
+    },
+    { 
+      element: '.branch', 
+      popover: { 
+        title: 'Title', 
+        description: 'Description',
+        onPopoverRender: () => console.log('onPopoverRender'),
+      } 
+    },
+    { 
+      element: '.drag', 
+      popover: { 
+        title: 'Title', 
+        description: 'Description',
       },
-      {
-        text: 'Back',
-        action: tour.back
-      }
-    ]
-  });
-  
-  tour.addStep({
-    id: 'second-step',
-    text: 'Second step',
-    attachTo: {
-      //element: "[data-id='three']",
-      element: '.branch',
-      on: 'bottom'
-    },
-    buttons: [
-      {
-        text: 'Next',
-        action() {
-          tour.next()
-        } 
-      }
-    ]
-  });
-  
-  tour.addStep({
-    id: 'third-step',
-    text: 'Third step',
-    attachTo: {
-      element: '.drag',
-      on: 'bottom'
-    },
-    buttons: [
-      {
-        text: 'Next',
-        action() {
-          tour.next()
-        } 
-      }
-    ]
-  });
-  
-  tour.addStep({
-    id: 'fourth-step',
-    text: 'Fourth step',
-    attachTo: {
-      element: '.lock',
-      on: 'bottom'
-    },
-    buttons: [
-      {
-        text: 'Next',
-        action() {
-          tour.next()
-        } 
-      }
-    ]
-  });
-  
-  tour.addStep({
-    id: 'fifth-step',
-    text: 'Fifth step',
-    attachTo: {
-      element: '.discard',
-      on: 'bottom'
-    },
-    buttons: [
-      {
-        text: 'Next',
-        action() {
-          tour.next()
-        } 
-      }
-    ]
-  });
-  
-  tour.addStep({
-    id: 'sixth-step',
-    text: 'Sixth step',
-    attachTo: {
-      element: '.inertify',
-      on: 'bottom'
-    },
-    buttons: [
-      {
-        text: 'Next',
-        action() {
-  
-          tour.next()
-        } 
-      }
-    ]
-  });
-  
-  tour.addStep({
-    id: 'seventh-step',
-    text: 'Seventh step',
-    buttons: [
-      {
-        text: 'Next',
-        action() {
-          send({ type: "mediate", childType: "INERTIFY", data: { id: "three" } })
-          tour.next()
-        } 
-      }
-    ]
-  });
-  
-  const first = () => send({ type: "decidePath", id: "three"})
+      //hooks
+      onHighlightStarted: (el, step, options) => null,
+      onHighlighted: (el, step, options) => {
+        const popover = options.state.popover;
+        console.log(popover)
+        const firstButton = document.createElement("button");
+        firstButton.innerText = "Go to First";
+        popover.description.appendChild(firstButton);
 
-  tour.start();
+        firstButton.addEventListener("click", () => {
+          driverObj.drive(0);
+        });
+      },
+      onDeselected: () => console.log('once more.. hi!'),
+      onPopoverRender: () => console.log('onPopoverRender'), // doesn't get called -- using onHighlighted instead
+    },
+    { 
+      element: '.lock', 
+      popover: { 
+        title: 'Title', 
+        description: 'Description',
+        onPopoverRender: () => console.log('onPopoverRender'),
+      } 
+    },
+    { 
+      element: '.discard', 
+      popover: { 
+        title: 'Title', 
+        description: 'Description',
+        onPopoverRender: () => console.log('onPopoverRender'),
+      } 
+    },
+    { 
+      element: '.inertify', 
+      popover: { 
+        title: 'Inertify', 
+        description: 'asoidjfidj' 
+      }
+    },
+    { 
+      popover: { 
+        title: 'Zoom', 
+        description: 'asoidjfidj' 
+      }
+    },
+    { 
+      popover: { 
+        title: 'Create', 
+        description: 'double-click on empty space' 
+      }
+    },
+  ]
+});
+  
+driverObj.drive();
+
+
+
+export const guidedTour = (send) => {
+
   setTimeout(() => {
-    first()
-  }, 2000)
+    send({ type: "decidePath", id: "three"})
+  }, 1000)
+
+  //https://driverjs.com/docs/configuration
+
 }

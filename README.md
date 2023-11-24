@@ -28,17 +28,7 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - screencasts and/or snapshots (desktop)
 
----
-
-DONE
-
-- bug: sometimes dom element becomes decoupled somehow from graph node when double-click and drag happen in immediate succession on an inert node, followed by the exception "getCanvasPosition is undefined" <span style="font-size: 1.2em; color:green">✔</span>
-
-- bug: if you drag the inert node first, and then open the card and attempt to drag the card then you "Uncaught TypeError: destructured parameter is undefined". But then if you inertify the card, and re-open it, then drag works fine. The error points to drag.js and the addDeltas function. <span style="font-size: 1.2em; color:green">✔</span>
-
-- bug: dragging or resizing the view when a nodecard is active throws the dom element and the graph node out of synch. the element position needs to be updated whenever setDomPosition is called on the nodecard instance, conditioned on the card machine being in the active state. <span style="font-size: 1.2em; color:green">✔</span>
-
-- synchronize position changes across UI and XState, using "stabilized", "dragging", and "resize" events from vis.network <span style="font-size: 1.2em; color:green">✔</span>
+- add confirmation for deleting cards
 
 ---
 

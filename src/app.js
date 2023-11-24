@@ -23,6 +23,7 @@ import "../assets/styles/prompt.css";
 import data from "../data/abc123.json";
 import { guidedTour } from "./guided-tour";
 
+
 const container = document.querySelector("#container");
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
