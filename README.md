@@ -18,23 +18,21 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
   https://visjs.github.io/vis-network/docs/network/index.html#Events
   NOTE: the vis-network events have an event property that holds the original DOM event -- this might be useful for a condition.
 
-- adapt to mobile.. the drag event doesn't seem to work in mobile
+- the drag event doesn't work in mobile
 
 - guided tour
 
 - create a better dataset.
 
-- screencasts and/or snapshots (desktop)
-
 - add confirmation for deleting cards
 
-- after branch is clicked, the first card should temporarily change appearance somehow, and then it should collapse when second card is created/selected
+- after branch is clicked, the first card should temporarily change appearance somehow, and then maybe it should collapse when second card is created/selected.
 
-- the button menu should be collapsible.. and it should be collapsed by default
+- some way of deriving titles for the collapsed nodes. you could specify a special syntax for marking the title within the text content.
 
-- cards need to be smaller especially for mobile screens
+- hide canvas node when card is expanded.. now that the card is smaller the node momentarily peeks out beyond the edges of the card when you're dragging it. perhaps using the 'opacity' property.. see https://visjs.github.io/vis-network/docs/network/nodes.html. you might be able to put this property on the card machine. see app.js, library-wrapper.js, app-machine.js and card-machine.js .
 
-- some way of deriving titles for the collapsed nodes
+- animation effect on buttons
 
 ---
 

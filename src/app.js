@@ -20,7 +20,7 @@ import "../assets/styles/nodecard.css";
 import "../assets/styles/icon-button.scss";
 import "../assets/styles/tooltip.scss";
 import "../assets/styles/prompt.css";
-import data from "../data/abc123.json";
+import data from "../data/vervaeke.json";
 import { guidedTour } from "./guided-tour";
 
 
@@ -184,4 +184,4 @@ service.onTransition((state, event) => {
 
 service.start();
 
-guidedTour(service.send)
+guidedTour(service.send, calculatePositionThenCreate)

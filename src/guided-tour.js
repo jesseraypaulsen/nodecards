@@ -1,10 +1,11 @@
 const driver = window.driver.js.driver;
 
+export const guidedTour = (send, calculatePositionThenCreate) => {
 
 const driverObj = driver({
   showProgress: true,
-  onPopoverRender: (popover, { config, state }) => console.log('onPopoverRender'), // doesn't execute
-  onPopoverRender: () => console.log('onPopoverRender'),
+  overlayOpacity: 0,
+  //onPopoverRender: () => console.log('onPopoverRender'), // doesn't execute
   steps: [
     {
       popover: {
@@ -16,7 +17,7 @@ const driverObj = driver({
       popover: { 
         title: 'Title', 
         description: 'Description',
-        onPopoverRender: () => console.log('onPopoverRender'),
+        //onPopoverRender: () => console.log('onPopoverRender'), // doesn't execute.. using onHighlighted instead
       } 
     },
     { 
@@ -37,16 +38,21 @@ const driverObj = driver({
         firstButton.addEventListener("click", () => {
           driverObj.drive(0);
         });
+
+        //driverObj.setConfig({ overlayOpacity: 0}) //erases the steps
+
+        // calculatePositionThenCreate("adfsdijij", "aeoiocijaji", "aoimcpijioej", {
+        //   "x": 780,
+        //   "y": 295
+        // })
       },
       onDeselected: () => console.log('once more.. hi!'),
-      onPopoverRender: () => console.log('onPopoverRender'), // doesn't get called -- using onHighlighted instead
     },
     { 
       element: '.lock', 
       popover: { 
         title: 'Title', 
         description: 'Description',
-        onPopoverRender: () => console.log('onPopoverRender'),
       } 
     },
     { 
@@ -54,14 +60,38 @@ const driverObj = driver({
       popover: { 
         title: 'Title', 
         description: 'Description',
-        onPopoverRender: () => console.log('onPopoverRender'),
+        onNextClick: (el, step, options) => {
+          calculatePositionThenCreate("newCard", "new card", "blah blah blah blah blah blah blah", {
+            "x": 780,
+            "y": 295
+          })
+
+          // crude hack.. delay next step so that the new nodecard has time to fully materialize, 
+          // and erase the lingering popover div from this current step in the meantime
+          setTimeout(() => {
+            driverObj.moveNext();
+          }, 1000)
+          console.log(options.state.popover.wrapper)
+          options.state.popover.wrapper.style = "display:none;"
+        },
       } 
+    },
+    {
+      element: '[data-id="newCard"]',
+      popover: {
+        title: 'new card',
+        description: 'blah blah blah blah blah'
+      },
+      onDeselected: (el) => {
+        el.querySelector('.inertify').click()
+      }
     },
     { 
       element: '.inertify', 
       popover: { 
         title: 'Inertify', 
-        description: 'asoidjfidj' 
+        description: 'asoidjfidj',
+        side: 'bottom'
       }
     },
     { 
@@ -74,7 +104,8 @@ const driverObj = driver({
       popover: { 
         title: 'Create', 
         description: 'double-click on empty space' 
-      }
+      },
+      onDeselected: () => guided2er(send, calculatePositionThenCreate)
     },
   ]
 });
@@ -83,7 +114,6 @@ driverObj.drive();
 
 
 
-export const guidedTour = (send) => {
 
   setTimeout(() => {
     send({ type: "decidePath", id: "three"})
@@ -91,4 +121,10 @@ export const guidedTour = (send) => {
 
   //https://driverjs.com/docs/configuration
 
+}
+
+export const guided2er = (send, calculatePositionThenCreate) => {
+  const driverObj = driver()
+  driverObj.highlight({ popover: { description: "hi!"}})
+  //driverObj.highlight({ popover: { description: "hi again!!"}}) // only lets you do one of these
 }
