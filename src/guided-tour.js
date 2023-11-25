@@ -67,7 +67,7 @@ const driverObj = driver({
     { 
       popover: { 
         title: 'Zoom', 
-        description: 'asoidjfidj' 
+        description: 'show how you can still write in a tiny card. find the right event terminology for both laptop/desktop and mobile.' 
       }
     },
     { 

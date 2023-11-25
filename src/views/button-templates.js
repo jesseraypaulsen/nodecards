@@ -1,10 +1,11 @@
 // http://fonts.google.com/icons
-import dragIcon from "../../assets/icons/drag_indicator_FILL0_wght200_GRAD0_opsz24.png";
-import deleteIcon from "../../assets/icons/delete_forever_FILL0_wght200_GRAD0_opsz24.png";
-import inertifyIcon from "../../assets/icons/swipe_down_alt_FILL0_wght200_GRAD0_opsz24.png";
-import branchIcon from "../../assets/icons/fork_right_FILL0_wght200_GRAD0_opsz24.png";
-import lockIcon from "../../assets/icons/lock_FILL1_wght200_GRAD0_opsz24.png";
-import lockOpenIcon from "../../assets/icons/lock_open_FILL0_wght200_GRAD0_opsz24.png";
+import dragIcon from "../../assets/icons/drag_indicator_FILL0_wght300_GRAD-25_opsz20.svg"
+import deleteIcon from "../../assets/icons/delete_forever_FILL0_wght200_GRAD-25_opsz20.svg";
+import inertifyIcon from "../../assets/icons/swipe_down_alt_FILL0_wght200_GRAD-25_opsz20.svg";
+import branchIcon from "../../assets/icons/fork_right_FILL0_wght200_GRAD-25_opsz20.svg"
+import lockIcon from "../../assets/icons/lock_FILL1_wght200_GRAD-25_opsz20.svg";
+import lockOpenIcon from "../../assets/icons/lock_open_FILL0_wght200_GRAD-25_opsz20.svg";
+
 
 export default (controllers, id) => {
   const eventType = "click";

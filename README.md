@@ -12,8 +12,6 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - bug: when the card is in "active.locked" some of the buttons should be disabled.
 
-- styles for link creation
-
 - refactor to improve structure, see app.js
 
 - bug: sometimes the nodecard opens when the node is dragged.
@@ -29,6 +27,14 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 - screencasts and/or snapshots (desktop)
 
 - add confirmation for deleting cards
+
+- after branch is clicked, the first card should temporarily change appearance somehow, and then it should collapse when second card is created/selected
+
+- the button menu should be collapsible.. and it should be collapsed by default
+
+- cards need to be smaller especially for mobile screens
+
+- some way of deriving titles for the collapsed nodes
 
 ---
 
