@@ -4,6 +4,7 @@ export const graphController = (send) => {
   const handlers = {
     nodecard: (e) => {
       send({ type: "decidePath", id: e.nodes[0] });
+      console.log(e)
     },
     link: (e) => {
       send({ type: "openLinkPrompt", id: e.edges[0], pointer: e.pointer });

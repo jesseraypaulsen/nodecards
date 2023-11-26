@@ -58,10 +58,24 @@ export default (network, send) => {
     });
   };
 
+  const hydratePositionedCard = ({ id, label, text, x, y }) => {
+    const canvasPosition = {x, y}
+    const domPosition = canvasToDOM({ x, y })
+    createCard({
+      label,
+      text,
+      domPosition,
+      canvasPosition,
+      id,
+      startInert: true
+    })
+  }
+
   return {
     hydrateCard,
     hydrateLink,
     //removeLink,
     calculatePositionThenCreate,
+    hydratePositionedCard
   };
 };

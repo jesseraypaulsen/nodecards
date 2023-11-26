@@ -1,17 +1,25 @@
 {
   "cards": [
-    { "id": "one", "label": "opponent processing", "text": "the first card" },
-    { "id": "two", "label": "attention", "text": "the second card" },
-    {
-      "id": "three",
-      "label": "evolution",
-      "text": "the third card",
-      "position": { "x": -350, "y": -300 }
-    }
+    { "id": "one", "label": "opponent processes", "text": "the first card", "x": 0, "y": 0 },
+    { "id": "two", "label": "attention", "text": "the second card", "x": -110, "y": -30 }, 
+    { "id": "three", "label": "evolution", "text": "the third card", "x": 130, "y": -30 },
+    { "id": "four", "label": "enabling constraint", "text": "adfsdff", "x": -10, "y": 160 },
+    { "id": "five", "label": "selective constraint", "text": "asdfdsfdfs", "x": 10, "y": -235 },
+    { "id": "six", "label": "default mode", "text": "asdfdsf", "x": -110, "y": 100 },
+    { "id": "seven", "label": "task-focused mode", "text": "adfdsfd", "x": -100, "y": -150 },
+    { "id": "eight", "label": "variation", "text": "asdfdsf", "x": 110, "y": 100 },
+    { "id": "nine", "label": "scarcity", "text": "adfdsfd", "x": 130, "y": -150 }
   ],
   "links": [
-    { "id": "a", "label": "a", "from": "one", "to": "two" },
-    { "id": "b", "label": "b", "from": "two", "to": "three" },
-    { "id": "c", "label": "c", "from": "three", "to": "one" }
+    { "id": "a", "label": "", "from": "one", "to": "two" },
+    { "id": "b", "label": "", "from": "one", "to": "three" },
+    { "id": "c", "label": "", "from": "four", "to": "six" },
+    { "id": "d", "label": "", "from": "four", "to": "eight" },
+    { "id": "e", "label": "", "from": "five", "to": "seven" },
+    { "id": "f", "label": "", "from": "five", "to": "nine" },
+    { "id": "g", "label": "", "from": "two", "to": "six" },
+    { "id": "h", "label": "", "from": "two", "to": "seven" },
+    { "id": "i", "label": "", "from": "three", "to": "eight" },
+    { "id": "j", "label": "", "from": "three", "to": "nine" }
   ]
 }

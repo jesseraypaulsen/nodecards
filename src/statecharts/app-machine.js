@@ -16,7 +16,8 @@ export const appMachine = (runChildEffect) =>
       },
       states: {
         mode: {
-          initial: "initializing",
+          //initial: "initializing",
+          initial: "enabled",
           states: {
             enabled: {
               initial: "linkCreation_OFF",
@@ -184,7 +185,7 @@ export const appMachine = (runChildEffect) =>
                 },
               },
               after: {
-                1000: { target: "enabled" },
+                2000: { target: "enabled" },
               },
             },
             disabled: {
@@ -205,6 +206,7 @@ export const appMachine = (runChildEffect) =>
         },
         physics: {
           initial: "initializing",
+          //initial: 'disabled',
           states: {
             initializing: {
               on: {
@@ -230,7 +232,7 @@ export const appMachine = (runChildEffect) =>
       actions: {
         createCard: assign({
           cards: (context, event) => {
-            const { id, label, text, domPosition, canvasPosition } = event;
+            const { id, label, text, domPosition, canvasPosition, startInert = false } = event;
             return context.cards.concat({
               id,
               ref: spawn(
@@ -240,7 +242,7 @@ export const appMachine = (runChildEffect) =>
                   label,
                   domPosition,
                   canvasPosition,
-                  startInert: false,
+                  startInert
                 }),
                 {
                   name: id,
@@ -254,6 +256,7 @@ export const appMachine = (runChildEffect) =>
         }),
         hydrateCard: assign({
           cards: (context, event) => {
+            console.log(event)
             const { id, label, text } = event;
             return context.cards.concat({
               id,

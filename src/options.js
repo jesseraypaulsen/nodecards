@@ -2,13 +2,15 @@ export const options = {
   nodes: {
     font: {
       color: "#ffffff",
+      size: 12
     },
+    widthConstraint: { maximum: 70 },
     shape: "box",
     shadow: true,
     color: "#b3a5f7",
   },
   physics: {
-    enabled: true,
+    enabled: false,
   },
   interaction: {
     dragView: true,

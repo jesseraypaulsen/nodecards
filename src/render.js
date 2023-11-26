@@ -5,11 +5,16 @@ export default function Render(
   synchSettingsPanel,
   hydrateCard,
   hydrateLink,
-  peripheralEffects
+  peripheralEffects,
+  hydratePositionedCard
 ) {
-  // TODO: 'invoke' data calls from XState?
+
+  // initialize when the dataset does not provide positions for the nodes.
+  // the layout algorithm will generate positions. the state machine
+  // should be set to start in the mode.initializing state. the state machine will then move to
+  // mode.enabled after a period of time, and in this state physics will be turned off.
   const init = (data) => {
-    data.cards.map(({ id, label, text, position }) => {
+    data.cards.map(({ id, label, text }) => {
       hydrateCard({ id, label, text });
     });
 
@@ -17,6 +22,17 @@ export default function Render(
       hydrateLink({ id, label, from, to });
     });
   };
+
+  // initialize positioned data. the state machine should be set to start in the mode.enabled stated.
+  const initPositioned = (data) => {
+    data.cards.map(({ id, label, text, x, y }) => {
+      hydratePositionedCard({ id, label, text, x, y });
+    });
+
+    data.links.map(({ id, label, from, to }) => {
+      hydrateLink({ id, label, from, to });
+    });
+  }
 
   const render = (state, event) => {
     synchSettingsPanel(event);
@@ -26,7 +42,7 @@ export default function Render(
     else runParentEffect(eventType, data);
   };
 
-  return { init, render };
+  return { init: initPositioned, render };
 }
 
 function processParentState(state, event) {

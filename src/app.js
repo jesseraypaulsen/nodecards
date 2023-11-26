@@ -23,8 +23,11 @@ import "../assets/styles/prompt.css";
 import data from "../data/vervaeke.json";
 import { guidedTour } from "./guided-tour";
 
-
 const container = document.querySelector("#container");
+
+// when App mode is off, prevent context menu from opening when you click and hold a node
+container.addEventListener('contextmenu', (e) => e.preventDefault())
+
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
 
@@ -49,7 +52,7 @@ const { setupParentEffect, runChildEffect } = DeckManager(
 );
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
-const { calculatePositionThenCreate, hydrateCard, hydrateLink } = wrappers;
+const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositionedCard } = wrappers;
 const { panelControllers, linkPromptController } = peripheralControllers(
   service.send
 );
@@ -135,6 +138,10 @@ network.on("doubleClick", (e) => {
   }
 });
 
+network.on('click', (e) => {
+  console.log(e)
+})
+
 const peripheralEffects = {
   turnPhysicsOff: () => setPhysics(false),
   turnPhysicsOn: () => setPhysics(true),
@@ -173,7 +180,8 @@ const { init, render } = Render(
   synchPanel,
   hydrateCard,
   hydrateLink,
-  peripheralEffects
+  peripheralEffects,
+  hydratePositionedCard
 );
 
 // subscribe views

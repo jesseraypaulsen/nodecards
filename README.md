@@ -34,6 +34,8 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - animation effect on buttons
 
+- improve appearance of Delete Link prompt
+
 ---
 
 SOMEDAY/MAYBE
