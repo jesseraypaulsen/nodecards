@@ -1,6 +1,8 @@
+import mouseCursor from "../assets/mouse-cursor.png";
+import "../assets/styles/guided-tour.css";
 const driver = window.driver.js.driver;
 
-export const guidedTour = (send, calculatePositionThenCreate) => {
+export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
 
   const driverObj = driver({
     showProgress: true,
@@ -40,11 +42,6 @@ export const guidedTour = (send, calculatePositionThenCreate) => {
           });
 
           //driverObj.setConfig({ overlayOpacity: 0}) //erases the steps
-
-          // calculatePositionThenCreate("adfsdijij", "aeoiocijaji", "aoimcpijioej", {
-          //   "x": 780,
-          //   "y": 295
-          // })
         },
         onDeselected: () => console.log('once more.. hi!'),
       },
@@ -61,18 +58,35 @@ export const guidedTour = (send, calculatePositionThenCreate) => {
           title: 'Title', 
           description: 'Description',
           onNextClick: (el, step, options) => {
-            calculatePositionThenCreate("newCard", "new card", "blah blah blah blah blah blah blah", {
-              //DOM coordinates
-              "x": 180,
-              "y": 280
-            })
 
-            // crude hack.. delay next step so that the new nodecard has time to fully materialize, 
-            // and erase the lingering popover div from this current step in the meantime
-            setTimeout(() => {
-              driverObj.moveNext();
-            }, 1000)
-            console.log(options.state.popover.wrapper)
+            const fakeMouseCursor = document.createElement('img')
+            fakeMouseCursor.classList.add("fake-mouse-cursor")
+            fakeMouseCursor.src = mouseCursor;
+            document.querySelector('#container').append(fakeMouseCursor)
+            
+            const domPositions = canvasToDOM({ x: -5, y: 65 })
+            console.log('domPositions: ', domPositions)
+
+            const afterFakeMouseClick = () => {
+
+              console.log('afterFakeMouseClick')
+              createPositionedCard({id: "newCard", label: "new card", text: "blah blah blah", x: -5, y: 65, startInert: false })
+
+              // crude hack.. delay next step so that the new nodecard has time to fully expand 
+              
+              //TODO: callback for after nodecard expansion animation?
+              setTimeout(() => {
+                driverObj.moveNext();
+                console.log('moveNext')
+              }, 1000)
+
+            }
+            fakeMouseCursor.animate([
+              { top: "99%", right: "1%" },
+              { top: domPositions.y + 'px', right: domPositions.x + 'px' }
+            ], 2000).onfinish = afterFakeMouseClick;
+              
+            // erase the lingering popover div from this current step in the meantime
             options.state.popover.wrapper.style = "display:none;"
           },
         } 
@@ -106,7 +120,7 @@ export const guidedTour = (send, calculatePositionThenCreate) => {
           title: 'Create', 
           description: 'double-click on empty space' 
         },
-        onDeselected: () => guided2er(send, calculatePositionThenCreate)
+        onDeselected: () => guided2er(send)
       },
     ]
   });
@@ -121,7 +135,7 @@ export const guidedTour = (send, calculatePositionThenCreate) => {
 
 }
 
-export const guided2er = (send, calculatePositionThenCreate) => {
+export const guided2er = (send) => {
   const driverObj = driver()
   driverObj.highlight({ popover: { description: "hi!"}})
   //driverObj.highlight({ popover: { description: "hi again!!"}}) // only lets you do one of these

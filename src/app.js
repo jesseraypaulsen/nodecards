@@ -52,7 +52,7 @@ const { setupParentEffect, runChildEffect } = DeckManager(
 );
 const service = interpret(appMachine(runChildEffect));
 const wrappers = Wrappers(network, service.send);
-const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositionedCard } = wrappers;
+const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositionedCard, canvasToDOM } = wrappers;
 const { panelControllers, linkPromptController } = peripheralControllers(
   service.send
 );
@@ -184,6 +184,9 @@ const { init, render } = Render(
   hydratePositionedCard
 );
 
+// alias
+const createPositionedCard = hydratePositionedCard;
+
 // subscribe views
 service.onTransition((state, event) => {
   if (state.event.type === "xstate.init") init(data);
@@ -192,4 +195,4 @@ service.onTransition((state, event) => {
 
 service.start();
 
-guidedTour(service.send, calculatePositionThenCreate)
+guidedTour(service.send, createPositionedCard, canvasToDOM)

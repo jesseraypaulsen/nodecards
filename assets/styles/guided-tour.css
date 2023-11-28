@@ -1,0 +1,9 @@
+.fake-mouse-cursor {
+  position: absolute;
+}
+
+
+/* @keyframes mouse-cursor-move {
+  from { bottom: 2em; right: 5em; }
+   to { bottom: 20em; right: 30em; } 
+} */
