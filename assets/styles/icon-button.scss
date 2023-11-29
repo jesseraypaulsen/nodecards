@@ -13,3 +13,7 @@
 .button.drag {
   cursor: grab;
 }
+
+.button:active {
+  transform: translateY(.15em);
+}

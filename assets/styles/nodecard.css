@@ -18,6 +18,10 @@
   /* word-wrap: break-word; */
 }
 
+.nodecard.linking-from {
+  border: 2px solid orange;
+}
+
 /* selects both .reader and .editor */
 .nodecard > :first-child {
   font-family: Times, "Times New Roman", Georgia, serif;

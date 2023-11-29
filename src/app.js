@@ -155,6 +155,11 @@ const catchActiveCardEvent = (id) => {
   const domCards = Array.from(container.querySelectorAll(".nodecard")).filter(
     (el) => el.dataset.id !== id
   );
+  console.log('catchActiveCardEvent', domCards)
+
+  const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == id)
+  fromCard.classList.add('linking-from')
+
   const handler = (e, id) => {
     service.send({
       type: "createLinkIfLinkCreationIsOn",
@@ -163,11 +168,15 @@ const catchActiveCardEvent = (id) => {
     domCards.forEach((el) => {
       el.removeEventListener("click", handler);
     });
+    //fromCard.classList.remove('linking-from')
+    //console.log('handler in catchActiveCardEvent.. ', fromCard)
   };
+
   domCards.forEach((el) => {
     const id = el.dataset.id;
     el.addEventListener("click", (e) => handler(e, id));
   });
+
 };
 
 const runParentEffect = setupParentEffect({
@@ -189,6 +198,17 @@ const createPositionedCard = hydratePositionedCard;
 
 // subscribe views
 service.onTransition((state, event) => {
+
+  if (event.type == "createLink") {
+
+    const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == event.from)
+
+    if (fromCard !== -1) {
+      if (fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
+    }
+  
+  }
+
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

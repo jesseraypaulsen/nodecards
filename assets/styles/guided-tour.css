@@ -2,6 +2,7 @@
   position: absolute;
 }
 
+/* because the driver.js config option disableActiveInteraction does not work, so this overwrites the class */
 .driver-active-element, .driver-active-element * {
   pointer-events: none !important;
 }
