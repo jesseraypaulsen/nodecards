@@ -151,12 +151,13 @@ const peripheralEffects = {
 settingsPanel(panelControllers);
 const _nodecardControllers = nodecardControllers(container, service.send);
 
+// for linking to nodecards that are currently expanded
 const catchActiveCardEvent = (id) => {
   const domCards = Array.from(container.querySelectorAll(".nodecard")).filter(
     (el) => el.dataset.id !== id
   );
-  console.log('catchActiveCardEvent', domCards)
 
+  // highlight the card that the link originates from
   const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == id)
   fromCard.classList.add('linking-from')
 
@@ -168,8 +169,6 @@ const catchActiveCardEvent = (id) => {
     domCards.forEach((el) => {
       el.removeEventListener("click", handler);
     });
-    //fromCard.classList.remove('linking-from')
-    //console.log('handler in catchActiveCardEvent.. ', fromCard)
   };
 
   domCards.forEach((el) => {
@@ -202,11 +201,11 @@ service.onTransition((state, event) => {
   if (event.type == "createLink") {
 
     const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == event.from)
+    
+    // remove the highlight from the card that originated the link
+    if (fromCard && fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
 
-    if (fromCard !== -1) {
-      if (fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
-    }
-  
+
   }
 
   if (state.event.type === "xstate.init") init(data);
