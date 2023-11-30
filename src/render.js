@@ -23,7 +23,7 @@ export default function Render(
     });
   };
 
-  // initialize positioned data. the state machine should be set to start in the mode.enabled stated.
+  // initialize positioned data. the state machine should be set to start in the mode.enabled state.
   const initPositioned = (data) => {
     data.cards.map(({ id, label, text, x, y }) => {
       hydratePositionedCard({ id, label, text, x, y });

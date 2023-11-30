@@ -62,7 +62,11 @@ const _graphController = graphController(service.send);
 network.on("click", _graphController);
 
 const sendPositions = (id, canvasPosition, domPosition) => {
-  service.send({ type: "setCardDOMPosition", id, domPosition });
+  service.send({ 
+    type: "setCardDOMPosition", 
+    id, 
+    domPosition });
+
   service.send({
     type: "setCardCanvasPosition",
     id,
@@ -151,15 +155,26 @@ const peripheralEffects = {
 settingsPanel(panelControllers);
 const _nodecardControllers = nodecardControllers(container, service.send);
 
+// highlight the card that the link originates from
+const startHighlightingSourceCard = (id) => {
+  const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == id)
+  fromCard.classList.add('linking-from')
+}
+
+// remove the highlight from the card that originated the link
+const stopHighlightingSourceCard = (from) => {
+  const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == from)
+  if (fromCard && fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
+}
+
 // for linking to nodecards that are currently expanded
 const catchActiveCardEvent = (id) => {
+
   const domCards = Array.from(container.querySelectorAll(".nodecard")).filter(
     (el) => el.dataset.id !== id
   );
 
-  // highlight the card that the link originates from
-  const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == id)
-  fromCard.classList.add('linking-from')
+  startHighlightingSourceCard(id)
 
   const handler = (e, id) => {
     service.send({
@@ -178,9 +193,11 @@ const catchActiveCardEvent = (id) => {
 
 };
 
+
 const runParentEffect = setupParentEffect({
   controllers: _nodecardControllers,
   catchActiveCardEvent,
+  stopHighlightingSourceCard
 });
 
 const { init, render } = Render(
@@ -197,17 +214,6 @@ const createPositionedCard = hydratePositionedCard;
 
 // subscribe views
 service.onTransition((state, event) => {
-
-  if (event.type == "createLink") {
-
-    const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == event.from)
-    
-    // remove the highlight from the card that originated the link
-    if (fromCard && fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
-
-
-  }
-
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

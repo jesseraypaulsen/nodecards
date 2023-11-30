@@ -10,8 +10,6 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - bug: after you zoom out, when you drag the active card the element and the node fall out of synch. likewise if you open the console (or close it if it was open when the app first loaded), or change the browser vieport size in any other way.
 
-- bug: when the card is in "active.locked" some of the buttons should be disabled.
-
 - refactor to improve structure, see app.js
 
 - bug: sometimes the nodecard opens when the node is dragged.
@@ -27,8 +25,6 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 - add confirmation for deleting cards
 
 - some way of deriving titles for the collapsed nodes. you could specify a special syntax for marking the title within the text content.
-
-- hide canvas node when card is expanded.. now that the card is smaller the node momentarily peeks out beyond the edges of the card when you're dragging it. perhaps using the 'opacity' property.. see https://visjs.github.io/vis-network/docs/network/nodes.html. you might be able to put this property on the card machine. see app.js, library-wrapper.js, app-machine.js and card-machine.js .
 
 - improve appearance of Delete Link prompt
 
