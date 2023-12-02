@@ -81,7 +81,12 @@ export const appMachine = (runChildEffect) =>
                     },
                     cancelLinkCreation: {
                       target: "linkCreation_OFF",
+                      cond: 'isSourceCard'
                     },
+                    // if the link button is clicked a second time on the source card
+                    BRANCH: {
+                      actions: [send((_, {from}) => ({type: 'cancelLinkCreation', from}))]
+                    }
                   },
                 },
                 linkCreation_OFF: {
@@ -229,6 +234,12 @@ export const appMachine = (runChildEffect) =>
       },
     },
     {
+      guards: {
+        isSourceCard: (context, event) => {
+          console.log('hi!', context, event)
+          return context.linkCreation.from == event.from
+        },
+      },
       actions: {
         createCard: assign({
           cards: (context, event) => {

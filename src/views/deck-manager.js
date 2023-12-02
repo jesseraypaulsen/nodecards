@@ -30,7 +30,7 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
-  const parentEffects = ({ controllers, catchActiveCardEvent, stopHighlightingSourceCard }) => ({
+  const parentEffects = ({ controllers, catchActiveCardEvent, startHighlightingSourceCard, stopHighlightingSourceCard }) => ({
     /*destroyCard: ({ id }) => {
       removeCard(id);
       This fails because it gets called no matter what state the parent machine is in.
@@ -64,10 +64,15 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
     },
     createLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));
-      stopHighlightingSourceCard(from)
+      stopHighlightingSourceCard(from);
     },
     catchActiveCardEvent: ({ id }) => {
       catchActiveCardEvent(id);
+      startHighlightingSourceCard(id);
+    },
+    cancelLinkCreation: ({from}) => { 
+      console.log('cancelLinkCreation')
+      stopHighlightingSourceCard(from)
     },
     destroyLink: ({ id }) => {
       removeLink(id);

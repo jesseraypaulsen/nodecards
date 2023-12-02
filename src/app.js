@@ -73,6 +73,7 @@ const sendPositions = (id, canvasPosition, domPosition) => {
     canvasPosition,
   });
 };
+
 const synchDOMWithGraph = () => {
   const canvasPositions = network.getPositions();
   const ids = Object.keys(canvasPositions);
@@ -84,12 +85,6 @@ const synchDOMWithGraph = () => {
   });
 };
 
-//TODO, not working
-//https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport
-// visualViewport.onresize = e => {
-//   synchDOMWithGraph()
-//   console.log('synchDOMWithGraph called')
-// }
 
 const scaleActiveCards = (e) => {
   const rootStyle = document.querySelector(":root");
@@ -104,23 +99,19 @@ network.on("zoom", (e) => {
   scaleActiveCards(e);
 });
 
+//TODO, not working
+//https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport
+// visualViewport.onresize = e => {
+//   synchDOMWithGraph()
+//   console.log('synchDOMWithGraph called')
+// }
+
 network.on("resize", (e) => {
   setTimeout(() => synchDOMWithGraph(), 100);
 });
 
 network.on("dragging", (e) => {
   if (e.nodes[0]) {
-    // dragging node
-    // service.send({
-    //   type: "setCardDOMPosition",
-    //   id: e.nodes[0],
-    //   domPosition: e.pointer.DOM,
-    // });
-    // service.send({
-    //   type: "setCardCanvasPosition",
-    //   id: e.nodes[0],
-    //   canvasPosition: e.pointer.canvas,
-    // });
     sendPositions(e.nodes[0], e.pointer.canvas, e.pointer.DOM);
   } else {
     // dragging view
@@ -174,8 +165,6 @@ const catchActiveCardEvent = (id) => {
     (el) => el.dataset.id !== id
   );
 
-  startHighlightingSourceCard(id)
-
   const handler = (e, id) => {
     service.send({
       type: "createLinkIfLinkCreationIsOn",
@@ -197,6 +186,7 @@ const catchActiveCardEvent = (id) => {
 const runParentEffect = setupParentEffect({
   controllers: _nodecardControllers,
   catchActiveCardEvent,
+  startHighlightingSourceCard,
   stopHighlightingSourceCard
 });
 
@@ -214,6 +204,7 @@ const createPositionedCard = hydratePositionedCard;
 
 // subscribe views
 service.onTransition((state, event) => {
+  console.log(state)
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });
