@@ -1,6 +1,6 @@
 import { isValid } from "../utils.js";
 
-export default function DeckManager(cardFace, createEdge, removeEdge) {
+export default function DeckManager(cardFace, { createEdge, removeEdge }) {
   let nodecards = [];
   let links = [];
   //let zoomScale = 1;
@@ -30,6 +30,7 @@ export default function DeckManager(cardFace, createEdge, removeEdge) {
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
+  //const parentEffects = ({ controllers, startHighlightingSourceCard, stopHighlightingSourceCard }) => ({
   const parentEffects = ({ controllers, startHighlightingSourceCard, stopHighlightingSourceCard }) => ({
     /*destroyCard: ({ id }) => {
       removeCard(id);

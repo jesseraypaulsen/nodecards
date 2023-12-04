@@ -335,6 +335,7 @@ function runRunChildEffect(runChildEffect, state, event) {
 }
 
 function processChildState(state, event) {
+  
   // when the parent machine transitions to 'mode.disabled', prevent the inertify effect for cards that are already inert
   if (
     state.history &&
@@ -343,6 +344,7 @@ function processChildState(state, event) {
     event.type === "INERTIFY"
   )
     return;
+
   else if (event.type === "activate") {
     if (state.matches("active.unlocked")) {
       return "activateUnlocked";
@@ -350,5 +352,6 @@ function processChildState(state, event) {
       return "activateLocked";
     }
   }
+
   return event.type;
 }

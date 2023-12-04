@@ -1,3 +1,9 @@
+import peripheralControllers from "./peripheral-controllers";
+import promptViews from "../views/prompt";
+//import { settingsPanel, synchPanel } from "../views/settings-panel";
+import { settingsPanel } from "../views/settings-panel";
+
+
 export default (network, send) => {
   // vis-network adapters
 
@@ -71,12 +77,33 @@ export default (network, send) => {
     })
   }
 
+  const setPhysics = (value) => {
+    const options = { physics: { enabled: value } };
+    network.setOptions(options);
+  };
+  const { panelControllers, linkPromptController } = peripheralControllers(
+    send
+  );
+  
+  const openLinkPrompt = promptViews(linkPromptController);
+
+  const peripheralEffects = {
+    turnPhysicsOff: () => setPhysics(false),
+    turnPhysicsOn: () => setPhysics(true),
+    openLinkPrompt: (e) => openLinkPrompt(e),
+  };
+
+  settingsPanel(panelControllers);
+
+
+
   return {
     hydrateCard,
     hydrateLink,
     //removeLink,
     calculatePositionThenCreate,
     hydratePositionedCard,
-    canvasToDOM
+    canvasToDOM,
+    peripheralEffects
   };
 };
