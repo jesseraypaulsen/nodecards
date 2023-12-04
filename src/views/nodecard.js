@@ -33,7 +33,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       canvasPosition = nextCanvasPosition;
     };
 
-    const { editorController, buttonsControllers } = controllers(
+    const { editorController, buttonsControllers, linkTargetController } = controllers(
       getLinksForCard,
       getCanvasPosition,
       getDomPosition
@@ -49,7 +49,8 @@ export default (graphAdapterFactory, domAdapterFactory) =>
       getText,
       getId,
       editorController,
-      buttonsControllers
+      buttonsControllers,
+      linkTargetController
     );
 
     const { createNode, createNodeWithKnownPosition } = graphAdapter;

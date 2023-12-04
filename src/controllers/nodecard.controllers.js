@@ -3,6 +3,7 @@ import drag from "../views/drag";
 
 export default (container, send) =>
   (getLinksForCard, getCanvasPosition, getDomPosition) => {
+
     const editorController = (e, id) => {
       send({
         type: "mediate",
@@ -10,6 +11,7 @@ export default (container, send) =>
         data: { text: e.target.value, id },
       });
     };
+
     const buttonsControllers = {
       unlock: (id) =>
         send({ type: "mediate", childType: "UNLOCK", data: { id } }),
@@ -33,8 +35,16 @@ export default (container, send) =>
       },
     };
 
+    const linkTargetController = (id) => {
+      send({
+        type: "createLinkIfLinkCreationIsOn",
+        to: id,
+      });
+    }
+
     return {
       editorController,
       buttonsControllers,
+      linkTargetController
     };
   };

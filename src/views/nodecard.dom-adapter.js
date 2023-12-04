@@ -4,7 +4,7 @@ import createButtonBar from "./button-bar";
 
 export const domAdapterFactory =
   //(activeTemplates, buttonTemplates) =>
-  (getDomPosition, getText, getId, editorController, buttonsControllers) => {
+  (getDomPosition, getText, getId, editorController, buttonsControllers, linkTargetController) => {
     //the closured variable must be a property of an object,
     //or its mutations will be inaccessible to the methods.
     let _private = { el: {} };
@@ -12,7 +12,7 @@ export const domAdapterFactory =
     return {
       ...elementRemover(_private),
       ...elementPositioner(_private, getDomPosition),
-      ...containerOpener(_private, getId),
+      ...containerOpener(_private, getId, linkTargetController),
       ...elementFiller(_private),
       ...editorUpdater(_private, getText),
       ...collapser(_private),
@@ -66,10 +66,11 @@ const createEditor =
     bar: createButtonBar(getId(), null, buttonsControllers).editorBar(),
   });
 
-const containerOpener = (_, getId) => ({
+const containerOpener = (_, getId, linkTargetController) => ({
   openContainer() {
     _.el = div("nodecard", "expand");
     _.el.dataset.id = getId();
+    _.el.addEventListener("click", () => linkTargetController(getId()))
     const rootStyle = getComputedStyle(document.querySelector(":root"));
     const zs = rootStyle.getPropertyValue("--zoom-scale");
     _.el.style.transform = `scale(${zs})`;

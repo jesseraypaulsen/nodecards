@@ -28,10 +28,13 @@ const container = document.querySelector("#container");
 // when App mode is off, prevent context menu from opening when you click and hold a node
 container.addEventListener('contextmenu', (e) => e.preventDefault())
 
+//TODO: import network API from within graph-adapter.js
 const network = new vis.Network(container, {}, options);
 const graphAdapterFactory = graphAdapterFactoryFactory(network);
 
 const cardFace = nodecard(graphAdapterFactory, domAdapterFactory);
+
+//TODO: createEdge, removeEdge, setPhysics should go in graph-adapter.js
 const createEdge = (argsObject) => {
   network.body.data.edges.add(argsObject);
   return argsObject;
@@ -51,8 +54,9 @@ const { setupParentEffect, runChildEffect } = DeckManager(
   removeEdge
 );
 const service = interpret(appMachine(runChildEffect));
-const wrappers = Wrappers(network, service.send);
-const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositionedCard, canvasToDOM } = wrappers;
+
+const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositionedCard, canvasToDOM } = Wrappers(network, service.send);
+
 const { panelControllers, linkPromptController } = peripheralControllers(
   service.send
 );
@@ -144,6 +148,7 @@ const peripheralEffects = {
 };
 
 settingsPanel(panelControllers);
+
 const _nodecardControllers = nodecardControllers(container, service.send);
 
 // highlight the card that the link originates from
@@ -158,34 +163,9 @@ const stopHighlightingSourceCard = (from) => {
   if (fromCard && fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
 }
 
-// for linking to nodecards that are currently expanded
-const catchActiveCardEvent = (id) => {
-
-  const domCards = Array.from(container.querySelectorAll(".nodecard")).filter(
-    (el) => el.dataset.id !== id
-  );
-
-  const handler = (e, id) => {
-    service.send({
-      type: "createLinkIfLinkCreationIsOn",
-      to: id,
-    });
-    domCards.forEach((el) => {
-      el.removeEventListener("click", handler);
-    });
-  };
-
-  domCards.forEach((el) => {
-    const id = el.dataset.id;
-    el.addEventListener("click", (e) => handler(e, id));
-  });
-
-};
-
 
 const runParentEffect = setupParentEffect({
   controllers: _nodecardControllers,
-  catchActiveCardEvent,
   startHighlightingSourceCard,
   stopHighlightingSourceCard
 });

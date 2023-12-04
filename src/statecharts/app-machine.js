@@ -35,7 +35,7 @@ export const appMachine = (runChildEffect) =>
                       }),
                     }),
                     send((_, { from }) => ({
-                      type: "catchActiveCardEvent",
+                      type: "highlightSourceCard",
                       id: from,
                     })),
                   ],
@@ -74,6 +74,9 @@ export const appMachine = (runChildEffect) =>
                           to,
                         })),
                       ],
+                      cond: 'isNotSourceCard' 
+                      // expanded cards always send 'createLinkIfCreationIsOn' event when user interacts with them,
+                      // including whenever you click on the link button. so this guard prevents the source card from linking to itself.
                     },
                     // the "createLink" event is both sent and received from within the same state
                     createLink: {
@@ -83,7 +86,7 @@ export const appMachine = (runChildEffect) =>
                       target: "linkCreation_OFF",
                       cond: 'isSourceCard'
                     },
-                    // if the link button is clicked a second time on the source card
+                    // cancel link creation if the link button is clicked a second time on the source card
                     BRANCH: {
                       actions: [send((_, {from}) => ({type: 'cancelLinkCreation', from}))]
                     }
@@ -236,9 +239,11 @@ export const appMachine = (runChildEffect) =>
     {
       guards: {
         isSourceCard: (context, event) => {
-          console.log('hi!', context, event)
           return context.linkCreation.from == event.from
         },
+        isNotSourceCard: (context, event) => {
+          return context.linkCreation.from !== event.to
+        }
       },
       actions: {
         createCard: assign({
