@@ -36,6 +36,8 @@ const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositioned
 
 graphAdapterFactories.d(service.send, canvasToDOM, calculatePositionThenCreate)
 
+//TODO: highlighting functions should come from nodecard.controller.js
+
 // highlight the card that the link originates from
 const startHighlightingSourceCard = (id) => {
   const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == id)
@@ -48,8 +50,10 @@ const stopHighlightingSourceCard = (from) => {
   if (fromCard && fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
 }
 
+const controllers = nodecardControllers(container, service.send)
+
 const runParentEffect = setupParentEffect({
-  controllers: nodecardControllers(container, service.send),
+  controllers,
   startHighlightingSourceCard,
   stopHighlightingSourceCard
 });

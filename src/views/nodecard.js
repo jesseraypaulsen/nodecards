@@ -32,7 +32,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     const setCanvasPosition = (nextCanvasPosition) => {
       canvasPosition = nextCanvasPosition;
     };
-    console.log(controllers)
+
     const { editorController, buttonsControllers, linkTargetController } = controllers(
       getLinksForCard,
       getCanvasPosition,

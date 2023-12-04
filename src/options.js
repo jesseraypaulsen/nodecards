@@ -15,6 +15,7 @@ export const options = {
   interaction: {
     dragView: true,
     zoomView: true,
+    selectConnectedEdges: false
   },
 };
 

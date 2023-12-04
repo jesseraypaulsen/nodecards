@@ -30,7 +30,6 @@ export default function DeckManager(cardFace, { createEdge, removeEdge }) {
     nodecards = [...nodecards.filter((card) => card.getId() !== id)];
   };
 
-  //const parentEffects = ({ controllers, startHighlightingSourceCard, stopHighlightingSourceCard }) => ({
   const parentEffects = ({ controllers, startHighlightingSourceCard, stopHighlightingSourceCard }) => ({
     /*destroyCard: ({ id }) => {
       removeCard(id);
