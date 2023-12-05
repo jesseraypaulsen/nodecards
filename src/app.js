@@ -7,6 +7,7 @@ import { domAdapterFactory } from "./views/nodecard.dom-adapter";
 import { synchPanel } from "./views/synch-settings-panel"
 import graphAdapterFactoryFactory from "./views/graph-adapter";
 import nodecardControllers from "./controllers/nodecard.controllers";
+import { stopHighlightingSourceCard, startHighlightingSourceCard } from "./views/highlight-source-card";
 import "../assets/styles/main.css";
 import "../assets/styles/settings-panel.css";
 import "../assets/styles/nodecard.css";
@@ -36,19 +37,6 @@ const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositioned
 
 graphAdapterFactories.d(service.send, canvasToDOM, calculatePositionThenCreate)
 
-//TODO: highlighting functions should come from nodecard.controller.js
-
-// highlight the card that the link originates from
-const startHighlightingSourceCard = (id) => {
-  const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == id)
-  fromCard.classList.add('linking-from')
-}
-
-// remove the highlight from the card that originated the link
-const stopHighlightingSourceCard = (from) => {
-  const fromCard = Array.from(container.querySelectorAll(".nodecard")).find(el => el.dataset.id == from)
-  if (fromCard && fromCard.classList.contains('linking-from')) fromCard.classList.remove('linking-from')
-}
 
 const controllers = nodecardControllers(container, service.send)
 
