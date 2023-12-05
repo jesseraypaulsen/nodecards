@@ -66,6 +66,8 @@ export default function graphAdapterFactoryFactory(container) {
  
   const d = (send, canvasToDOM, calculatePositionThenCreate) => {
 
+
+
     const sendPositions = (id, canvasPosition, domPosition) => {
       send({ 
         type: "setCardDOMPosition", 

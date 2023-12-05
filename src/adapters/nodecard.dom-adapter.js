@@ -1,6 +1,6 @@
-import { render, div, setPosition } from "./dom-helpers";
-import activeTemplates from "./active-templates";
-import createButtonBar from "./button-bar";
+import { render, div, setPosition } from "../views/dom-helpers";
+import activeTemplates from "../views/active-templates";
+import createButtonBar from "../views/button-bar";
 
 export const domAdapterFactory =
   //(activeTemplates, buttonTemplates) =>

@@ -3,9 +3,9 @@ import { appMachine } from "./statecharts/app-machine";
 import Render from "./render";
 import DeckManager from "./views/deck-manager";
 import nodecard from "./views/nodecard";
-import { domAdapterFactory } from "./views/nodecard.dom-adapter";
+import { domAdapterFactory } from "./adapters/nodecard.dom-adapter";
 import { synchPanel } from "./views/synch-settings-panel"
-import graphAdapterFactoryFactory from "./views/graph-adapter";
+import graphAdapterFactoryFactory from "./adapters/graph-adapter";
 import nodecardControllers from "./controllers/nodecard.controllers";
 import { stopHighlightingSourceCard, startHighlightingSourceCard } from "./views/highlight-source-card";
 import "../assets/styles/main.css";
@@ -33,7 +33,7 @@ const { setupParentEffect, runChildEffect } = DeckManager(
 
 const service = interpret(appMachine(runChildEffect));
 
-const { calculatePositionThenCreate, hydrateCard, hydrateLink, hydratePositionedCard, canvasToDOM, peripheralEffects } = graphAdapterFactories.c(service.send);
+const { hydrateCard, hydrateLink, calculatePositionThenCreate, hydratePositionedCard, canvasToDOM, peripheralEffects } = graphAdapterFactories.c(service.send);
 
 graphAdapterFactories.d(service.send, canvasToDOM, calculatePositionThenCreate)
 

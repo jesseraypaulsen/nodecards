@@ -64,6 +64,8 @@ export default (network, send) => {
     });
   };
 
+
+
   const hydratePositionedCard = ({ id, label, text, x, y, startInert = true }) => {
     const canvasPosition = {x, y}
     const domPosition = canvasToDOM({ x, y })
@@ -104,6 +106,7 @@ export default (network, send) => {
     calculatePositionThenCreate,
     hydratePositionedCard,
     canvasToDOM,
+    DOMtoCanvas,
     peripheralEffects
   };
 };
