@@ -1,5 +1,6 @@
 import fillTemplates from "./button-templates";
 import { div, span } from "./dom-helpers";
+import "../../assets/styles/icon-button.scss";
 
 //createButtonBar
 export default (id, source, controllers) => {

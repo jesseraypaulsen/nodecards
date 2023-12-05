@@ -1,6 +1,8 @@
 import { render, div, setPosition } from "../views/dom-helpers";
 import activeTemplates from "../views/active-templates";
 import createButtonBar from "../views/button-bar";
+import "../../assets/styles/nodecard.css";
+
 
 export const domAdapterFactory =
   //(activeTemplates, buttonTemplates) =>

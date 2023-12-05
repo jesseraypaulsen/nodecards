@@ -9,11 +9,6 @@ import graphAdapterFactoryFactory from "./adapters/graph-adapter";
 import nodecardControllers from "./controllers/nodecard.controllers";
 import { stopHighlightingSourceCard, startHighlightingSourceCard } from "./views/highlight-source-card";
 import "../assets/styles/main.css";
-import "../assets/styles/settings-panel.css";
-import "../assets/styles/nodecard.css";
-import "../assets/styles/icon-button.scss";
-import "../assets/styles/tooltip.scss";
-import "../assets/styles/prompt.css";
 import data from "../data/vervaeke.json";
 import { guidedTour } from "./guided-tour";
 

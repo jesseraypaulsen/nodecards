@@ -1,4 +1,6 @@
 import { render, qs, div, setPosition } from "./dom-helpers";
+import "../../assets/styles/prompt.css";
+
 
 export default function promptViews(linkPromptController) {
   const openLinkPrompt = ({

@@ -1,4 +1,6 @@
 import { qs, render, div } from "./dom-helpers";
+import "../../assets/styles/settings-panel.css";
+
 
 export function settingsPanel(controllers) {
   const cp = div("control-panel");
