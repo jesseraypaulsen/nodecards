@@ -105,6 +105,7 @@ export default function graphAdapterFactoryFactory(container) {
     network.on("zoom", (e) => {
       synchDOMWithGraph();
       scaleActiveCards(e);
+      console.log('zoom!!!!')
     });
     
     //TODO, not working
@@ -146,6 +147,55 @@ export default function graphAdapterFactoryFactory(container) {
     
   }
   
-  
-  return { a, b, c, d } 
+  const zooming = (scale, send) => {
+
+    //TODO: factor out duplicate functions (sendPositions, synchDOMwithGraph and scaleActiveCards.. see above)
+
+    const sendPositions = (id, canvasPosition, domPosition) => {
+      send({ 
+        type: "setCardDOMPosition", 
+        id, 
+        domPosition });
+    
+      send({
+        type: "setCardCanvasPosition",
+        id,
+        canvasPosition,
+      });
+    };
+
+    const synchDOMWithGraph = () => {
+      const canvasPositions = network.getPositions();
+      const ids = Object.keys(canvasPositions);
+      ids.forEach((id) => {
+        const canvasPosition = canvasPositions[id];
+        //const domPosition = network.canvasToDOM(canvasPosition);
+        const domPosition = network.canvasToDOM(canvasPosition);
+    
+        sendPositions(id, canvasPosition, domPosition);
+      });
+    };
+
+    const scaleActiveCards = (e) => {
+      const rootStyle = document.querySelector(":root");
+      rootStyle.style.setProperty("--zoom-scale", e.scale);
+      document.querySelectorAll(".nodecard").forEach((el) => {
+        el.style.transform = `scale(${e.scale})`;
+      });
+    };
+
+    const scaleZoomHandler = (e) => {
+      console.log('afterDrawing', e)
+      synchDOMWithGraph();
+      // unlike the zoom event, this event does not have an event object let alone one with the scale property..
+      // fortunately the vis-network API provides another way.
+      scaleActiveCards({scale: network.getScale()});
+    }
+    
+    //'zoom' event listener doesn't work for this! does fire on manual zoom tho
+    network.on('afterDrawing', scaleZoomHandler)
+    network.once('animationFinished', () => network.off('afterDrawing', scaleZoomHandler)) 
+    network.moveTo({ scale, animation: true })
+  }
+  return { a, b, c, d, zooming } 
 }

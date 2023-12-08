@@ -1,9 +1,10 @@
 import mouseCursor from "../assets/mouse-cursor.png";
+import mousePointer from "../assets/mouse-pointer.png"
 import "../assets/styles/guided-tour.css";
 
 const driver = window.driver.js.driver;
 
-export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
+export const guidedTour = (send, createPositionedCard, canvasToDOM, zooming) => {
 
   //https://github.com/kamranahmedse/driver.js/blob/master/src/highlight.ts
   //setting disableActiveInteraction to true should add .driver-no-interaction to the element.. but it doesn't work.
@@ -11,7 +12,6 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
 
 
   const driverObj = driver({
-    //overlayOpacity: 0,
     allowClose: false,
     //disableActiveInteraction: true,       // this doesn't work.. 
     showProgress: false,
@@ -37,11 +37,9 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
         //hooks
         onHighlightStarted: (el, step, options) => console.log('onHighlightStarted hook'),
         onHighlighted: (el, step, options) => {
-          console.log('onHighlighted hook')
           //this is just a sloppy demonstration to myself for how to customize the popover. 
           //the onPopoverRender hook doesn't execute for me, so I'm using this one instead.
           const popover = options.state.popover;
-          console.log(popover)
           const firstButton = document.createElement("button");
           firstButton.innerText = "Go to First";
           popover.description.appendChild(firstButton);
@@ -53,14 +51,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
           //driverObj.setConfig({ overlayOpacity: 0}) //erases the steps.. 
           //so there's no way to alter the overlay behavior from one step to the next
         },
-        onDeselected: () => console.log('onDeselected hook'),
         //onPopoverRender: () => //fails to execute
-      },
-      { 
-        element: '.lock', 
-        popover: { 
-          description: 'Lock the card to prevent the text from being changed.',
-        } 
       },
       { 
         element: '.inertify', 
@@ -70,32 +61,13 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
           side: 'bottom'
         },
         onDeselected: (el) => {
-          //el.querySelector('.inertify').click()
           el.click()
         }
       },
       { 
         popover: { 
           description: 'Double-click or double-tap on empty space to create a new card.',
-          onNextClick: (_,__, options) => {
-
-            const fakeMouseCursor = document.createElement('img')
-            fakeMouseCursor.classList.add("fake-mouse-cursor")
-            fakeMouseCursor.src = mouseCursor;
-            document.querySelector('#container').append(fakeMouseCursor)
-            
-            const domPositions = canvasToDOM({ x: -5, y: 65 })
-
-            const afterFakeMouseClick = () => openNewCard(driverObj.moveNext)
-
-            fakeMouseCursor.animate([
-              { top: "99%", right: "1%" },
-              { top: domPositions.y + 'px', right: domPositions.x + 'px' }
-            ], 2000).onfinish = afterFakeMouseClick;
-              
-            // erase the lingering popover div from this current step in the meantime
-            options.state.popover.wrapper.style = "display:none;"
-          }
+          onNextClick: (_,__, options) => fakeMouse(canvasToDOM, options, [-5, 65, "70%", "30%"], openNewCard)
         } 
       },
       {
@@ -110,30 +82,23 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
           description: "This is the button for deletion."
         },
         onDeselected: (el) => {
-          el.click()
+          setTimeout(() => {
+            el.click()
+            driverObj.destroy()
+            setTimeout(() => guided2er(send, zooming), 1000)
+          }, 1000)
         }
       },
-      { 
-        popover: { 
-          title: 'Zoom', 
-          description: 'show how you can still write in a tiny card. find the right event terminology for both laptop/desktop and mobile.',
-        },
-        onDeselected: (el, step, options) => {
-          console.log(options.state)
-          driverObj.destroy()
-          guided2er(send)
-        }
-      }
     ]
   });
   
-  const openNewCard = (callback) => {
+  const openNewCard = () => {
 
     createPositionedCard({id: "newCard", label: "new card", text: "blah blah blah", x: -5, y: 65, startInert: false })
   
     // wait until the card has expanded before moving to the next step so that the element is available to the step
     document.querySelector('#container').addEventListener('animationend', (e) => {
-      if (e.animationName == 'expandCard') callback(); 
+      if (e.animationName == 'expandCard') driverObj.moveNext()
     }, { once: true })
 
   }
@@ -157,14 +122,74 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM) => {
 
 }
 
-export const guided2er = (send) => {
+export const guided2er = (send, zooming) => {
   const driverObj = driver({
-    showButtons: ['next', 'previous', 'close', 'done'] // doesn't work
+    showButtons: ['next'],
+    allowClose: false, // necessary to prevent user interaction that would interfere with the effects
+    overlayOpacity: 0,
+    steps: [
+      {
+        popover: { 
+          description: "You can zoom if you want to.",
+          onNextClick: () => showZoom(send, zooming, .65, () => driverObj.moveNext()),
+        },
+        onDeselected: (el, step, options) => {
+          console.log(options.state)
+          send({ type: "decidePath", id: "six"})
+          driverObj.destroy()
+          guided3er(send, zooming)
+        }
+      }
+    ],
   })
-  driverObj.highlight({
-    popover: { 
-      description: "The Guided Tour has concluded. Click/tap anywhere to exit the tour and begin using the app."
-    }
+  driverObj.drive()
+}
+
+export const guided3er = (send, zooming) => {
+  const driverObj = driver({
+    showButtons: ['next'],
+    allowClose: false, // necessary to prevent user interaction that would interfere with the effects
+    overlayOpacity: 0,
+    steps: [
+      {
+        popover: { 
+          description: "Fin",
+          onNextClick: () => showZoom(send, zooming, 2, () => driverObj.moveNext()),
+        },
+        onDeselected: (el, step, options) => {
+          console.log(options.state)
+          driverObj.destroy()
+        }
+      },
+    ],
   })
-  //driverObj.highlight({ popover: { description: "hi again!!"}}) // only lets you do one of these
+  driverObj.drive()
+}
+
+function fakeMouse(canvasToDOM, options, path, afterFakeMouseClick) {
+  
+  const fakeMouseCursor = document.createElement('img')
+  fakeMouseCursor.classList.add("fake-mouse-cursor")
+  fakeMouseCursor.src = mouseCursor;
+  //fakeMouseCursor.src = mousePointer;
+
+  document.querySelector('#container').append(fakeMouseCursor)
+  
+  const domPositions = canvasToDOM({ x: path[0], y: path[1] })
+
+  fakeMouseCursor.animate([
+    { top: path[2], right: path[3] },
+    { top: domPositions.y + 'px', right: domPositions.x + 'px' }
+  ], 750).onfinish = afterFakeMouseClick;
+    
+  // erase the lingering popover div from this current step in the meantime
+  options.state.popover.wrapper.style = "display:none;"
+  
+}
+
+function showZoom(send, zooming, scale, callback) {
+  zooming(scale, send)
+  setTimeout(() => {
+    callback()
+  }, 2000)
 }

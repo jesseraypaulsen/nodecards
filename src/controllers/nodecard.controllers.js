@@ -15,19 +15,23 @@ export default (container, send) =>
     const buttonsControllers = {
       unlock: (id) =>
         send({ type: "mediate", childType: "UNLOCK", data: { id } }),
+
       lock: (id) => send({ type: "mediate", childType: "LOCK", data: { id } }),
+
       delete: (id) => {
         const links = getLinksForCard(id);
         send({ type: "destroyCard", id, links });
       },
+
       inertify: (id) =>
         send({ type: "mediate", childType: "INERTIFY", data: { id } }),
+
       branch: (id) => {
         const linkId = generateId();
         const label = '';
-        console.log('branching from card with id: ', id)
         send({ type: "BRANCH", linkId, label, from: id });
       },
+      
       drag: (e, id) => {
         e.preventDefault();
         send("turnPhysicsOff");

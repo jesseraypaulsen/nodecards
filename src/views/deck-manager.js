@@ -70,7 +70,6 @@ export default function DeckManager(cardFace, { createEdge, removeEdge }) {
       startHighlightingSourceCard(id);
     },
     cancelLinkCreation: ({from}) => { 
-      console.log('cancelLinkCreation')
       stopHighlightingSourceCard(from)
     },
     destroyLink: ({ id }) => {
