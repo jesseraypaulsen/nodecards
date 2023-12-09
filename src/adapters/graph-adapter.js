@@ -193,5 +193,5 @@ export default function graphAdapterFactoryFactory(container) {
     network.once('animationFinished', () => network.off('afterDrawing', scaleZoomHandler)) 
     network.moveTo({ scale, animation: true })
   }
-  return { a, b, c, d, zooming } 
+  return { a, b, c, d, zooming, network } 
 }

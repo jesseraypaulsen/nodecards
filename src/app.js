@@ -61,4 +61,4 @@ service.onTransition((state, event) => {
 
 service.start();
 
-guidedTour(service.send, createPositionedCard, canvasToDOM, DOMtoCanvas, graphAdapterFactories.zooming)
+guidedTour(service.send, createPositionedCard, canvasToDOM, DOMtoCanvas, graphAdapterFactories.zooming, graphAdapterFactories.network)

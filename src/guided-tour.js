@@ -4,7 +4,7 @@ import "../assets/styles/guided-tour.css";
 
 const driver = window.driver.js.driver;
 
-export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas, zooming) => {
+export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas, zooming, network) => {
 
   //https://github.com/kamranahmedse/driver.js/blob/master/src/highlight.ts
   //setting disableActiveInteraction to true should add .driver-no-interaction to the element.. but it doesn't work.
@@ -22,8 +22,15 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
     steps: [
       {
         popover: {
-          description: "Begin the Guided Tour?"
-        }
+          description: "Begin the Guided Tour?",
+          onNextClick: (_,__, options) => {
+            hidePopover(options)
+            afterCardExpands(driverObj.moveNext)
+            const origin = { x: "30%", y: "70%" }
+            const target = network.canvasToDOM(network.getPosition("three"))
+            fakeMouse(origin, target, () => send({ type: "decidePath", id: "three"}))
+          }
+        },
       },
       { 
         element: '.branch', 
@@ -38,7 +45,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
           description: 'asoidjfidj',
           side: 'bottom',
           onNextClick: (el,__, options) => { 
-            prematurelyHidePopover(options)
+            hidePopover(options)
             const origin = { x: "30%", y: "70%" }
             const target = { x: getOffset(el).left, y: getOffset(el).top }
             fakeMouse(origin, target, () =>  {
@@ -55,7 +62,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
         popover: { 
           description: 'Double-click or double-tap on empty space to create a new card.',
           onNextClick: (_,__, options) => {
-            prematurelyHidePopover(options)
+            hidePopover(options)
             const origin = { x: "30%", y: "70%" }
             const target = canvasToDOM({ x: -5, y: 65 })
             fakeMouse(origin, target, openNewCard)
@@ -73,7 +80,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
         popover: {
           description: "This is the button for deletion.",
           onNextClick: (el,__, options) => { 
-            prematurelyHidePopover(options)
+            hidePopover(options)
             const origin = { x: "30%", y: "70%" }
             const target = { x: getOffset(el).left, y: getOffset(el).top }
             fakeMouse(origin, target, () => driverObj.moveNext())
@@ -93,28 +100,10 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
     createPositionedCard({id: "newCard", label: "new card", text: "blah blah blah", x: -5, y: 65, startInert: false })
   
     // wait until the card has expanded before moving to the next step so that the element is available to the step
-    document.querySelector('#container').addEventListener('animationend', (e) => {
-      if (e.animationName == 'expandCard') driverObj.moveNext()
-    }, { once: true })
-
+    afterCardExpands(driverObj.moveNext)
   }
 
-
-
-
   driverObj.drive();
-
-  //todo: 
-  //- add step that shows that turning off App mode lets you move the nodes around without expanding them
-  //- the steps should be performed on more than one card.. moving up or down along the contour of the layout.
-  //- you could add  a step for expanding a card, then one for collapsing the card you previously expanded.
-  //- a step for linking to a newly created card, and a following step for linking to a pre-existing card.
-  //- if you have steps for all of the buttons, will the guided tour will be too long?
-  //- i need to use multiple driverObj instances in order to turn the overlay on and off while doing animated demos
-
-  send({ type: "decidePath", id: "three"})
-
-  //https://driverjs.com/docs/configuration
 
 }
 
@@ -128,9 +117,7 @@ export const guided2er = (send, zooming) => {
         popover: { 
           description: "You can zoom if you want to.",
           onNextClick: (_,__, options) => {
-            prematurelyHidePopover(options)
-            //TODO functions
-            //1fakeMouse and 2typing, after first zoom before second.. 
+            hidePopover(options)
 
             const andFinally = () => driverObj.moveNext()
             const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,andFinally), 1000)
@@ -138,7 +125,7 @@ export const guided2er = (send, zooming) => {
             send({ type: "decidePath", id: "six"})
 
             const cardStuff = () => {
-              const card = container.querySelector('[data-id="six"]')
+              const card = document.querySelector('[data-id="six"]')
               const origin = { x: "30%", y: "70%" }
               const target = { x: getOffset(card).left, y: getOffset(card).top }
               fakeMouse(origin, target, () => fakeTyping(send, secondZoom, "six"))
@@ -149,8 +136,7 @@ export const guided2er = (send, zooming) => {
 
 
             // execute the first zoom after the nodecard expands
-            container.addEventListener('animationend', handler, { once: true })
-
+            afterCardExpands(handler)
 
           }
         },
@@ -185,7 +171,7 @@ export const guided3er = (send, zooming) => {
   })
   driverObj.drive()
 }
-const prematurelyHidePopover = (options) =>  options.state.popover.wrapper.style = "display:none;"
+const hidePopover = (options) =>  options.state.popover.wrapper.style = "display:none;"
 
 //https://stackoverflow.com/a/28222246
 function getOffset(el) {
@@ -237,6 +223,12 @@ function showZoom(send, zooming, scale, callback) {
   }, 2000)
 }
 
+function afterCardExpands(callback) {
+  document.querySelector('#container').addEventListener('animationend', (e) => {
+    if (e.animationName == 'expandCard') callback()
+  }, { once: true })
+}
+
 /*
 onHighlighted: (el, step, options) => {
   //this is just a sloppy demonstration to myself for how to customize the popover. 
@@ -255,3 +247,15 @@ onHighlighted: (el, step, options) => {
 },
 //onPopoverRender: () => //fails to execute
 */
+
+//todo: 
+//- add step that shows that turning off App mode lets you move the nodes around without expanding them
+//- the steps should be performed on more than one card.. moving up or down along the contour of the layout.
+//- you could add  a step for expanding a card, then one for collapsing the card you previously expanded.
+//- a step for linking to a newly created card, and a following step for linking to a pre-existing card.
+//- if you have steps for all of the buttons, will the guided tour will be too long?
+//- i need to use multiple driverObj instances in order to turn the overlay on and off while doing animated demos
+
+// send({ type: "decidePath", id: "three"})
+
+//https://driverjs.com/docs/configuration
