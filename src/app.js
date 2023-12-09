@@ -28,7 +28,7 @@ const { setupParentEffect, runChildEffect } = DeckManager(
 
 const service = interpret(appMachine(runChildEffect));
 
-const { hydrateCard, hydrateLink, calculatePositionThenCreate, hydratePositionedCard, canvasToDOM, peripheralEffects } = graphAdapterFactories.c(service.send);
+const { hydrateCard, hydrateLink, calculatePositionThenCreate, hydratePositionedCard, canvasToDOM, DOMtoCanvas, peripheralEffects } = graphAdapterFactories.c(service.send);
 
 graphAdapterFactories.d(service.send, canvasToDOM, calculatePositionThenCreate)
 
@@ -61,4 +61,4 @@ service.onTransition((state, event) => {
 
 service.start();
 
-guidedTour(service.send, createPositionedCard, canvasToDOM, graphAdapterFactories.zooming)
+guidedTour(service.send, createPositionedCard, canvasToDOM, DOMtoCanvas, graphAdapterFactories.zooming)

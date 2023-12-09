@@ -4,7 +4,7 @@ import "../assets/styles/guided-tour.css";
 
 const driver = window.driver.js.driver;
 
-export const guidedTour = (send, createPositionedCard, canvasToDOM, zooming) => {
+export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas, zooming) => {
 
   //https://github.com/kamranahmedse/driver.js/blob/master/src/highlight.ts
   //setting disableActiveInteraction to true should add .driver-no-interaction to the element.. but it doesn't work.
@@ -17,6 +17,8 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, zooming) => 
     showProgress: false,
     //onPopoverRender: () => // fails to execute
     showButtons: ['next'],
+    overlayOpacity: .3,
+    smoothScroll: true,
     steps: [
       {
         popover: {
@@ -30,44 +32,34 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, zooming) => 
         },
       },
       { 
-        element: '.drag', 
-        popover: { 
-          description: 'Move the card by holding this button as you move your finger or the mouse.',
-        },
-        //hooks
-        onHighlightStarted: (el, step, options) => console.log('onHighlightStarted hook'),
-        onHighlighted: (el, step, options) => {
-          //this is just a sloppy demonstration to myself for how to customize the popover. 
-          //the onPopoverRender hook doesn't execute for me, so I'm using this one instead.
-          const popover = options.state.popover;
-          const firstButton = document.createElement("button");
-          firstButton.innerText = "Go to First";
-          popover.description.appendChild(firstButton);
-
-          firstButton.addEventListener("click", () => {
-            driverObj.drive(0);
-          });
-
-          //driverObj.setConfig({ overlayOpacity: 0}) //erases the steps.. 
-          //so there's no way to alter the overlay behavior from one step to the next
-        },
-        //onPopoverRender: () => //fails to execute
-      },
-      { 
         element: '.inertify', 
         popover: { 
           title: 'Inertify', 
           description: 'asoidjfidj',
-          side: 'bottom'
+          side: 'bottom',
+          onNextClick: (el,__, options) => { 
+            prematurelyHidePopover(options)
+            const origin = { x: "30%", y: "70%" }
+            const target = { x: getOffset(el).left, y: getOffset(el).top }
+            fakeMouse(origin, target, () =>  {
+              el.click()
+              setTimeout(() => driverObj.moveNext(), 500)
+            })
+          }
         },
         onDeselected: (el) => {
-          el.click()
+          //el.click()
         }
       },
       { 
         popover: { 
           description: 'Double-click or double-tap on empty space to create a new card.',
-          onNextClick: (_,__, options) => fakeMouse(canvasToDOM, options, [-5, 65, "70%", "30%"], openNewCard)
+          onNextClick: (_,__, options) => {
+            prematurelyHidePopover(options)
+            const origin = { x: "30%", y: "70%" }
+            const target = canvasToDOM({ x: -5, y: 65 })
+            fakeMouse(origin, target, openNewCard)
+          }
         } 
       },
       {
@@ -79,14 +71,18 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, zooming) => 
       {
         element: '.discard',
         popover: {
-          description: "This is the button for deletion."
+          description: "This is the button for deletion.",
+          onNextClick: (el,__, options) => { 
+            prematurelyHidePopover(options)
+            const origin = { x: "30%", y: "70%" }
+            const target = { x: getOffset(el).left, y: getOffset(el).top }
+            fakeMouse(origin, target, () => driverObj.moveNext())
+          }
         },
         onDeselected: (el) => {
-          setTimeout(() => {
             el.click()
             driverObj.destroy()
-            setTimeout(() => guided2er(send, zooming), 1000)
-          }, 1000)
+            setTimeout(() => guided2er(send, zooming), 500)
         }
       },
     ]
@@ -131,13 +127,18 @@ export const guided2er = (send, zooming) => {
       {
         popover: { 
           description: "You can zoom if you want to.",
-          onNextClick: () => showZoom(send, zooming, .65, () => driverObj.moveNext()),
+          onNextClick: (_,__, options) => {
+            prematurelyHidePopover(options)
+            const andFinally = () => driverObj.moveNext()
+            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,andFinally), 1000)
+            showZoom(send, zooming, .65, secondZoom)
+          }
         },
         onDeselected: (el, step, options) => {
           console.log(options.state)
           send({ type: "decidePath", id: "six"})
           driverObj.destroy()
-          guided3er(send, zooming)
+          setTimeout(() => guided3er(send, zooming), 1250)
         }
       }
     ],
@@ -154,7 +155,6 @@ export const guided3er = (send, zooming) => {
       {
         popover: { 
           description: "Fin",
-          onNextClick: () => showZoom(send, zooming, 2, () => driverObj.moveNext()),
         },
         onDeselected: (el, step, options) => {
           console.log(options.state)
@@ -165,8 +165,18 @@ export const guided3er = (send, zooming) => {
   })
   driverObj.drive()
 }
+const prematurelyHidePopover = (options) =>  options.state.popover.wrapper.style = "display:none;"
 
-function fakeMouse(canvasToDOM, options, path, afterFakeMouseClick) {
+//https://stackoverflow.com/a/28222246
+function getOffset(el) {
+  const rect = el.getBoundingClientRect();
+  return {
+    left: rect.left,
+    top: rect.top
+  };
+}
+
+function fakeMouse(origin, target, afterFakeMouseClick) {
   
   const fakeMouseCursor = document.createElement('img')
   fakeMouseCursor.classList.add("fake-mouse-cursor")
@@ -175,16 +185,11 @@ function fakeMouse(canvasToDOM, options, path, afterFakeMouseClick) {
 
   document.querySelector('#container').append(fakeMouseCursor)
   
-  const domPositions = canvasToDOM({ x: path[0], y: path[1] })
-
   fakeMouseCursor.animate([
-    { top: path[2], right: path[3] },
-    { top: domPositions.y + 'px', right: domPositions.x + 'px' }
+    { top: origin.y, left: origin.x },
+    { top: target.y + 'px', left: target.x + 'px' }
   ], 750).onfinish = afterFakeMouseClick;
-    
-  // erase the lingering popover div from this current step in the meantime
-  options.state.popover.wrapper.style = "display:none;"
-  
+      
 }
 
 function showZoom(send, zooming, scale, callback) {
@@ -193,3 +198,22 @@ function showZoom(send, zooming, scale, callback) {
     callback()
   }, 2000)
 }
+
+/*
+onHighlighted: (el, step, options) => {
+  //this is just a sloppy demonstration to myself for how to customize the popover. 
+  //the onPopoverRender hook doesn't execute for me, so I'm using this one instead.
+  const popover = options.state.popover;
+  const firstButton = document.createElement("button");
+  firstButton.innerText = "Go to First";
+  popover.description.appendChild(firstButton);
+
+  firstButton.addEventListener("click", () => {
+    driverObj.drive(0);
+  });
+
+  //driverObj.setConfig({ overlayOpacity: 0}) //erases the steps.. 
+  //so there's no way to alter the overlay behavior from one step to the next
+},
+//onPopoverRender: () => //fails to execute
+*/

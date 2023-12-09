@@ -169,7 +169,6 @@ export default function graphAdapterFactoryFactory(container) {
       const ids = Object.keys(canvasPositions);
       ids.forEach((id) => {
         const canvasPosition = canvasPositions[id];
-        //const domPosition = network.canvasToDOM(canvasPosition);
         const domPosition = network.canvasToDOM(canvasPosition);
     
         sendPositions(id, canvasPosition, domPosition);
@@ -185,14 +184,11 @@ export default function graphAdapterFactoryFactory(container) {
     };
 
     const scaleZoomHandler = (e) => {
-      console.log('afterDrawing', e)
       synchDOMWithGraph();
-      // unlike the zoom event, this event does not have an event object let alone one with the scale property..
-      // fortunately the vis-network API provides another way.
       scaleActiveCards({scale: network.getScale()});
     }
     
-    //'zoom' event listener doesn't work for this! does fire on manual zoom tho
+    //'zoom' event listener doesn't work for this! it does fire on manual zoom tho
     network.on('afterDrawing', scaleZoomHandler)
     network.once('animationFinished', () => network.off('afterDrawing', scaleZoomHandler)) 
     network.moveTo({ scale, animation: true })
