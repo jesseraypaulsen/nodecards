@@ -129,14 +129,34 @@ export const guided2er = (send, zooming) => {
           description: "You can zoom if you want to.",
           onNextClick: (_,__, options) => {
             prematurelyHidePopover(options)
+            //TODO functions
+            //1fakeMouse and 2typing, after first zoom before second.. 
+
             const andFinally = () => driverObj.moveNext()
             const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,andFinally), 1000)
-            showZoom(send, zooming, .65, secondZoom)
+
+            send({ type: "decidePath", id: "six"})
+
+            const cardStuff = () => {
+              const card = container.querySelector('[data-id="six"]')
+              const origin = { x: "30%", y: "70%" }
+              const target = { x: getOffset(card).left, y: getOffset(card).top }
+              fakeMouse(origin, target, () => fakeTyping(send, secondZoom, "six"))
+            }
+
+            const container = document.querySelector("#container")
+            const handler = () => showZoom(send, zooming, .65, cardStuff)
+
+
+            // execute the first zoom after the nodecard expands
+            container.addEventListener('animationend', handler, { once: true })
+
+
           }
         },
         onDeselected: (el, step, options) => {
           console.log(options.state)
-          send({ type: "decidePath", id: "six"})
+          //send({ type: "decidePath", id: "six"})
           driverObj.destroy()
           setTimeout(() => guided3er(send, zooming), 1250)
         }
@@ -190,6 +210,24 @@ function fakeMouse(origin, target, afterFakeMouseClick) {
     { top: target.y + 'px', left: target.x + 'px' }
   ], 750).onfinish = afterFakeMouseClick;
       
+}
+
+function fakeTyping(send, callback, id) {
+  const input = "you can type stuff into the card"
+  let _input = ''
+  
+  input.split('').forEach((c,i) => {
+    setTimeout(() => {
+      _input += c
+      send({
+        type: "mediate",
+        childType: "TYPING",
+        data: { text: _input, id },
+      });
+      if (i == input.length-1) callback()
+    }, i*200)
+  })
+
 }
 
 function showZoom(send, zooming, scale, callback) {
