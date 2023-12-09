@@ -36,6 +36,17 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
         element: '.branch', 
         popover: { 
           description: 'This button allows you to create links between cards, new or pre-existing.',
+          onNextClick: (el,_,options) => {
+            hidePopover(options)
+            const origin = { x: "30%", y: "70%" }
+            const target = { x: getOffset(el).left, y: getOffset(el).top }
+            const link = () => {
+              el.click()
+              setTimeout(() => send({type: 'decidePath', id: "six"}), 400)
+              setTimeout(() => driverObj.moveNext(), 1000)
+            }
+            fakeMouse(origin, target, link)
+          }
         },
       },
       { 
