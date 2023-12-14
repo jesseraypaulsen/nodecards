@@ -1,5 +1,6 @@
 .fake-mouse-cursor {
   position: absolute;
+  z-index: 3000;
 }
 
 /* because the driver.js config option disableActiveInteraction does not work, so this overwrites the class */

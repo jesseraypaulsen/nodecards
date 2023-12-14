@@ -26,9 +26,8 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
           onNextClick: (_,__, options) => {
             hidePopover(options)
             afterCardExpands(driverObj.moveNext)
-            const origin = { x: "30%", y: "70%" }
             const target = network.canvasToDOM(network.getPosition("three"))
-            fakeMouse(origin, target, () => send({ type: "decidePath", id: "three"}))
+            fakeMouse(target, () => send({ type: "decidePath", id: "three"}))
           }
         },
       },
@@ -38,14 +37,18 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
           description: 'This button allows you to create links between cards, new or pre-existing.',
           onNextClick: (el,_,options) => {
             hidePopover(options)
-            const origin = { x: "30%", y: "70%" }
-            const target = { x: getOffset(el).left, y: getOffset(el).top }
+            const firstTarget = { x: getOffset(el).left, y: getOffset(el).top }
+            const secondTarget = network.canvasToDOM(network.getPosition("six"))
             const link = () => {
               el.click()
-              setTimeout(() => send({type: 'decidePath', id: "six"}), 400)
+              setTimeout(() => {
+                fakeMouse(secondTarget, () => {
+                  send({type: 'decidePath', id: "six"})
+                })
+              }, 400)
               setTimeout(() => driverObj.moveNext(), 1000)
             }
-            fakeMouse(origin, target, link)
+            fakeMouse(firstTarget, link)
           }
         },
       },
@@ -57,16 +60,12 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
           side: 'bottom',
           onNextClick: (el,__, options) => { 
             hidePopover(options)
-            const origin = { x: "30%", y: "70%" }
             const target = { x: getOffset(el).left, y: getOffset(el).top }
-            fakeMouse(origin, target, () =>  {
+            fakeMouse(target, () =>  {
               el.click()
               setTimeout(() => driverObj.moveNext(), 500)
             })
           }
-        },
-        onDeselected: (el) => {
-          //el.click()
         }
       },
       { 
@@ -74,9 +73,8 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
           description: 'Double-click or double-tap on empty space to create a new card.',
           onNextClick: (_,__, options) => {
             hidePopover(options)
-            const origin = { x: "30%", y: "70%" }
             const target = canvasToDOM({ x: -5, y: 65 })
-            fakeMouse(origin, target, openNewCard)
+            fakeMouse(target, openNewCard)
           }
         } 
       },
@@ -92,9 +90,8 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
           description: "This is the button for deletion.",
           onNextClick: (el,__, options) => { 
             hidePopover(options)
-            const origin = { x: "30%", y: "70%" }
             const target = { x: getOffset(el).left, y: getOffset(el).top }
-            fakeMouse(origin, target, () => driverObj.moveNext())
+            fakeMouse(target, () => driverObj.moveNext())
           }
         },
         onDeselected: (el) => {
@@ -137,12 +134,11 @@ export const guided2er = (send, zooming) => {
 
             const cardStuff = () => {
               const card = document.querySelector('[data-id="six"]')
-              const origin = { x: "30%", y: "70%" }
+
               const target = { x: getOffset(card).left, y: getOffset(card).top }
-              fakeMouse(origin, target, () => fakeTyping(send, secondZoom, "six"))
+              fakeMouse(target, () => fakeTyping(send, secondZoom, "six"))
             }
 
-            const container = document.querySelector("#container")
             const handler = () => showZoom(send, zooming, .65, cardStuff)
 
 
@@ -151,30 +147,12 @@ export const guided2er = (send, zooming) => {
 
           }
         },
-        onDeselected: (el, step, options) => {
-          console.log(options.state)
-          //send({ type: "decidePath", id: "six"})
-          driverObj.destroy()
-          setTimeout(() => guided3er(send, zooming), 1250)
-        }
-      }
-    ],
-  })
-  driverObj.drive()
-}
-
-export const guided3er = (send, zooming) => {
-  const driverObj = driver({
-    showButtons: ['next'],
-    allowClose: false, // necessary to prevent user interaction that would interfere with the effects
-    overlayOpacity: 0,
-    steps: [
+      },
       {
         popover: { 
           description: "Fin",
         },
-        onDeselected: (el, step, options) => {
-          console.log(options.state)
+        onDeselected: () => {
           driverObj.destroy()
         }
       },
@@ -182,6 +160,7 @@ export const guided3er = (send, zooming) => {
   })
   driverObj.drive()
 }
+
 const hidePopover = (options) =>  options.state.popover.wrapper.style = "display:none;"
 
 //https://stackoverflow.com/a/28222246
@@ -193,19 +172,23 @@ function getOffset(el) {
   };
 }
 
-function fakeMouse(origin, target, afterFakeMouseClick) {
+function fakeMouse(target, afterFakeMouseClick) {
   
   const fakeMouseCursor = document.createElement('img')
   fakeMouseCursor.classList.add("fake-mouse-cursor")
   fakeMouseCursor.src = mouseCursor;
-  //fakeMouseCursor.src = mousePointer;
 
   document.querySelector('#container').append(fakeMouseCursor)
+
+  // the path of mouse movement should be very short to make its unnatural appearance less obvious
+  const vary = (Math.random() < 0.5)  ? 50 : -50;
+  const originX = target.x + vary + 'px';
+  const originY = target.y + 50 + 'px';
   
   fakeMouseCursor.animate([
-    { top: origin.y, left: origin.x },
+    { top: originY, left: originX },
     { top: target.y + 'px', left: target.x + 'px' }
-  ], 750).onfinish = afterFakeMouseClick;
+  ], 500).onfinish = afterFakeMouseClick;
       
 }
 
@@ -240,6 +223,20 @@ function afterCardExpands(callback) {
   }, { once: true })
 }
 
+/* 
+
+TODO
+
+1. natural looking mouse activity
+2. do something about the overlay cutout
+3. improve timing of steps and animation
+
+beyond Guided Tour..
+- dragging behavior
+- refactor app.js, graph adapters, guided tour
+
+*/
+
 /*
 onHighlighted: (el, step, options) => {
   //this is just a sloppy demonstration to myself for how to customize the popover. 
@@ -258,15 +255,5 @@ onHighlighted: (el, step, options) => {
 },
 //onPopoverRender: () => //fails to execute
 */
-
-//todo: 
-//- add step that shows that turning off App mode lets you move the nodes around without expanding them
-//- the steps should be performed on more than one card.. moving up or down along the contour of the layout.
-//- you could add  a step for expanding a card, then one for collapsing the card you previously expanded.
-//- a step for linking to a newly created card, and a following step for linking to a pre-existing card.
-//- if you have steps for all of the buttons, will the guided tour will be too long?
-//- i need to use multiple driverObj instances in order to turn the overlay on and off while doing animated demos
-
-// send({ type: "decidePath", id: "three"})
 
 //https://driverjs.com/docs/configuration
