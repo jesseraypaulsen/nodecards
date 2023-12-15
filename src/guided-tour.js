@@ -125,7 +125,7 @@ export const guided2er = (send, zooming) => {
             hidePopover(options)
 
             const andFinally = () => driverObj.moveNext()
-            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,andFinally), 1000)
+            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,() => {}), 1000)
 
             send({ type: "decidePath", id: "six"})
 
@@ -133,7 +133,7 @@ export const guided2er = (send, zooming) => {
               const card = document.querySelector('[data-id="six"]')
 
               const target = { x: getOffset(card).left, y: getOffset(card).top }
-              fakeMouse(target, () => fakeTyping(send, secondZoom, "six"))
+              fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "six"))
             }
 
             const handler = () => showZoom(send, zooming, .65, cardStuff)
@@ -148,7 +148,7 @@ export const guided2er = (send, zooming) => {
       {
         element: '[data-id="six"]',
         popover: { 
-          description: "And of course you can type notes into a card.",
+          description: "The Guided Tour is finished. User interaction is enabled now.",
         },
         onDeselected: () => {
           driverObj.destroy()
@@ -190,7 +190,7 @@ function fakeMouse(target, afterFakeMouseClick) {
       
 }
 
-function fakeTyping(send, callback, id) {
+function fakeTyping(send, firstCallback, secondCallback, id) {
   const input = "you can type stuff into the card"
   let _input = ''
   
@@ -202,7 +202,8 @@ function fakeTyping(send, callback, id) {
         childType: "TYPING",
         data: { text: _input, id },
       });
-      if (i == input.length-1) callback()
+      if (i == Math.ceil(input.length/3)) firstCallback()
+      if (i == input.length-1) secondCallback()
     }, i*200)
   })
 
@@ -224,10 +225,6 @@ function afterCardExpands(callback) {
 /* 
 
 TODO: improve timing of steps and animation
-
-beyond Guided Tour..
-- dragging behavior
-- refactor app.js, graph adapters, guided tour
 
 */
 
