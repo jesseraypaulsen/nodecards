@@ -142,12 +142,12 @@ export const guided2er = (send, zooming) => {
           onNextClick: (_,__,options) => {
             hidePopover(options)
             const andFinally = () => driverObj.moveNext()
-            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,andFinally), 1000)
+            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,() => {}), 1000)
             const cardStuff = () => {
               const card = document.querySelector('[data-id="six"]')
 
               const target = { x: getOffset(card).left, y: getOffset(card).top }
-              fakeMouse(target, () => fakeTyping(send, secondZoom, "six"))
+              fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "six"))
             }
             cardStuff()
           }
@@ -197,7 +197,7 @@ function fakeMouse(target, afterFakeMouseClick) {
       
 }
 
-function fakeTyping(send, callback, id) {
+function fakeTyping(send, firstCallback, secondCallback, id) {
   const input = "you can type stuff into the card"
   let _input = ''
   
@@ -209,7 +209,8 @@ function fakeTyping(send, callback, id) {
         childType: "TYPING",
         data: { text: _input, id },
       });
-      if (i == input.length-1) callback()
+      if (i == Math.ceil(input.length/3)) firstCallback()
+      if (i == input.length-1) secondCallback()
     }, i*200)
   })
 
@@ -231,10 +232,6 @@ function afterCardExpands(callback) {
 /* 
 
 TODO: improve timing of steps and animation
-
-beyond Guided Tour..
-- dragging behavior
-- refactor app.js, graph adapters, guided tour
 
 */
 
