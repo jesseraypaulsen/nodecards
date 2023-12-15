@@ -17,12 +17,15 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
     showProgress: false,
     //onPopoverRender: () => // fails to execute
     showButtons: ['next'],
-    overlayOpacity: .3,
+    // overlayOpacity: .3,
+    overlayOpacity: 0,
     smoothScroll: true,
     steps: [
       {
         popover: {
-          description: "Begin the Guided Tour?",
+          title: "Welcome to Nodecards",
+          description: "Lets take a quick tour to see what it does.",
+          showButtons: ['next', 'close'],
           onNextClick: (_,__, options) => {
             hidePopover(options)
             afterCardExpands(driverObj.moveNext)
@@ -34,7 +37,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
       { 
         element: '.branch', 
         popover: { 
-          description: 'This button allows you to create links between cards, new or pre-existing.',
+          description: 'You can link one nodecard to another.',
           onNextClick: (el,_,options) => {
             hidePopover(options)
             const firstTarget = { x: getOffset(el).left, y: getOffset(el).top }
@@ -54,9 +57,8 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
       },
       { 
         element: '.inertify', 
-        popover: { 
-          title: 'Inertify', 
-          description: 'asoidjfidj',
+        popover: {  
+          description: 'You can then collapse a nodecard back down to its inert state.',
           side: 'bottom',
           onNextClick: (el,__, options) => { 
             hidePopover(options)
@@ -70,7 +72,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
       },
       { 
         popover: { 
-          description: 'Double-click or double-tap on empty space to create a new card.',
+          description: 'You can create a new card by double-clicking or double-tapping on empty space.',
           onNextClick: (_,__, options) => {
             hidePopover(options)
             const target = canvasToDOM({ x: -5, y: 65 })
@@ -79,15 +81,10 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
         } 
       },
       {
-        element: '[data-id="newCard"]', //this is the card created by the previous step
-        popover: {
-          description: 'Not only can you create new cards, you can delete them too.',
-        },
-      },
-      {
         element: '.discard',
         popover: {
-          description: "This is the button for deletion.",
+          description: "You can delete a card.",
+          side: 'bottom',
           onNextClick: (el,__, options) => { 
             hidePopover(options)
             const target = { x: getOffset(el).left, y: getOffset(el).top }
@@ -123,7 +120,7 @@ export const guided2er = (send, zooming) => {
     steps: [
       {
         popover: { 
-          description: "You can zoom if you want to.",
+          description: "You can also zoom in and out by using two fingers on the touchpad or screen.",
           onNextClick: (_,__, options) => {
             hidePopover(options)
 
@@ -149,8 +146,9 @@ export const guided2er = (send, zooming) => {
         },
       },
       {
+        element: '[data-id="six"]',
         popover: { 
-          description: "Fin",
+          description: "And of course you can type notes into a card.",
         },
         onDeselected: () => {
           driverObj.destroy()
@@ -225,15 +223,22 @@ function afterCardExpands(callback) {
 
 /* 
 
-TODO
-
-1. natural looking mouse activity
-2. do something about the overlay cutout
-3. improve timing of steps and animation
+TODO: improve timing of steps and animation
 
 beyond Guided Tour..
 - dragging behavior
 - refactor app.js, graph adapters, guided tour
+
+*/
+
+/*
+
+      {
+        element: '[data-id="newCard"]', //this is how you highlight an entire card
+        popover: {
+          description: 'Not only can you create new cards, you can delete them too.',
+        },
+      },
 
 */
 
