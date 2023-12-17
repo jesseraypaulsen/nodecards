@@ -10,6 +10,7 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - bug: after you zoom out, when you drag the active card the element and the node fall out of synch. likewise if you open the console (or close it if it was open when the app first loaded), or change the browser vieport size in any other way.
 
+- refactor app.js, graph adapters, guided tour
 - refactor app.js, graph-adapters.js, guided-tour.js
 
 - bug: sometimes the nodecard opens when the node is dragged.

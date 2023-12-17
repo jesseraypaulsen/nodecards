@@ -124,10 +124,20 @@ export const guided2er = (send, zooming) => {
           onNextClick: (_,__, options) => {
             hidePopover(options)
 
+            const andFinally = () => driverObj.moveNext()
+            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,() => {}), 1000)
+
             send({ type: "decidePath", id: "six"})
 
-            //const handler = () => showZoom(send, zooming, .65, cardStuff)
-            const handler = () => showZoom(send, zooming, .65, () => driverObj.moveNext())
+            const cardStuff = () => {
+              const card = document.querySelector('[data-id="six"]')
+
+              const target = { x: getOffset(card).left, y: getOffset(card).top }
+              fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "six"))
+            }
+
+            const handler = () => showZoom(send, zooming, .65, cardStuff)
+
 
             // execute the first zoom after the nodecard expands
             afterCardExpands(handler)
@@ -138,24 +148,7 @@ export const guided2er = (send, zooming) => {
       {
         element: '[data-id="six"]',
         popover: { 
-          description: "And of course you can type notes into a card.",
-          onNextClick: (_,__,options) => {
-            hidePopover(options)
-            const andFinally = () => driverObj.moveNext()
-            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,() => {}), 1000)
-            const cardStuff = () => {
-              const card = document.querySelector('[data-id="six"]')
-
-              const target = { x: getOffset(card).left, y: getOffset(card).top }
-              fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "six"))
-            }
-            cardStuff()
-          }
-        },
-      },
-      {
-        popover: {
-          description: "Fin."
+          description: "The Guided Tour is finished. User interaction is enabled now.",
         },
         onDeselected: () => {
           driverObj.destroy()
@@ -232,6 +225,17 @@ function afterCardExpands(callback) {
 /* 
 
 TODO: improve timing of steps and animation
+
+*/
+
+/*
+
+      {
+        element: '[data-id="newCard"]', //this is how you highlight an entire card
+        popover: {
+          description: 'Not only can you create new cards, you can delete them too.',
+        },
+      },
 
 */
 
