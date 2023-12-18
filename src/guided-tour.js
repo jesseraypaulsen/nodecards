@@ -14,12 +14,12 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
   const driverObj = driver({
     allowClose: false,
     //disableActiveInteraction: true,       // this doesn't work.. 
-    showProgress: false,
     //onPopoverRender: () => // fails to execute
+    showProgress: false,
     showButtons: ['next'],
-    // overlayOpacity: .3,
     overlayOpacity: 0,
     smoothScroll: true,
+    popoverClass: "driverjs-theme",
     steps: [
       {
         popover: {
@@ -117,6 +117,7 @@ export const guided2er = (send, zooming) => {
     showButtons: ['next'],
     allowClose: false, // necessary to prevent user interaction that would interfere with the effects
     overlayOpacity: 0,
+    popoverClass: "driverjs-theme",
     steps: [
       {
         popover: { 
@@ -146,7 +147,7 @@ export const guided2er = (send, zooming) => {
         },
       },
       {
-        element: '[data-id="six"]',
+        //element: '[data-id="six"]', // highlight the entire nodecard
         popover: { 
           description: "The Guided Tour is finished. User interaction is enabled now.",
         },
@@ -222,27 +223,12 @@ function afterCardExpands(callback) {
   }, { once: true })
 }
 
-/* 
-
-TODO: improve timing of steps and animation
-
-*/
-
-/*
-
-      {
-        element: '[data-id="newCard"]', //this is how you highlight an entire card
-        popover: {
-          description: 'Not only can you create new cards, you can delete them too.',
-        },
-      },
-
-*/
 
 /*
 onHighlighted: (el, step, options) => {
-  //this is just a sloppy demonstration to myself for how to customize the popover. 
-  //the onPopoverRender hook doesn't execute for me, so I'm using this one instead.
+  //this shows how to customize the popover if need be,
+  //because the onPopoverRender hook doesn't execute.
+
   const popover = options.state.popover;
   const firstButton = document.createElement("button");
   firstButton.innerText = "Go to First";
@@ -255,7 +241,6 @@ onHighlighted: (el, step, options) => {
   //driverObj.setConfig({ overlayOpacity: 0}) //erases the steps.. 
   //so there's no way to alter the overlay behavior from one step to the next
 },
-//onPopoverRender: () => //fails to execute
 */
 
 //https://driverjs.com/docs/configuration
