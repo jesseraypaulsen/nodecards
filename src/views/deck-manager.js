@@ -59,8 +59,9 @@ export default function DeckManager(cardFace, { createEdge, removeEdge }) {
         })
       );
     },
-    hydrateLink: ({ id, label, from, to }) => {
-      addLink(createEdge({ id, label, from, to }));
+    hydrateLink: ({ id, label, from, to, arrows }) => {
+      if (arrows) addLink(createEdge({ id, label, from, to, arrows }));
+      else addLink(createEdge({ id, label, from, to }));
     },
     createLink: ({ id, label, from, to }) => {
       addLink(createEdge({ id, label, from, to }));

@@ -295,13 +295,24 @@ export const appMachine = (runChildEffect) =>
         }),
         hydrateLink: assign({
           links: (context, event) => {
-            const { id, label, from, to } = event;
-            return context.links.concat({
-              id,
-              label,
-              from,
-              to,
-            });
+            if (event.arrows) {
+              const { id, label, from, to, arrows } = event;
+              return context.links.concat({
+                id,
+                label,
+                from,
+                to,
+                arrows
+              });
+            } else {
+              const { id, label, from, to } = event;
+              return context.links.concat({
+                id,
+                label,
+                from,
+                to,
+              });
+            }
           },
         }),
         setCardCanvasPosition: ({ cards }, { id, canvasPosition }) => {

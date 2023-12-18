@@ -29,9 +29,22 @@ export default function Render(
       hydratePositionedCard({ id, label, text, x, y });
     });
 
-    data.links.map(({ id, label, from, to }) => {
-      hydrateLink({ id, label, from, to });
-    });
+    // data.links.map(({ id, label, from, to }) => {
+    //   hydrateLink({ id, label, from, to });
+    // });
+
+    data.links.map(l => {
+      if (l.arrows) {
+        console.log(l.arrows)
+        const { id, label, from, to, arrows } = l;
+        hydrateLink({ id, label, from, to, arrows })
+      }
+      else {
+        const { id, label, from, to } = l;
+        hydrateLink({ id, label, from, to })
+      }
+    })
+
   }
 
   const render = (state, event) => {

@@ -21,7 +21,7 @@
     { "id": "b", "label": "", "from": "one", "to": "three" },
     { "id": "c", "label": "", "from": "four", "to": "six" },
     { "id": "d", "label": "", "from": "four", "to": "eight" },
-    { "id": "e", "label": "", "from": "five", "to": "seven" },
+    { "id": "e", "label": "", "from": "five", "to": "seven", "arrows": "to"},
     { "id": "f", "label": "", "from": "five", "to": "nine" },
     { "id": "g", "label": "", "from": "two", "to": "six" },
     { "id": "h", "label": "", "from": "two", "to": "seven" },
