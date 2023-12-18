@@ -248,20 +248,14 @@ export const appMachine = (runChildEffect) =>
       actions: {
         createCard: assign({
           cards: (context, event) => {
-            const { id, label, text, domPosition, canvasPosition, startInert = false } = event;
+            const data = { ...event }
+            delete data.type
             return context.cards.concat({
-              id,
+              id: data.id,
               ref: spawn(
-                cardMachine({
-                  id,
-                  text,
-                  label,
-                  domPosition,
-                  canvasPosition,
-                  startInert
-                }),
+                cardMachine(data),
                 {
-                  name: id,
+                  name: data.id,
                   sync: true,
                 }
               ).onTransition((state, event) => {
@@ -270,6 +264,30 @@ export const appMachine = (runChildEffect) =>
             });
           },
         }),
+        // createCard: assign({
+        //   cards: (context, event) => {
+        //     const { id, label, text, domPosition, canvasPosition, startInert = false } = event;
+        //     return context.cards.concat({
+        //       id,
+        //       ref: spawn(
+        //         cardMachine({
+        //           id,
+        //           text,
+        //           label,
+        //           domPosition,
+        //           canvasPosition,
+        //           startInert
+        //         }),
+        //         {
+        //           name: id,
+        //           sync: true,
+        //         }
+        //       ).onTransition((state, event) => {
+        //         runRunChildEffect(runChildEffect, state, event);
+        //       }),
+        //     });
+        //   },
+        // }),
         hydrateCard: assign({
           cards: (context, event) => {
             console.log(event)

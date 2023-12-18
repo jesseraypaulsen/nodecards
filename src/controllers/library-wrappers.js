@@ -66,17 +66,29 @@ export default (network, send) => {
 
 
 
-  const hydratePositionedCard = ({ id, label, text, x, y, startInert = true }) => {
+  // const hydratePositionedCard = ({ id, label, text, x, y, startInert = true }) => {
+  //   const canvasPosition = {x, y}
+  //   const domPosition = canvasToDOM({ x, y })
+  //   createCard({
+  //     label,
+  //     text,
+  //     domPosition,
+  //     canvasPosition,
+  //     id,
+  //     startInert
+  //   })
+  // }
+
+  const hydratePositionedCard = (props) => {
+    const {x, y} = props;
     const canvasPosition = {x, y}
     const domPosition = canvasToDOM({ x, y })
-    createCard({
-      label,
-      text,
-      domPosition,
-      canvasPosition,
-      id,
-      startInert
-    })
+    delete props.x
+    delete props.y
+    
+    const revisedProps = { ...props, canvasPosition, domPosition }
+
+    createCard(revisedProps)
   }
 
   const setPhysics = (value) => {

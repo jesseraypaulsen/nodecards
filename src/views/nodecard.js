@@ -14,6 +14,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     text,
     domPosition,
     canvasPosition,
+    config,
     getLinksForCard,
     controllers,
   }) => {
@@ -22,6 +23,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     const getText = () => text;
     const getCanvasPosition = () => canvasPosition;
     const getDomPosition = () => domPosition;
+    const getConfig = () => config;
 
     const setText = (nextText) => {
       text = nextText;
@@ -42,7 +44,8 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     const graphAdapter = graphAdapterFactory(
       getId,
       getLabel,
-      getCanvasPosition
+      getCanvasPosition,
+      getConfig
     );
     const domAdapter = domAdapterFactory(
       getDomPosition,

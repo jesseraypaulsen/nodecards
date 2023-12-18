@@ -46,14 +46,23 @@ export default function DeckManager(cardFace, { createEdge, removeEdge }) {
         })
       );
     },
-    createCard: ({ id, label, text, domPosition, canvasPosition }) => {
+    // createCard: ({ id, label, text, domPosition, canvasPosition }) => {
+    //   addCard(
+    //     cardFace({
+    //       id,
+    //       label,
+    //       text,
+    //       domPosition,
+    //       canvasPosition,
+    //       getLinksForCard,
+    //       controllers,
+    //     })
+    //   );
+    // },
+    createCard: (props) => {
       addCard(
         cardFace({
-          id,
-          label,
-          text,
-          domPosition,
-          canvasPosition,
+          ...props,
           getLinksForCard,
           controllers,
         })

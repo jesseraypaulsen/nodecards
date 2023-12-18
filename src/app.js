@@ -9,7 +9,8 @@ import graphAdapterFactoryFactory from "./adapters/graph-adapter";
 import nodecardControllers from "./controllers/nodecard.controllers";
 import { stopHighlightingSourceCard, startHighlightingSourceCard } from "./views/highlight-source-card";
 import "../assets/styles/main.css";
-import data from "../data/vervaeke.json";
+//import data from "../data/vervaeke.json";
+import { data } from "../data/vervaeke"
 import { guidedTour } from "./guided-tour";
 
 const container = document.querySelector("#container");
@@ -55,6 +56,7 @@ const createPositionedCard = hydratePositionedCard;
 
 // subscribe views
 service.onTransition((state, event) => {
+  console.log(event)
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

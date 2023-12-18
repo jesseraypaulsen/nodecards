@@ -1,25 +1,26 @@
 import { createMachine, assign, send } from "xstate";
 
-export const cardMachine = ({
+export const cardMachine = (/*{
   id,
   text,
   label,
   canvasPosition,
   domPosition,
   startInert,
-}) =>
+}*/props) =>
   createMachine(
     {
       predictableActionArguments: true,
       id: "nodecard",
       initial: "deciding",
       context: {
-        id,
+        /*id,
         label,
         text,
         canvasPosition,
         domPosition,
-        startInert,
+        startInert,*/
+        ...props
       },
       on: {
         setDOMPosition: {
