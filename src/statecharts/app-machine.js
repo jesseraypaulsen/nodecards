@@ -290,7 +290,6 @@ export const appMachine = (runChildEffect) =>
         // }),
         hydrateCard: assign({
           cards: (context, event) => {
-            console.log(event)
             const { id, label, text } = event;
             return context.cards.concat({
               id,
@@ -311,26 +310,33 @@ export const appMachine = (runChildEffect) =>
             });
           },
         }),
+        // hydrateLink: assign({
+        //   links: (context, event) => {
+        //     if (event.arrows) {
+        //       const { id, label, from, to, arrows } = event;
+        //       return context.links.concat({
+        //         id,
+        //         label,
+        //         from,
+        //         to,
+        //         arrows
+        //       });
+        //     } else {
+        //       const { id, label, from, to } = event;
+        //       return context.links.concat({
+        //         id,
+        //         label,
+        //         from,
+        //         to,
+        //       });
+        //     }
+        //   },
+        // }),
         hydrateLink: assign({
           links: (context, event) => {
-            if (event.arrows) {
-              const { id, label, from, to, arrows } = event;
-              return context.links.concat({
-                id,
-                label,
-                from,
-                to,
-                arrows
-              });
-            } else {
-              const { id, label, from, to } = event;
-              return context.links.concat({
-                id,
-                label,
-                from,
-                to,
-              });
-            }
+              const data = { ...event }
+              delete data.type
+              return context.links.concat(data);
           },
         }),
         setCardCanvasPosition: ({ cards }, { id, canvasPosition }) => {

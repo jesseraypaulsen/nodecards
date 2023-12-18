@@ -42,7 +42,9 @@ export default function Render(
     //     hydrateLink({ id, label, from, to })
     //   }
     // })
-    data.links.map(l => hydrateLink(l))
+    data.links.map(l => {
+      hydrateLink(l)
+    })
 
   }
 

@@ -109,7 +109,6 @@ export default function graphAdapterFactoryFactory(container) {
     network.on("zoom", (e) => {
       synchDOMWithGraph();
       scaleActiveCards(e);
-      console.log('zoom!!!!')
     });
     
     //TODO, not working
@@ -120,6 +119,7 @@ export default function graphAdapterFactoryFactory(container) {
     // }
     
     network.on("resize", (e) => {
+      console.log('resize')
       setTimeout(() => synchDOMWithGraph(), 100);
     });
     

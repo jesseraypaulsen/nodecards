@@ -56,7 +56,7 @@ const createPositionedCard = hydratePositionedCard;
 
 // subscribe views
 service.onTransition((state, event) => {
-  console.log(event)
+  //console.log(event, state)
   if (state.event.type === "xstate.init") init(data);
   else render(state, event);
 });

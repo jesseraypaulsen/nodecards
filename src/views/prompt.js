@@ -10,7 +10,9 @@ export default function promptViews(linkPromptController) {
     },
   }) => {
     const prompt = div("link-deletion-prompt");
-    prompt.innerHTML = `<span>x</span><span>Remove link?</span>`;
+    // prompt.innerHTML = `<span>x</span><span>Remove link?</span>`;
+    prompt.innerHTML = `<span>Remove link?</span>`;
+
     render(prompt);
     setPosition(prompt, x, y);
 
