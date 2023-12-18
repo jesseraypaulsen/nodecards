@@ -18,6 +18,7 @@ export default (graphAdapterFactory, domAdapterFactory) =>
     getLinksForCard,
     controllers,
   }) => {
+
     const getId = () => id;
     const getLabel = () => label;
     const getText = () => text;

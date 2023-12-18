@@ -32,17 +32,17 @@ export default function Render(
       hydratePositionedCard({ ...props, startInert: true });
     });
 
-    data.links.map(l => {
-      if (l.arrows) {
-        console.log(l.arrows)
-        const { id, label, from, to, arrows } = l;
-        hydrateLink({ id, label, from, to, arrows })
-      }
-      else {
-        const { id, label, from, to } = l;
-        hydrateLink({ id, label, from, to })
-      }
-    })
+    // data.links.map(l => {
+    //   if (l.arrows) {
+    //     const { id, label, from, to, arrows } = l;
+    //     hydrateLink({ id, label, from, to, arrows })
+    //   }
+    //   else {
+    //     const { id, label, from, to } = l;
+    //     hydrateLink({ id, label, from, to })
+    //   }
+    // })
+    data.links.map(l => hydrateLink(l))
 
   }
 

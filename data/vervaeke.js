@@ -1,11 +1,27 @@
 
 const typeNodes = {
   color: {
-    background: "grey"
+    background: "lightgrey"
   },
   font: {
     color: "black",
-    size: 12 // determines the size of the node itself
+    size: 10 // determines the size of the node itself
+  },
+  //opacity: .4 // doesn't work
+}
+
+const typeEdges = {
+  dashes: true
+}
+
+const mainNodes = {
+  color: {
+    background: 'red'
+  },
+  font: {
+    color: "white",
+    size: 16,
+    bold: true
   }
 }
 
@@ -13,8 +29,8 @@ const typeNodes = {
 export const data = {
   cards: [
     { id: "one", label: "opponent processes", text: "the first card", x: 0, y: 0 },
-    { id: "two", label: "cognitive attention", text: "the second card", x: -110, y: -30 }, 
-    { id: "three", label: "biological evolution", text: "the third card", x: 130, y: -30 },
+    { id: "two", label: "cognitive attention", text: "the second card", x: -110, y: -30, config: mainNodes }, 
+    { id: "three", label: "biological evolution", text: "the third card", x: 130, y: -30, config: mainNodes },
     { id: "four", label: "enabling constraints", text: "adfsdff", x: -10, y: 160, config: typeNodes },
     { id: "five", label: "selective constraints", text: "asdfdsfdfs", x: 10, y: -235, config: typeNodes },
     { id: "six", label: "default mode", text: "asdfdsf", x: -110, y: 100 },
@@ -29,9 +45,10 @@ export const data = {
 
   ],
   links: [
-    { id: "a", label: "", from: "one", to: "two", arrows: "to" },
+    //{ id: "a", label: "", from: "one", to: "two", arrows: "to" },
+    { id: "a", label: "", from: "one", to: "two", arrows: "to"},
     { id: "b", label: "", from: "one", to: "three", arrows: "to" },
-    { id: "c", label: "", from: "four", to: "six", arrows: "to" },
+    { id: "c", label: "", from: "four", to: "six", arrows: "to", dashes: true },
     { id: "d", label: "", from: "four", to: "eight", arrows: "to" },
     { id: "e", label: "", from: "five", to: "seven", arrows: "to"},
     { id: "f", label: "", from: "five", to: "nine", arrows: "to" },

@@ -8,6 +8,8 @@ export const options = {
     shape: "box",
     shadow: true,
     color: "#b3a5f7",
+    borderWidth: 0,
+    chosen: false
   },
   physics: {
     enabled: false,
@@ -17,6 +19,14 @@ export const options = {
     zoomView: true,
     selectConnectedEdges: false
   },
+  edges: {
+    arrows: {
+      to: {
+        enabled: false,
+        scaleFactor: .5
+      }
+    }
+  }
 };
 
 /*const options = { 

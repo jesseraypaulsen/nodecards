@@ -9,14 +9,18 @@ export default function graphAdapterFactoryFactory(container) {
 
   const network = new vis.Network(container, {}, options);
 
-  const a = (getId, getLabel, getCanvasPosition) => {
+  const a = (getId, getLabel, getCanvasPosition, getConfig) => {
     const createNode = () => {
       network.body.data.nodes.add({ id: getId(), label: getLabel() });
     };
     
     const createNodeWithKnownPosition = () => {
       const { x, y } = getCanvasPosition();
-      network.body.data.nodes.add({ id: getId(), label: getLabel(), x, y });
+      const config = getConfig()
+
+      //if (config) network.body.data.nodes.add({ id: getId(), label: getLabel(), x, y, font: config.font, color: config.color });
+      if (config) network.body.data.nodes.add({ id: getId(), label: getLabel(), x, y, ...config });
+      else network.body.data.nodes.add({ id: getId(), label: getLabel(), x, y });
     };
     
     const removeNode = () => {
