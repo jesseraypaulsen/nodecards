@@ -126,7 +126,6 @@ export const guided2er = (send, zooming) => {
             hidePopover(options)
 
             const andFinally = () => driverObj.moveNext()
-            //const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,() => {}), 1000)
             const secondZoom = () => setTimeout(() => zooming(2,send), 1000)
 
 
@@ -140,7 +139,6 @@ export const guided2er = (send, zooming) => {
               fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "six"))
             }
 
-            // const handler = () => showZoom(send, zooming, .65, cardStuff)
             const handler = () => zooming(.65, send, cardStuff)
 
             // execute the first zoom after the nodecard expands

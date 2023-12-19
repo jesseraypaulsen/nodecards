@@ -2,7 +2,7 @@ export const options = {
   nodes: {
     font: {
       color: "#ffffff",
-      size: 12
+      size: 11
     },
     widthConstraint: { maximum: 70 },
     shape: "box",
@@ -22,7 +22,7 @@ export const options = {
   edges: {
     arrows: {
       to: {
-        enabled: false,
+        enabled: true,
         scaleFactor: .5
       }
     }
