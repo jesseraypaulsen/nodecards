@@ -20,7 +20,7 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - add confirmation for deleting cards
 
-- some way of deriving titles for the collapsed nodes. you could specify a special syntax for marking the title within the text content.
+- some way of deriving titles for the collapsed nodes. you could specify a special syntax for marking the title within the text content. or you could simply use the first 20 or so characters from the text content.
 
 - bug: as the text content in a nodecard reaches a certain length the last line is covered up by the button bar.
 

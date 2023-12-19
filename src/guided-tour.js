@@ -12,9 +12,9 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
 
 
   const driverObj = driver({
-    allowClose: false,
-    //disableActiveInteraction: true,       // this doesn't work.. 
-    //onPopoverRender: () => // fails to execute
+    allowClose: false, // prevent user interaction that would interfere with the effects.
+    //disableActiveInteraction: true, // doesn't work.
+    //onPopoverRender: () => // fails to execute.
     showProgress: false,
     showButtons: ['next'],
     overlayOpacity: 0,
@@ -79,7 +79,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
             const pos = { x: 0, y: -115 }
             const openNewCard = () => {
           
-              createPositionedCard({id: "newCard", label: "new card", text: "blah blah blah", x: pos.x, y: pos.y, startInert: false })
+              createPositionedCard({id: "newCard", label: "new card", text: "", x: pos.x, y: pos.y, startInert: false })
             
               // wait until the card has expanded before moving to the next step so that the element is available to the step
               afterCardExpands(driverObj.moveNext)
@@ -90,9 +90,33 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
         } 
       },
       {
+        popover: { 
+          description: "You can also zoom in and out by using two fingers on the touchpad or screen.",
+          onNextClick: (_,__, options) => {
+            hidePopover(options)
+
+            const secondZoom = () => setTimeout(() => zooming(2,send), 1000)
+            const andFinally = () => {
+              setTimeout(() => zooming(1,send, () => driverObj.moveNext()), 1000)
+            }
+
+            const cardStuff = () => {
+              const card = document.querySelector('[data-id="newCard"]')
+
+              const target = { x: getOffset(card).left+10, y: getOffset(card).top+10 }
+              console.log(target)
+              fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "newCard"))
+            }
+
+            zooming(.65, send, cardStuff)
+
+          }
+        },
+      },
+      {
         element: '.discard',
         popover: {
-          description: "You can delete a card.",
+          description: "And you can delete cards too.",
           side: 'bottom',
           onNextClick: (el,__, options) => { 
             hidePopover(options)
@@ -100,54 +124,7 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
             fakeMouse(target, () => driverObj.moveNext())
           }
         },
-        onDeselected: (el) => {
-            el.click()
-            driverObj.destroy()
-            setTimeout(() => guided2er(send, zooming), 500)
-        }
-      },
-    ]
-  });
-  
-
-  driverObj.drive();
-
-}
-
-export const guided2er = (send, zooming) => {
-  const driverObj = driver({
-    showButtons: ['next'],
-    allowClose: false, // necessary to prevent user interaction that would interfere with the effects
-    overlayOpacity: 0,
-    popoverClass: "driverjs-theme",
-    steps: [
-      {
-        popover: { 
-          description: "You can also zoom in and out by using two fingers on the touchpad or screen.",
-          onNextClick: (_,__, options) => {
-            hidePopover(options)
-
-            const andFinally = () => driverObj.moveNext()
-            const secondZoom = () => setTimeout(() => zooming(2,send), 1000)
-
-
-            send({ type: "decidePath", id: "six"})
-
-            const cardStuff = () => {
-              const card = document.querySelector('[data-id="six"]')
-
-              const target = { x: getOffset(card).left+10, y: getOffset(card).top+10 }
-              console.log(target)
-              fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "six"))
-            }
-
-            const handler = () => zooming(.65, send, cardStuff)
-
-            // execute the first zoom after the nodecard expands
-            afterCardExpands(handler)
-
-          }
-        },
+        onDeselected: (el) => el.click()
       },
       {
         //element: '[data-id="six"]', // highlight the entire nodecard
@@ -156,12 +133,14 @@ export const guided2er = (send, zooming) => {
         },
         onDeselected: () => {
           driverObj.destroy()
-          zooming(1,send)
         }
       }
-    ],
-  })
-  driverObj.drive()
+    ]
+  });
+  
+
+  driverObj.drive();
+
 }
 
 const hidePopover = (options) =>  options.state.popover.wrapper.style = "display:none;"
