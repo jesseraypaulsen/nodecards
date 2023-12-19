@@ -126,19 +126,22 @@ export const guided2er = (send, zooming) => {
             hidePopover(options)
 
             const andFinally = () => driverObj.moveNext()
-            const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,() => {}), 1000)
+            //const secondZoom = () => setTimeout(() => showZoom(send,zooming,2,() => {}), 1000)
+            const secondZoom = () => setTimeout(() => zooming(2,send), 1000)
+
 
             send({ type: "decidePath", id: "six"})
 
             const cardStuff = () => {
               const card = document.querySelector('[data-id="six"]')
 
-              const target = { x: getOffset(card).left, y: getOffset(card).top }
+              const target = { x: getOffset(card).left+10, y: getOffset(card).top+10 }
+              console.log(target)
               fakeMouse(target, () => fakeTyping(send, secondZoom, andFinally, "six"))
             }
 
-            const handler = () => showZoom(send, zooming, .65, cardStuff)
-
+            // const handler = () => showZoom(send, zooming, .65, cardStuff)
+            const handler = () => zooming(.65, send, cardStuff)
 
             // execute the first zoom after the nodecard expands
             afterCardExpands(handler)
@@ -153,6 +156,7 @@ export const guided2er = (send, zooming) => {
         },
         onDeselected: () => {
           driverObj.destroy()
+          zooming(1,send)
         }
       }
     ],
@@ -208,13 +212,6 @@ function fakeTyping(send, firstCallback, secondCallback, id) {
     }, i*200)
   })
 
-}
-
-function showZoom(send, zooming, scale, callback) {
-  zooming(scale, send)
-  setTimeout(() => {
-    callback()
-  }, 2000)
 }
 
 function afterCardExpands(callback) {

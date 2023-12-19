@@ -151,7 +151,7 @@ export default function graphAdapterFactoryFactory(container) {
     
   }
   
-  const zooming = (scale, send) => {
+  const zooming = (scale, send, callback) => {
 
     //TODO: factor out duplicate functions (sendPositions, synchDOMwithGraph and scaleActiveCards.. see above)
 
@@ -194,7 +194,10 @@ export default function graphAdapterFactoryFactory(container) {
     
     //'zoom' event listener doesn't work for this! it does fire on manual zoom tho
     network.on('afterDrawing', scaleZoomHandler)
-    network.once('animationFinished', () => network.off('afterDrawing', scaleZoomHandler)) 
+    network.once('animationFinished', () => {
+      network.off('afterDrawing', scaleZoomHandler)
+      if (callback) callback()
+    }) 
     network.moveTo({ scale, animation: true })
   }
   return { a, b, c, d, zooming, network } 
