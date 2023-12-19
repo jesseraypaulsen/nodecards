@@ -1,5 +1,5 @@
 import mouseCursor from "../assets/mouse-cursor.png";
-import mousePointer from "../assets/mouse-pointer.png"
+//import mousePointer from "../assets/mouse-pointer.png"
 import "../assets/styles/guided-tour.css";
 
 const driver = window.driver.js.driver;
@@ -38,15 +38,16 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
         element: '.branch', 
         popover: { 
           description: 'You can link one nodecard to another.',
+          side: "left",
           onNextClick: (el,_,options) => {
             hidePopover(options)
             const firstTarget = { x: getOffset(el).left, y: getOffset(el).top }
-            const secondTarget = network.canvasToDOM(network.getPosition("six"))
+            const secondTarget = network.canvasToDOM(network.getPosition("two"))
             const link = () => {
               el.click()
               setTimeout(() => {
                 fakeMouse(secondTarget, () => {
-                  send({type: 'decidePath', id: "six"})
+                  send({type: 'decidePath', id: "two"})
                 })
               }, 400)
               setTimeout(() => driverObj.moveNext(), 1000)
@@ -75,7 +76,15 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
           description: 'You can create a new card by double-clicking or double-tapping on empty space.',
           onNextClick: (_,__, options) => {
             hidePopover(options)
-            const target = canvasToDOM({ x: -5, y: 65 })
+            const pos = { x: 0, y: -115 }
+            const openNewCard = () => {
+          
+              createPositionedCard({id: "newCard", label: "new card", text: "blah blah blah", x: pos.x, y: pos.y, startInert: false })
+            
+              // wait until the card has expanded before moving to the next step so that the element is available to the step
+              afterCardExpands(driverObj.moveNext)
+            }
+            const target = canvasToDOM(pos)
             fakeMouse(target, openNewCard)
           }
         } 
@@ -100,13 +109,6 @@ export const guidedTour = (send, createPositionedCard, canvasToDOM, DOMtoCanvas,
     ]
   });
   
-  const openNewCard = () => {
-
-    createPositionedCard({id: "newCard", label: "new card", text: "blah blah blah", x: -5, y: 65, startInert: false })
-  
-    // wait until the card has expanded before moving to the next step so that the element is available to the step
-    afterCardExpands(driverObj.moveNext)
-  }
 
   driverObj.drive();
 

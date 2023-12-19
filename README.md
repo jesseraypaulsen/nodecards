@@ -18,15 +18,13 @@ Extends a graph rendering library and adapts it into a personal knowledge manage
 
 - the drag event doesn't work in mobile
 
-- guided tour
-
-- improve dataset.
-
 - add confirmation for deleting cards
 
 - some way of deriving titles for the collapsed nodes. you could specify a special syntax for marking the title within the text content.
 
-- improve appearance of Delete Link prompt
+- bug: as the text content in a nodecard reaches a certain length the last line is covered up by the button bar.
+
+- bug: the links from the initial dataset are not being created in the state machine's context. hydrateLink is not being processed by the app-machine at all. but the event gets sent to the state machine and so it gets picked up by the deck manager which then creates the link in vis-network. this bug is caused by the fact that 'initializing' state is no longer being used, which is where the hydrateLink event gets picked up by the state machine.
 
 ---
 

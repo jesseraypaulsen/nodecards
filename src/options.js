@@ -20,6 +20,7 @@ export const options = {
     selectConnectedEdges: false
   },
   edges: {
+    width: 0.5,
     arrows: {
       to: {
         enabled: true,
